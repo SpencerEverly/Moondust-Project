@@ -59,7 +59,8 @@ public slots:
     QScrollArea *getFrameTilesetOfTab(QWidget *catTab);
     QTabBar *getGroupComboboxOfTab(QWidget *catTab);
     QWidget *findTabWidget(const QString &categoryItem);
-    QWidget *makeCategory(const QString &categoryItem);
+    bool categoryShouldBeVisible(int visibility);
+    QWidget *makeCategory(const QString &categoryItem, int visibility);
     void prepareCategoriesAndGroups();
     void prepareTilesetGroup(const SimpleTilesetGroup &tilesetGroups);
     void clearTilesetGroups();

@@ -85,6 +85,7 @@ SimpleTilesetGroup TilesetGroupEditor::toSimpleTilesetGroup()
     SimpleTilesetGroup s;
     s.groupName = ui->tilesetGroupName->text();
     s.groupCat = ui->category->currentText();
+    s.groupVisibility = ui->visibilityBox->currentIndex();
     s.groupWeight = ui->orderWeight->value();
     for(int i = 0; i < tilesets.size(); ++i)
         s.tilesets << tilesets[i].first;
@@ -102,6 +103,7 @@ void TilesetGroupEditor::SaveSimpleTilesetGroup(const QString &path, const Simpl
     simpleTilesetGroupINI.clear();
     simpleTilesetGroupINI.beginGroup("tileset-group"); //HEADER
     simpleTilesetGroupINI.setValue("category", tilesetGroup.groupCat);
+    simpleTilesetGroupINI.setValue("group-visibility", tilesetGroup.groupVisibility);
     simpleTilesetGroupINI.setValue("name", tilesetGroup.groupName);
     simpleTilesetGroupINI.setValue("weight", tilesetGroup.groupWeight);
     simpleTilesetGroupINI.setValue("tilesets-count", tilesetGroup.tilesets.size());
@@ -124,6 +126,7 @@ bool TilesetGroupEditor::OpenSimpleTilesetGroup(const QString &path, SimpleTiles
     tilesetGroup.groupName = simpleTilesetINI.value("name", "").toString();
     tilesetGroup.groupCat = simpleTilesetINI.value("category", "").toString();
     tilesetGroup.groupWeight = simpleTilesetINI.value("weight", -1).toInt();
+    tilesetGroup.groupVisibility = simpleTilesetINI.value("group-visibility", 0).toInt();
     int tc = simpleTilesetINI.value("tilesets-count", 0).toInt() + 1;
     simpleTilesetINI.endGroup();
     simpleTilesetINI.beginGroup("tilesets");
@@ -136,11 +139,6 @@ bool TilesetGroupEditor::OpenSimpleTilesetGroup(const QString &path, SimpleTiles
     simpleTilesetINI.endGroup();
 
     return true;
-}
-
-void TilesetGroupEditor::on_Close_clicked()
-{
-    this->close();
 }
 
 void TilesetGroupEditor::on_addTileset_clicked()
@@ -242,6 +240,7 @@ void TilesetGroupEditor::on_Open_clicked()
         }
         fetchCategories(dirPath);
         ui->category->setCurrentText(t.groupCat);
+        ui->visibilityBox->setCurrentIndex(t.groupVisibility);
         if(m_categories)
         {
             m_categories->beginGroup(categoryName(t.groupCat));
@@ -280,6 +279,7 @@ void TilesetGroupEditor::on_Save_clicked()
     lastFileName = pathInfo.baseName();
     fetchCategories(pathInfo.absoluteDir().absolutePath());
     ui->category->setCurrentText(g.groupCat);
+    ui->visibilityBox->setCurrentIndex(g.groupVisibility);
 }
 
 void TilesetGroupEditor::redrawAll()
@@ -368,23 +368,26 @@ void TilesetGroupEditor::fetchCategories(QString path)
     QStringList filters;
     filters << "*.tsgrp.ini";
     QStringList files = groups.entryList(filters);
+    QSet<QString> catNames;
 
-    QSet<QString> categoryNames;
     for(QString &file : files)
     {
         SimpleTilesetGroup xxx;
-        if(TilesetGroupEditor::OpenSimpleTilesetGroup(path + "/" + file, xxx))
-            categoryNames.insert(xxx.groupCat);
-    }
-    for(const QString &cat : categoryNames)
-    {
-        if(m_categories)
-        {
-            m_categories->beginGroup(categoryName(cat));
-            m_categories->setValue("name", cat);
-            m_categories->endGroup();
+        if(TilesetGroupEditor::OpenSimpleTilesetGroup(path + "/" + file, xxx)) {
+
+            if(!catNames.contains(xxx.groupCat + xxx.groupVisibility))
+            {
+                ui->category->addItem(xxx.groupCat);
+                if (m_categories) {
+
+                    m_categories->beginGroup(categoryName(xxx.groupCat + xxx.groupVisibility));
+                    m_categories->setValue("name", xxx.groupCat);
+                    m_categories->setValue("visibility", xxx.groupVisibility);
+                    m_categories->endGroup();
+                }
+                catNames.insert(xxx.groupCat + xxx.groupVisibility);
+            }
         }
-        ui->category->addItem(cat);
     }
 }
 

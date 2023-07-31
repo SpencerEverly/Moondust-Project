@@ -101,6 +101,7 @@ void DataConfig::loadTilesets()
         SimpleTilesetCachedCategory category;
         categories.beginGroup(TilesetGroupEditor::categoryName(cat));
         category.name = cat;
+        category.visibility = categories.value("visibility", 0).toInt();
         category.weight = categories.value("weight", -1).toInt();
         categories.endGroup();
         main_tileset_categogies.push_back(category);

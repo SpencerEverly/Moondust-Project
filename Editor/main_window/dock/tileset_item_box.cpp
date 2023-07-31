@@ -280,14 +280,30 @@ QWidget *TilesetItemBox::findTabWidget(const QString &categoryItem)
     QTabWidget *cat = ui->TileSetsCategories;
     for(int i = 0; i < cat->count(); ++i)
     {
-        if(cat->tabText(i) == categoryItem)
+        if(cat->tabText(i) == categoryItem && cat->isTabVisible(i))
             return cat->widget(i);
     }
     return nullptr;
 }
 
-QWidget *TilesetItemBox::makeCategory(const QString &categoryItem)
+bool TilesetItemBox::categoryShouldBeVisible(int visibility) {
+    // Ignore if this is a map tileset itembox and we're in a level
+    if ((visibility == 2) && mw()->activeChildWindow() != MainWindow::WND_World) {
+        return false;
+        // Ignore if this is a level tileset itembox and we're on the map
+    } else if ((visibility == 1) &&  mw()->activeChildWindow() != MainWindow::WND_Level) {
+        return false;
+    }
+
+    return true;
+}
+
+QWidget *TilesetItemBox::makeCategory(const QString &categoryItem, int visibility)
 {
+    if (!categoryShouldBeVisible(visibility)) {
+        return new QWidget();
+    }
+
     QTabWidget *TileSetsCategories = ui->TileSetsCategories;
     QWidget *catWid;
     QWidget *scrollWid;
@@ -343,8 +359,8 @@ QWidget *TilesetItemBox::makeCategory(const QString &categoryItem)
 
     catLayout->addWidget(TileSets, 1, 0, 1, 3);
 
-    TileSetsCategories->addTab(catWid, QString());
-    TileSetsCategories->setTabText(TileSetsCategories->indexOf(catWid), categoryItem);
+    TileSetsCategories->addTab(catWid, QString::number(visibility));
+    TileSetsCategories->setTabText(TileSetsCategories->indexOf(catWid),categoryItem);
 
     return catWid;
 }
@@ -355,7 +371,7 @@ void TilesetItemBox::prepareCategoriesAndGroups()
     {
         QWidget *t = findTabWidget(cat.name);
         if(!t)
-            makeCategory(cat.name);
+            makeCategory(cat.name, cat.visibility);
     }
 
     const QList<SimpleTilesetGroup > &t_groups = mw()->configs.main_tilesets_grp;
@@ -369,10 +385,14 @@ void TilesetItemBox::prepareTilesetGroup(const SimpleTilesetGroup &tilesetGroups
 
     QWidget *t = findTabWidget(tilesetGroups.groupCat);
     if(!t)
-        t = makeCategory(tilesetGroups.groupCat);
+        t = makeCategory(tilesetGroups.groupCat, tilesetGroups.groupVisibility);
     QTabBar *c = getGroupComboboxOfTab(t);
     if(!c)
         return;
+
+    if (!categoryShouldBeVisible(tilesetGroups.groupVisibility)) {
+        return;
+    }
     auto *cMenu = qvariant_cast<QMenu*>(c->property("menu"));
     if(!util::contains(c, tilesetGroups.groupName))
     {

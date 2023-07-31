@@ -54,6 +54,7 @@ struct SimpleTilesetGroup
     QString groupName;
     QString groupCat;
     int     groupWeight;
+    int     groupVisibility;
     QStringList tilesets;
 
     bool operator<(const SimpleTilesetGroup& other) const
@@ -106,6 +107,8 @@ struct SimpleTilesetCachedCategory
     //! Order weight of category
     int     weight;
 
+    int     visibility;
+
     bool operator<(const SimpleTilesetCachedCategory& other) const
     {
         if((weight < 0) && (other.weight >= 0))
@@ -130,7 +133,7 @@ struct SimpleTilesetCachedCategory
 
     bool operator==(const SimpleTilesetCachedCategory& other) const
     {
-        return ((weight == other.weight) &&
+        return ((weight == other.weight) && (visibility == other.visibility) &&
                 (name.compare(other.name, Qt::CaseInsensitive) == 0));
     }
 
