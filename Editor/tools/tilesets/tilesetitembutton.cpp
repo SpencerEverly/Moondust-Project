@@ -42,13 +42,20 @@ void TilesetItemButton::setConfig(DataConfig *config)
     m_config = config;
 }
 
-void TilesetItemButton::applyItem(const int &type_i, const int &id, const int &width, const int &height)
+void TilesetItemButton::applyItem(const int &type_i, const int &id, const int &width, const int &height, const bool notInSearch)
 {
     int wid = (width == -1 ? contentsRect().width() : width);
     int hei = (height == -1 ? contentsRect().height() : height);
     QPixmap p;
     Items::getItemGFX(type_i, id, p, scn, false, QSize(wid, hei));
     setToolTip(Items::getTilesetToolTip(type_i, id, scn));
+
+    if (notInSearch) {
+        QImage image = p.toImage();
+        QImage grayImage = image.convertToFormat(QImage::Format_Grayscale16);
+        p = QPixmap::fromImage(grayImage);
+    }
+
     if(p.isNull())
     {
         m_drawItem = QPixmap(wid, hei);

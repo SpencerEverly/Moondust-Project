@@ -58,6 +58,8 @@ public:
      */
     static void getItemGFX(const obj_wld_generic* inObj, QPixmap &outImg, bool whole=false, QSize targetSize=QSize(0,0));
 
+    static QString getSearchData(int itemType, unsigned long ItemID, QGraphicsScene *scene);
+
     static QString getTilesetToolTip(int itemType, unsigned long ItemID, QGraphicsScene *scene);
 
     /*!
