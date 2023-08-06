@@ -30,6 +30,7 @@
 struct SimpleTilesetItem
 {
     unsigned int row, col, id;
+    int type = -1; // -1 for support with legacy tilesets
 };
 
 /**
@@ -40,7 +41,7 @@ struct SimpleTileset
     unsigned int rows, cols;
     QString tileSetName;
     QString fileName;
-    int type;
+    int type; // legacy;
     bool customDir;
     QList<SimpleTilesetItem> items;
 };

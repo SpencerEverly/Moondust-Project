@@ -214,7 +214,7 @@ void TilesetEditor::on_clearTileset_clicked()
 
 void TilesetEditor::setUpTileset(int type)
 {
-    m_tileset->clear();
+    //m_tileset->clear();
     m_tileset->setType(type);
 }
 

@@ -525,6 +525,10 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                             QString searchBarText = m_searchBoxes[tabIndex - 1]->text();
                             bool includeTilesetInSearch = false;
                             for (int i = 0; i < tileSet.items.size(); ++i) {
+                                int type = tileSet.items[i].type;
+                                if (type == -1) {
+                                    type = tileSet.type;
+                                }
                                 if (TilesetItemBox::isItemFoundBySearch(tileSet.type, tileSet.items[i].id, searchBarText, scene)) {
                                     includeTilesetInSearch = true;
                                     break;
@@ -541,8 +545,12 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                             {
                                 SimpleTilesetItem &item = tileSet.items[k];
                                 auto *tButton = new TilesetItemButton(&mw()->configs, scene, tileSetNameWrapper);
+                                int type = tileSet.items[k].type;
+                                if (type == -1) {
+                                    type = tileSet.type;
+                                }
                                 tButton->applySize(32, 32);
-                                tButton->applyItem(tileSet.type, item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(tileSet.type, tileSet.items[k].id, searchBarText, scene));
+                                tButton->applyItem(type, item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(type, tileSet.items[k].id, searchBarText, scene));
                                 tsLayout->addWidget(tButton, item.row, item.col);
                                 connect(tButton, SIGNAL(clicked(int, ulong)), mw(), SLOT(SwitchPlacingItem(int, ulong)));
                             }
@@ -588,7 +596,11 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                 bool includeTilesetInSearch = false;
                 unsigned int mostRighter = 0;
                 for (int i = 0; i < ts.items.size(); ++i) {
-                    if (TilesetItemBox::isItemFoundBySearch(ts.type, ts.items[i].id, ui->customTilesetSearchEdit->text(), scene)) {
+                        int type = ts.items[i].type;
+                        if (type == -1) {
+                            type = ts.type;
+                        }
+                    if (TilesetItemBox::isItemFoundBySearch(type, ts.items[i].id, ui->customTilesetSearchEdit->text(), scene)) {
                         includeTilesetInSearch = true;
                         break;
                     }
@@ -605,8 +617,12 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                 {
                     SimpleTilesetItem &item = ts.items[k];
                     auto *tButton = new TilesetItemButton(&mw()->configs, scene, tilesetNameWrapper);
+                    int type = ts.items[k].type;
+                    if (type == -1) {
+                        type = ts.type;
+                    }
                     tButton->applySize(32, 32);
-                    tButton->applyItem(ts.type, (int)item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(ts.type, ts.items[k].id, ui->customTilesetSearchEdit->text(), scene));
+                    tButton->applyItem(type, (int)item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(type, ts.items[k].id, ui->customTilesetSearchEdit->text(), scene));
                     l->addWidget(tButton, (int)item.row, (int)item.col);
                     if(item.col >= mostRighter)
                         mostRighter = item.col + 1;
