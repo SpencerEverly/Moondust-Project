@@ -412,15 +412,37 @@
          <property name="title">
           <string>Placement mode</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_13">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
            <widget class="QCheckBox" name="Editor_placing_dontShowPropsBox">
             <property name="toolTip">
              <string comment="Pop-up hint">Properties box will not be shown atomatically when you select an item to place,
 like when choosing an item from the item toolbox or from the tileset item box.</string>
             </property>
             <property name="text">
-             <string>Don't show properties box when placing items</string>
+             <string>Don't open properties box when placing items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="Editor_placing_openPropBoxAuto">
+            <property name="toolTip">
+             <string comment="Pop-up hint">Properties box will not be shown atomatically when you select an item to place,
+like when choosing an item from the item toolbox or from the tileset item box.</string>
+            </property>
+            <property name="text">
+             <string>Open properties box when selecting items with left-click</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="Editor_placing_neverHidePropertiesBox">
+            <property name="toolTip">
+             <string comment="Pop-up hint">Properties box will not be shown atomatically when you select an item to place,
+like when choosing an item from the item toolbox or from the tileset item box.</string>
+            </property>
+            <property name="text">
+             <string>Keep properties box open when deselecting items</string>
             </property>
            </widget>
           </item>

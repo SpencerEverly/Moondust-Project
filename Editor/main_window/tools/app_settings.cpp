@@ -116,7 +116,9 @@ void AppSettings::loadSettings()
     ui->Editor_Mid_AllowPlacing->setChecked(GlobalSettings::MidMouse_allowSwitchToPlace);
     ui->Editor_Mid_AllowDrag->setChecked(GlobalSettings::MidMouse_allowSwitchToDrag);
 
+    ui->Editor_placing_neverHidePropertiesBox->setChecked(GlobalSettings::Placing_neverHidePropertiesBox);
     ui->Editor_placing_dontShowPropsBox->setChecked(GlobalSettings::Placing_dontShowPropertiesBox);
+    ui->Editor_placing_openPropBoxAuto->setChecked(GlobalSettings::Placing_OpenPropertiesBoxOnSelect);
 
     ui->historyLimit->setValue(GlobalSettings::historyLimit);
 
@@ -242,8 +244,11 @@ void AppSettings::on_buttonBox_accepted()
     GlobalSettings::MidMouse_allowSwitchToPlace = ui->Editor_Mid_AllowPlacing->isChecked();
     GlobalSettings::MidMouse_allowSwitchToDrag  = ui->Editor_Mid_AllowDrag->isChecked();
 
+    GlobalSettings::Placing_neverHidePropertiesBox = ui->Editor_placing_neverHidePropertiesBox->isChecked();
     GlobalSettings::Placing_dontShowPropertiesBox = ui->Editor_placing_dontShowPropsBox->isChecked();
+    GlobalSettings::Placing_OpenPropertiesBoxOnSelect = ui->Editor_placing_openPropBoxAuto->isChecked();
     GlobalSettings::historyLimit = ui->historyLimit->value();
+
 
     GlobalSettings::LvlOpts.autoSave_enable = ui->autoSaveEnable->isChecked();
     GlobalSettings::LvlOpts.autoSave_interval = ui->autoSaveInterval->value();
