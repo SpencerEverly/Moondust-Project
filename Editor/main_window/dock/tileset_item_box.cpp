@@ -281,7 +281,7 @@ QWidget *TilesetItemBox::findTabWidget(const QString &categoryItem)
     QTabWidget *cat = ui->TileSetsCategories;
     for(int i = 0; i < cat->count(); ++i)
     {
-        if(cat->tabText(i) == categoryItem && cat->isTabVisible(i))
+        if(cat->tabText(i) == categoryItem && cat->isTabEnabled(i))
             return cat->widget(i);
     }
     return nullptr;
