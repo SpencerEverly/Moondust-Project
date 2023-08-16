@@ -51,6 +51,7 @@ void tileset::clear()
     piecePixmaps.clear();
     pieceRects.clear();
     pieceID.clear();
+    pieceType.clear();
     highlightedRect = QRect();
     inPlace = 0;
     update();
@@ -159,6 +160,7 @@ void tileset::dropEvent(QDropEvent *event)
         piecePixmaps.append(scaledPix);
         pieceRects.append(square);
         pieceID.append(objID);
+        pieceType.append(m_type);
 
         highlightedRect = QRect();
         update();
@@ -180,9 +182,11 @@ void tileset::mousePressEvent(QMouseEvent *event)
     {
         if(m_editMode)
         {
-            piecePixmaps.removeAt(findPiece(targetSquare(event->pos())));
-            pieceID.removeAt(findPiece(targetSquare(event->pos())));
-            pieceRects.removeAt(findPiece(targetSquare(event->pos())));
+            auto piece = findPiece(targetSquare(event->pos()));
+            piecePixmaps.removeAt(piece);
+            pieceID.removeAt(piece);
+            pieceType.removeAt(piece);
+            pieceRects.removeAt(piece);
             update();
             return;
         }
@@ -206,6 +210,7 @@ void tileset::mousePressEvent(QMouseEvent *event)
     piecePixmaps.removeAt(found);
     pieceRects.removeAt(found);
     pieceID.removeAt(found);
+    pieceType.removeAt(found);
     update();
 
     QByteArray itemData;
@@ -226,6 +231,7 @@ void tileset::mousePressEvent(QMouseEvent *event)
         piecePixmaps.insert(found, pixmap);
         pieceRects.insert(found, square);
         pieceID.insert(found, objID);
+        pieceType.insert(found, m_type);
         update();
     }
 }
@@ -317,6 +323,7 @@ SimpleTileset tileset::toSimpleTileset()
         it.col = pieceRects[i].x() / m_baseSize;
         it.row = pieceRects[i].y() / m_baseSize;
         it.id = pieceID[i];
+        it.type = pieceType[i];
         s.items << it;
     }
     return s;
@@ -332,10 +339,15 @@ void tileset::loadSimpleTileset(const SimpleTileset &tileset)
     for(int i = 0; i < tileset.items.size(); ++i)
     {
         QPixmap scaledPix;
-        Items::getItemGFX(m_type, tileset.items[i].id, scaledPix, scn, false, QSize(m_baseSize, m_baseSize));
+        int type = tileset.items[i].type;
+        if (type == -1) {
+            type = tileset.type;
+        }
+        Items::getItemGFX(type, tileset.items[i].id, scaledPix, scn, false, QSize(m_baseSize, m_baseSize));
         piecePixmaps.append(scaledPix);
         pieceRects.append(QRect(tileset.items[i].col * m_baseSize, tileset.items[i].row * m_baseSize, m_baseSize, m_baseSize));
         pieceID.append(tileset.items[i].id);
+        pieceType.append(type);
     }
 }
 
@@ -359,6 +371,7 @@ void tileset::SaveSimpleTileset(const QString &path, const SimpleTileset &tilese
     {
         simpleTilesetINI.beginGroup(QString("item-%1-%2").arg(tileset.items[i].col).arg(tileset.items[i].row));
         simpleTilesetINI.setValue("id", tileset.items[i].id);
+        simpleTilesetINI.setValue("type", tileset.items[i].type);
         simpleTilesetINI.endGroup();
     }
 }
@@ -400,6 +413,7 @@ bool tileset::OpenSimpleTileset(const QString &path, SimpleTileset &tileset)
                         return false;
                     simpleTilesetINI.beginGroup(gr);
                     i.id = (unsigned int)simpleTilesetINI.value("id", 0).toInt();
+                    i.type = simpleTilesetINI.value("type", -1).toInt();
                     simpleTilesetINI.endGroup();
                     tileset.items << i;
                 }
@@ -438,6 +452,7 @@ void tileset::removeOuterItems(QRect updatedRect)
     QList<QRect> rmRects;
     QList<QPixmap> rmPixm;
     QList<int> rmId;
+    QList<int> rmType;
 
     for(int i = 0; i < pieceRects.size(); ++i)
     {
@@ -446,6 +461,7 @@ void tileset::removeOuterItems(QRect updatedRect)
             rmRects << pieceRects[i];
             rmPixm << piecePixmaps[i];
             rmId << pieceID[i];
+            rmType << pieceType[i];
         }
     }
 
@@ -455,6 +471,7 @@ void tileset::removeOuterItems(QRect updatedRect)
         pieceRects.removeAt(l);
         piecePixmaps.removeAt(l);
         pieceID.removeAt(l);
+        pieceType.removeAt(l);
     }
 }
 int tileset::cols() const

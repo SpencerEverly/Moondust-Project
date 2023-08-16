@@ -33,7 +33,6 @@ public:
 private slots:
     void on_addTileset_clicked();
     void on_RemoveTileset_clicked();
-    void on_Close_clicked();
     void on_Open_clicked();
     void on_Save_clicked();
     void on_tilesetUp_clicked();

@@ -109,6 +109,7 @@ void WLD_ItemProps::openPropertiesFor(int Type, WorldLevelTile level, bool newIt
     {
     case 0:
     {
+        ui->WLD_LevelGrp->show();
         if(newItem)
             m_currentLevelArrayId = -1;
         else
@@ -173,14 +174,22 @@ void WLD_ItemProps::openPropertiesFor(int Type, WorldLevelTile level, bool newIt
     }
     case -1: //Nothing to edit
     default:
-        hide();
+        if (!GlobalSettings::Placing_neverHidePropertiesBox) {
+            hide();
+        } else {
+            ui->WLD_LevelGrp->hide();
+        }
     }
     m_lockSettings = false;
 }
 
 void WLD_ItemProps::hideToolbox()
 {
-    hide();
+    if (!GlobalSettings::Placing_neverHidePropertiesBox) {
+        hide();
+    } else {
+        ui->WLD_LevelGrp->hide();
+    }
 }
 
 

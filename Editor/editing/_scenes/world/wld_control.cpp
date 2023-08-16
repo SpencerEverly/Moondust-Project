@@ -251,6 +251,8 @@ void WldScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             m_mw->getViewMenu()->exec(mouseEvent->screenPos());
         }
         return;
+    } else if (GlobalSettings::Placing_OpenPropertiesBoxOnSelect) {
+        WldScene::openProps();
     }
 
     if(m_editModeObj)

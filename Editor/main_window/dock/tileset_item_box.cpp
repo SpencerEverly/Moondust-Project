@@ -23,6 +23,7 @@
 #include <QTabBar>
 #include <QToolButton>
 
+#include <common_features/items.h>
 #include <common_features/logger.h>
 #include <common_features/themes.h>
 #include <common_features/util.h>
@@ -279,19 +280,37 @@ QWidget *TilesetItemBox::findTabWidget(const QString &categoryItem)
     QTabWidget *cat = ui->TileSetsCategories;
     for(int i = 0; i < cat->count(); ++i)
     {
-        if(cat->tabText(i) == categoryItem)
+        if(cat->tabText(i) == categoryItem && cat->isTabEnabled(i))
             return cat->widget(i);
     }
     return nullptr;
 }
 
-QWidget *TilesetItemBox::makeCategory(const QString &categoryItem)
+bool TilesetItemBox::categoryShouldBeVisible(int visibility) {
+    // Ignore if this is a map tileset itembox and we're in a level
+    if ((visibility == 2) && mw()->activeChildWindow() != MainWindow::WND_World) {
+        return false;
+        // Ignore if this is a level tileset itembox and we're on the map
+    } else if ((visibility == 1) &&  mw()->activeChildWindow() != MainWindow::WND_Level) {
+        return false;
+    }
+
+    return true;
+}
+
+QWidget *TilesetItemBox::makeCategory(const QString &categoryItem, int visibility)
 {
+    if (!categoryShouldBeVisible(visibility)) {
+        return new QWidget();
+    }
+
     QTabWidget *TileSetsCategories = ui->TileSetsCategories;
     QWidget *catWid;
     QWidget *scrollWid;
     QGridLayout *catLayout;
     QLabel *grpLabel;
+    QLabel *searchLabel;
+    QLineEdit *searchLineEdit;
     QTabBar *tileSetGroup;
     QToolButton *menuButton;
     QMenu       *menuGroups;
@@ -324,6 +343,13 @@ QWidget *TilesetItemBox::makeCategory(const QString &categoryItem)
     menuGroups = new QMenu(menuButton);
     menuButton->setMenu(menuGroups);
     menuButton->setPopupMode(QToolButton::InstantPopup);
+    searchLabel = new QLabel(catWid);
+    searchLabel->setText(tr("Search:"));
+    catLayout->addWidget(searchLabel, 0, 3, 1, 1);
+    searchLineEdit = new QLineEdit(catWid);
+    catLayout->addWidget(searchLineEdit, 0, 4, 1, 4);
+    connect(searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(makeCurrentTileset()));
+    m_searchBoxes.append(searchLineEdit);
     catLayout->addWidget(menuButton, 0, 2, 1, 1);
 
     tileSetGroup->setProperty("menuButton", QVariant::fromValue(menuButton));
@@ -340,21 +366,22 @@ QWidget *TilesetItemBox::makeCategory(const QString &categoryItem)
     theLayOut = new FlowLayout(scrollWid);
     theLayOut->setSizeConstraint(QLayout::SetNoConstraint);
 
-    catLayout->addWidget(TileSets, 1, 0, 1, 3);
+    catLayout->addWidget(TileSets, 1, 0, 1, 8);
 
-    TileSetsCategories->addTab(catWid, QString());
-    TileSetsCategories->setTabText(TileSetsCategories->indexOf(catWid), categoryItem);
+    TileSetsCategories->addTab(catWid, QString::number(visibility));
+    TileSetsCategories->setTabText(TileSetsCategories->indexOf(catWid),categoryItem);
 
     return catWid;
 }
 
 void TilesetItemBox::prepareCategoriesAndGroups()
 {
+    m_searchBoxes.clear();
     for(const SimpleTilesetCachedCategory &cat : mw()->configs.main_tileset_categogies)
     {
         QWidget *t = findTabWidget(cat.name);
         if(!t)
-            makeCategory(cat.name);
+            makeCategory(cat.name, cat.visibility);
     }
 
     const QList<SimpleTilesetGroup > &t_groups = mw()->configs.main_tilesets_grp;
@@ -368,10 +395,14 @@ void TilesetItemBox::prepareTilesetGroup(const SimpleTilesetGroup &tilesetGroups
 
     QWidget *t = findTabWidget(tilesetGroups.groupCat);
     if(!t)
-        t = makeCategory(tilesetGroups.groupCat);
+        t = makeCategory(tilesetGroups.groupCat, tilesetGroups.groupVisibility);
     QTabBar *c = getGroupComboboxOfTab(t);
     if(!c)
         return;
+
+    if (!categoryShouldBeVisible(tilesetGroups.groupVisibility)) {
+        return;
+    }
     auto *cMenu = qvariant_cast<QMenu*>(c->property("menu"));
     if(!util::contains(c, tilesetGroups.groupName))
     {
@@ -412,6 +443,13 @@ void TilesetItemBox::clearTilesetGroups()
     }
 }
 
+bool TilesetItemBox::isItemFoundBySearch(uint type, uint id, QString searchText, QGraphicsScene* scene) {
+    QString tooltip = Items::getSearchData(type, id, scene);
+    if (tooltip.contains(searchText, Qt::CaseInsensitive) || id == searchText.toUInt()) {
+        return true;
+    }
+    return false;
+}
 
 void TilesetItemBox::makeSelectedTileset(int tabIndex)
 {
@@ -483,6 +521,20 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                     {
                         if(s == tileSet.fileName)
                         {
+                            QString searchBarText = m_searchBoxes[tabIndex - 1]->text();
+                            bool includeTilesetInSearch = false;
+                            for (int i = 0; i < tileSet.items.size(); ++i) {
+                                int type = tileSet.items[i].type;
+                                if (type == -1) {
+                                    type = tileSet.type;
+                                }
+                                if (TilesetItemBox::isItemFoundBySearch(tileSet.type, tileSet.items[i].id, searchBarText, scene)) {
+                                    includeTilesetInSearch = true;
+                                    break;
+                                }
+                            }
+                            if(!includeTilesetInSearch && !tileSet.tileSetName.contains(searchBarText, Qt::CaseInsensitive))
+                                continue;
                             auto *tileSetNameWrapper = new QGroupBox(tileSet.tileSetName, scrollWid);
                             ((FlowLayout *)scrollWid->layout())->addWidget(tileSetNameWrapper);
                             auto *tsLayout = new QGridLayout(tileSetNameWrapper);
@@ -492,8 +544,12 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                             {
                                 SimpleTilesetItem &item = tileSet.items[k];
                                 auto *tButton = new TilesetItemButton(&mw()->configs, scene, tileSetNameWrapper);
+                                int type = tileSet.items[k].type;
+                                if (type == -1) {
+                                    type = tileSet.type;
+                                }
                                 tButton->applySize(32, 32);
-                                tButton->applyItem(tileSet.type, item.id);
+                                tButton->applyItem(type, item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(type, tileSet.items[k].id, searchBarText, scene));
                                 tsLayout->addWidget(tButton, item.row, item.col);
                                 connect(tButton, SIGNAL(clicked(int, ulong)), mw(), SLOT(SwitchPlacingItem(int, ulong)));
                             }
@@ -536,8 +592,19 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
         {
             for(auto &ts : cTileSets)
             {
+                bool includeTilesetInSearch = false;
                 unsigned int mostRighter = 0;
-                if(!ts.tileSetName.contains(ui->customTilesetSearchEdit->text(), Qt::CaseInsensitive))
+                for (int i = 0; i < ts.items.size(); ++i) {
+                        int type = ts.items[i].type;
+                        if (type == -1) {
+                            type = ts.type;
+                        }
+                    if (TilesetItemBox::isItemFoundBySearch(type, ts.items[i].id, ui->customTilesetSearchEdit->text(), scene)) {
+                        includeTilesetInSearch = true;
+                        break;
+                    }
+                }
+                if(!includeTilesetInSearch && !ts.tileSetName.contains(ui->customTilesetSearchEdit->text(), Qt::CaseInsensitive))
                     continue;
 
                 auto *tilesetNameWrapper = new QGroupBox(ts.tileSetName, scrollWid);
@@ -549,8 +616,12 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                 {
                     SimpleTilesetItem &item = ts.items[k];
                     auto *tButton = new TilesetItemButton(&mw()->configs, scene, tilesetNameWrapper);
+                    int type = ts.items[k].type;
+                    if (type == -1) {
+                        type = ts.type;
+                    }
                     tButton->applySize(32, 32);
-                    tButton->applyItem(ts.type, (int)item.id);
+                    tButton->applyItem(type, (int)item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(type, ts.items[k].id, ui->customTilesetSearchEdit->text(), scene));
                     l->addWidget(tButton, (int)item.row, (int)item.col);
                     if(item.col >= mostRighter)
                         mostRighter = item.col + 1;

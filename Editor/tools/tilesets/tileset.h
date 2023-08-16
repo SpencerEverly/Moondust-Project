@@ -87,6 +87,7 @@ private:
     QList<QPixmap> piecePixmaps;
     QList<QRect> pieceRects;
     QList<long> pieceID;
+    QList<int> pieceType;
     QRect highlightedRect;
     int inPlace;
 

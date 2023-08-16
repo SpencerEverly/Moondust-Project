@@ -175,6 +175,52 @@ void Items::getItemGFX(int itemType, unsigned long ItemID, QPixmap &outImg, QGra
     }
 }
 
+QString Items::getSearchData(int itemType, unsigned long ItemID, QGraphicsScene *scene) {
+    LvlScene *scene_lvl = dynamic_cast<LvlScene *>(scene);
+    WldScene *scene_wld = dynamic_cast<WldScene *>(scene);
+    DataConfig &config = MainWinConnect::pMainWin->configs;
+    switch(itemType)
+    {
+    case ItemTypes::LVL_Block:
+    {
+        PGE_DataArray<obj_block> *array = scene_lvl ? &scene_lvl->m_localConfigBlocks : &config.main_block;
+        return QString((*array)[ItemID].setup.name + (*array)[ItemID].setup.description);
+    }
+    case ItemTypes::LVL_BGO:
+    {
+        PGE_DataArray<obj_bgo> *array = scene_lvl ? &scene_lvl->m_localConfigBGOs : &config.main_bgo;
+        return QString((*array)[ItemID].setup.name + (*array)[ItemID].setup.description);
+    }
+    case ItemTypes::LVL_NPC:
+    {
+        PGE_DataArray<obj_npc> *array = scene_lvl ? &scene_lvl->m_localConfigNPCs : &config.main_npc;
+        return QString((*array)[ItemID].setup.name + (*array)[ItemID].setup.description);
+    }
+    case ItemTypes::WLD_Tile:
+    {
+        PGE_DataArray<obj_w_tile> *array = scene_wld ? &scene_wld->m_localConfigTerrain : &config.main_wtiles;
+        return QString((*array)[ItemID].setup.name + (*array)[ItemID].setup.description);
+    }
+    case ItemTypes::WLD_Scenery:
+    {
+        PGE_DataArray<obj_w_scenery> *array = scene_wld ? &scene_wld->m_localConfigScenery : &config.main_wscene;
+        return QString((*array)[ItemID].setup.name + (*array)[ItemID].setup.description);
+    }
+    case ItemTypes::WLD_Path:
+    {
+        PGE_DataArray<obj_w_path> *array = scene_wld ? &scene_wld->m_localConfigPaths : &config.main_wpaths;
+        return QString((*array)[ItemID].setup.name + (*array)[ItemID].setup.description);
+    }
+    case ItemTypes::WLD_Level:
+    {
+        PGE_DataArray<obj_w_level> *array = scene_wld ? &scene_wld->m_localConfigLevels : &config.main_wlevels;
+        return QString((*array)[ItemID].setup.name + (*array)[ItemID].setup.description);
+    }
+    default:
+        break;
+    }
+    return "";
+}
 
 QString Items::getTilesetToolTip(int itemType, unsigned long ItemID, QGraphicsScene *scene)
 {

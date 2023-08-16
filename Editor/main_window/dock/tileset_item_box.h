@@ -21,7 +21,9 @@
 #define TILESET_ITEM_BOX_H
 
 #include <QDockWidget>
+#include <QLineEdit>
 #include <QTabWidget>
+#include <QGraphicsScene>
 #include "mwdock_base.h"
 
 #include <data_configs/obj_tilesets.h>
@@ -54,12 +56,12 @@ public slots:
     void on_tilesetGroup_currentIndexChanged(int index);
 
     void setTabPosition(QTabWidget::TabPosition pos);
-
     void editSelectedTileset();
     QScrollArea *getFrameTilesetOfTab(QWidget *catTab);
     QTabBar *getGroupComboboxOfTab(QWidget *catTab);
     QWidget *findTabWidget(const QString &categoryItem);
-    QWidget *makeCategory(const QString &categoryItem);
+    bool categoryShouldBeVisible(int visibility);
+    QWidget *makeCategory(const QString &categoryItem, int visibility);
     void prepareCategoriesAndGroups();
     void prepareTilesetGroup(const SimpleTilesetGroup &tilesetGroups);
     void clearTilesetGroups();
@@ -72,8 +74,10 @@ protected:
     virtual void focusInEvent(QFocusEvent * ev);
 
 private:
+    QList<QLineEdit*> m_searchBoxes;
     Ui::TilesetItemBox *ui;
     bool m_lockSettings = false;
+    bool isItemFoundBySearch(uint type, uint id, QString searchText, QGraphicsScene* scene);
 };
 
 #endif // TILESET_ITEM_BOX_H
