@@ -364,15 +364,18 @@ like when choosing an item from the item toolbox or from the tileset item box.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Locked Item Opacity</source>
+        <source>Opacity of locked items</source>
+        <comment>The title of group where user can set up the opacity level of locked items</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Opacity</source>
+        <comment>Opacity of locked items (label text)</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Defines the opacity level that will be applied to all locked elements of the scene.</source>
+        <comment>Explanation for the opacity of locked items</comment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1492,10 +1495,6 @@ therefore you can use same link to get updated version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Welcome to PGE Editor!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;p&gt;&lt;b&gt;Tip 1:&lt;/b&gt; You still be able to toggle UI via &lt;u&gt;Help&lt;/u&gt; menu or toggling toolboxes from &lt;u&gt;View&lt;/u&gt; menu and toggling
 sub-windows and tabs mode in the &lt;u&gt;Window&lt;/u&gt; menu.&lt;br/&gt;
 &lt;br/&gt;
@@ -1503,6 +1502,10 @@ sub-windows and tabs mode in the &lt;u&gt;Window&lt;/u&gt; menu.&lt;br/&gt;
 as well as toolboxes in toolbars and menus. This editor also allows you to select multiple objects at once!&lt;br/&gt;
 &lt;br/&gt;
 &lt;b&gt;Tip 3:&lt;/b&gt; Use middle mouse button to toggle placing of selected element or duplicate group!&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome to Moondust Editor!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

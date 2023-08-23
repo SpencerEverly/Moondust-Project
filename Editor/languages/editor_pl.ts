@@ -364,15 +364,18 @@ like when choosing an item from the item toolbox or from the tileset item box.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Locked Item Opacity</source>
+        <source>Opacity of locked items</source>
+        <comment>The title of group where user can set up the opacity level of locked items</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Opacity</source>
+        <comment>Opacity of locked items (label text)</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Defines the opacity level that will be applied to all locked elements of the scene.</source>
+        <comment>Explanation for the opacity of locked items</comment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1504,10 +1507,6 @@ dlatego możesz użyć tego samego linku, aby pobrać najnowszą wersję.</trans
         <translation>Klasyczny interfejs będzie podobny do edytora znanego wielu użytkownikom edytora z SMBX z długim stażem.</translation>
     </message>
     <message>
-        <source>Welcome to PGE Editor!</source>
-        <translation>Witaj w Edytorze Moondust!</translation>
-    </message>
-    <message>
         <source>&lt;p&gt;&lt;b&gt;Tip 1:&lt;/b&gt; You still be able to toggle UI via &lt;u&gt;Help&lt;/u&gt; menu or toggling toolboxes from &lt;u&gt;View&lt;/u&gt; menu and toggling
 sub-windows and tabs mode in the &lt;u&gt;Window&lt;/u&gt; menu.&lt;br/&gt;
 &lt;br/&gt;
@@ -1521,6 +1520,10 @@ as well as toolboxes in toolbars and menus. This editor also allows you to selec
 a także z pasków narzędzi (panele z ikonami na górze okna) i z menu. W tym edytorze możesz także zaznaczyć wiele obiektów na raz!&lt;br/&gt;
 &lt;br/&gt;
 &lt;b&gt;Wskazówka 3:&lt;/b&gt; Kliknij środkowym przyciskiem myszy aby przełączyć pomiędzy umieszczaniem zaznaczonych elementów, lub kopiowaniem ich!&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Welcome to Moondust Editor!</source>
+        <translation>Witaj w Edytorze Moondust!</translation>
     </message>
 </context>
 <context>

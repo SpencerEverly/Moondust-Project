@@ -365,15 +365,18 @@ like when choosing an item from the item toolbox or from the tileset item box.</
         <translation>минут</translation>
     </message>
     <message>
-        <source>Locked Item Opacity</source>
-        <translation>Заблокированные элементы</translation>
+        <source>Opacity of locked items</source>
+        <comment>The title of group where user can set up the opacity level of locked items</comment>
+        <translation>Видимость заблокированных элементов</translation>
     </message>
     <message>
         <source>Opacity</source>
+        <comment>Opacity of locked items (label text)</comment>
         <translation>Непрозрачность</translation>
     </message>
     <message>
         <source>Defines the opacity level that will be applied to all locked elements of the scene.</source>
+        <comment>Explanation for the opacity of locked items</comment>
         <translation>Определяет степень видимости (непрозрачности), применяемую ко всем заблокированным элементам на сцене.</translation>
     </message>
 </context>
@@ -1513,10 +1516,6 @@ therefore you can use same link to get updated version</source>
         <translation>Классический интерфейс более похож на редактор старого движка.</translation>
     </message>
     <message>
-        <source>Welcome to PGE Editor!</source>
-        <translation>Добро пожаловать в Редактор Moondust!</translation>
-    </message>
-    <message>
         <source>&lt;p&gt;&lt;b&gt;Tip 1:&lt;/b&gt; You still be able to toggle UI via &lt;u&gt;Help&lt;/u&gt; menu or toggling toolboxes from &lt;u&gt;View&lt;/u&gt; menu and toggling
 sub-windows and tabs mode in the &lt;u&gt;Window&lt;/u&gt; menu.&lt;br/&gt;
 &lt;br/&gt;
@@ -1529,6 +1528,10 @@ as well as toolboxes in toolbars and menus. This editor also allows you to selec
 &lt;b&gt;Совет 2:&lt;/b&gt; В отличии от старого редактора, большинство возможностей доступно через контекстное меню (открывается нажатием правой кнопки мыши), окна инструментов из панелей значков (перетаскиваемые панели со значками в верхней части окна) и меню. Этот редактор использует мульти-выбор!&lt;br/&gt;
 &lt;br/&gt;
 &lt;b&gt;Совет 3:&lt;/b&gt; Используйте среднюю кнопку мыши чтобы включать размещение выбранного элемента, или дублировать группу элементов!&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Welcome to Moondust Editor!</source>
+        <translation>Добро пожаловать в Редактор Moondust!</translation>
     </message>
 </context>
 <context>

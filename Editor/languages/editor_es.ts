@@ -364,15 +364,18 @@ like when choosing an item from the item toolbox or from the tileset item box.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Locked Item Opacity</source>
+        <source>Opacity of locked items</source>
+        <comment>The title of group where user can set up the opacity level of locked items</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Opacity</source>
+        <comment>Opacity of locked items (label text)</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Defines the opacity level that will be applied to all locked elements of the scene.</source>
+        <comment>Explanation for the opacity of locked items</comment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1504,10 +1507,6 @@ por lo tanto puede usar el mismo enlace para obtener la versión actualizada.</t
         <translation>Interfaz clásica similar al editor para el motor clásico.</translation>
     </message>
     <message>
-        <source>Welcome to PGE Editor!</source>
-        <translation type="unfinished">¡Bienvenido al Editor de PGE!</translation>
-    </message>
-    <message>
         <source>&lt;p&gt;&lt;b&gt;Tip 1:&lt;/b&gt; You still be able to toggle UI via &lt;u&gt;Help&lt;/u&gt; menu or toggling toolboxes from &lt;u&gt;View&lt;/u&gt; menu and toggling
 sub-windows and tabs mode in the &lt;u&gt;Window&lt;/u&gt; menu.&lt;br/&gt;
 &lt;br/&gt;
@@ -1520,6 +1519,10 @@ as well as toolboxes in toolbars and menus. This editor also allows you to selec
 &lt;b&gt;Tip 2:&lt;/b&gt; A diferencia del editor clásico, la mayoria de las características de elementos están disponibles del menú contextual (abriéndose con el botón derecho del ratón), cajas de las barras de herramientas (paneles arrastrables con íconos en la parte superior de la ventana) y menúes. ¡El editor usa multi selección!&lt;br/&gt;
 &lt;br/&gt;
 &lt;b&gt;Tip 3:&lt;/b&gt; ¡Use el botón medio del ratón para para intercambiar puesta del elemento seleccionado o grupo duplicado!&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Welcome to Moondust Editor!</source>
+        <translation type="unfinished">¡Bienvenido al Editor de Moondust!</translation>
     </message>
 </context>
 <context>
