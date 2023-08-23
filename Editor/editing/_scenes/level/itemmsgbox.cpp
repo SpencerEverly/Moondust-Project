@@ -51,22 +51,28 @@ ItemMsgBox::ItemMsgBox(Opened_By openedBy, QString text, bool isFriendly, QStrin
     //    QFont theFont("Press Start 2P", 11);
     //#endif
     QFont theFont("Press Start 2P");
-    theFont.setPixelSize(8);
+    theFont.setPixelSize(7);
     theFont.setStyleHint(QFont::Monospace);
-    ui->msgTextBox->setFont(theFont);
+    ui->msgTextBoxTiny->setFont(theFont);
     ui->msgTextBox->clear();
-    QFontMetrics meter(ui->msgTextBox->font());
+    QFontMetrics meter(ui->msgTextBoxTiny->font());
     int w_width = meter.size(Qt::TextSingleLine, "XXXXXXXXXXXXXXXXXXXXXXXXXXX").width();
-    int scrW = ui->msgTextBox->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
-    ui->msgTextBox->setMaximumWidth(w_width + scrW + 18);
-    ui->msgTextBox->setMinimumWidth(w_width + scrW + 18);
-    ui->msgTextBox->appendPlainText(currentText);
+    int scrW = ui->msgTextBoxTiny->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    ui->msgTextBoxTiny->setMaximumWidth(w_width + scrW + 18);
+    ui->msgTextBoxTiny->setMinimumWidth(w_width + scrW + 18);
+    ui->msgTextBoxTiny->appendPlainText(currentText);
     updateGeometry();
+    on_msgTextBox_textChanged();
 }
 
 ItemMsgBox::~ItemMsgBox()
 {
     delete ui;
+}
+
+void ItemMsgBox::on_msgTextBox_textChanged() {
+    ui->msgTextBoxTiny->clear();
+    ui->msgTextBoxTiny->appendPlainText(ui->msgTextBox->toPlainText().replace("\n", " "));
 }
 
 bool ItemMsgBox::isFriendlyChecked()

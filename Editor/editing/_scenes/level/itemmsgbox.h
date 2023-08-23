@@ -45,6 +45,7 @@ public:
 
 private slots:
     void on_buttonBox_accepted();
+    void on_msgTextBox_textChanged();
 
 private:
     Ui::ItemMsgBox *ui;
