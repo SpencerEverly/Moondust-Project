@@ -55,6 +55,8 @@ struct DataFolders
     PGEString gworld;
     PGEString gplayble;
 
+    PGEString cfgbackground2;
+
     PGEString gcustom;
 };
 

@@ -510,7 +510,7 @@ void LvlSectionProps::on_editBackground2Ini_clicked()
 
     if(edit->isUntitled())
     {
-        QMessageBox::information(this, tr("Please, save file"), tr("Please, save file first, if you want to manage custom background config files."), QMessageBox::Ok);
+        QMessageBox::information(this, tr("Please save the level"), tr("Please save the level in order to change the configuration of this background."), QMessageBox::Ok);
         return;
     }
 
@@ -519,12 +519,12 @@ void LvlSectionProps::on_editBackground2Ini_clicked()
     {
         QMessageBox::information(this,
                                  tr("Choose a background first"),
-                                 tr("Please, choose the background image first."),
+                                 tr("Please select a background image to edit."),
                                  QMessageBox::Ok);
         return;
     }
 
-    QString fileName = QString("background2-%3.ini").arg(backgroundId);
+    QString fileName = QString("background2-%3.txt").arg(backgroundId);
     QString dirPath  = QString("%1/%2")
                        .arg(edit->LvlData.meta.path)
                        .arg(edit->LvlData.meta.filename);
@@ -543,24 +543,35 @@ void LvlSectionProps::on_editBackground2Ini_clicked()
         if(backgroundId < main_bg.size())
         {
             const obj_BG &bg = main_bg[backgroundId];
-            QTextStream o(&f);
-            o << "[background2]\r\n"
+            QString dirPathToOriginal = mw()->configs.dirs.cfgbackground2 + fileName;
+            QFile fOrig(dirPathToOriginal);
+            if (fOrig.exists()) {
+                fOrig.open(QIODevice::ReadOnly);
+                QString str = fOrig.readAll();
+                QTextStream o(&f);
+                o << str;
 
-              << "; " << tr("Name that will appear in the editor",
-                            "A comment in the template of Background2 INI file.") << "\r\n"
-              << QString("name = \"%1\"\r\n").arg(bg.setup.name)
+                fOrig.close();
+            } else {
+                QTextStream o(&f);
+                o << "[background2]\r\n"
 
-              << "; " << tr("Backdrop fill color",
-                            "A comment in the template of Background2 INI file.") << "\r\n"
-              << QString("fill-color = black\r\n")
+                  << "; " << tr("Name that will appear in the editor",
+                                "A comment in the template of Background2 INI file.") << "\r\n"
+                  << QString("name = \"%1\"\r\n").arg(bg.setup.name)
 
-              << "\r\n\r\n"
-              << "; " << tr("Add layers here, for example:",
-                            "A comment in the template of Background2 INI file.") << "\r\n\r\n"
-              << "; [Layer1]\r\n"
-              << "; " << "depth = INFINITE" << "\r\n"
-              << "; " << "img = \"background.png\"" << "\r\n"
-              << "; " << "repeatX = true" << "\r\n";
+                  << "; " << tr("Backdrop fill color",
+                                "A comment in the template of Background2 INI file.") << "\r\n"
+                  << QString("fill-color = black\r\n")
+
+                  << "\r\n\r\n"
+                  << "; " << tr("Add layers here, for example:",
+                                "A comment in the template of Background2 INI file.") << "\r\n\r\n"
+                  << "; [Layer1]\r\n"
+                  << "; " << "depth = INFINITE" << "\r\n"
+                  << "; " << "img = \"background.png\"" << "\r\n"
+                  << "; " << "repeatX = true" << "\r\n";
+            }
         }
     }
 
