@@ -138,6 +138,9 @@ private slots:
 protected:
     void keyPressEvent(QKeyEvent *event);
 
+public:
+    int m_curItemType;
+
 private:
     void processNpcContainerButton(QPushButton *btn);
 
@@ -164,8 +167,6 @@ private:
     std::unique_ptr<JsonSettingsWidget> m_extraSettings;
     std::unique_ptr<JsonSettingsWidget> m_extraGlobalSettings;
     std::unique_ptr<QSpacerItem> m_extraSettingsSpacer;
-
-    int m_curItemType;
 
     QString m_recentBlockEventDestroy;
     QString m_recentBlockEventHit;

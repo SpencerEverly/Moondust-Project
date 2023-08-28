@@ -35,7 +35,8 @@ class CustomMusicSetup : public QDialog
         MIDI,
         GME,
         ADLMIDI,
-        PXTONE
+        PXTONE,
+        COMMON
     };
 
     int     adlDefaultBank = -1;

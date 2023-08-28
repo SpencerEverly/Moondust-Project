@@ -32,6 +32,7 @@
 #include <QStyleFactory>
 #endif
 
+#include <fstream>
 #include <iostream>
 #include <locale.h>
 #include "version.h"

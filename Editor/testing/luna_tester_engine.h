@@ -200,7 +200,8 @@ private:
      * @return true if data successfully sent, false on error
      */
     bool sendLevelData(LevelData &lvl);
-
+    void runLoop();
+    
     void stopEditorMusic();
 
 /********Settings functions*******/

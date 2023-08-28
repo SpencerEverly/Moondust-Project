@@ -29,6 +29,8 @@
 #include <editing/_scenes/level/itemmsgbox.h>
 #include <common_features/direction_switch_widget.h>
 
+#include <common_features/app_path.h>
+
 #include <networking/engine_intproc.h>
 
 #include "lvl_item_properties.h"
@@ -40,6 +42,9 @@
 #include <editing/_components/history/settings/lvl_block_userdata.hpp>
 #include <editing/_components/history/settings/lvl_bgo_userdata.hpp>
 #include <editing/_components/history/settings/lvl_npc_userdata.hpp>
+
+#include <fstream>
+#include <iostream>
 
 /*!
  * \brief Return reference to global NPC settings container with dependency to container setup. If this NPC a container - find config from contained NPC
@@ -299,7 +304,17 @@ void LvlItemProperties::openBlockProps(LevelBlock &block, bool isPlacingNew, boo
     resetBox(isPlacingNew);
 
     m_curItemType = ItemTypes::LVL_Block;
-
+    
+    std::ofstream MyFile;
+    MyFile.open("PGE_setEntity.txt");
+    MyFile << "1";
+    MyFile.close();
+    
+    std::ofstream MyFile2;
+    MyFile2.open("PGE_setBlockEntity.txt");
+    MyFile2 << std::to_string(LvlPlacingItems::blockSet.id);
+    MyFile2.close();
+    
     if(isPlacingNew)
         m_currentBlockArrayId = -1;
     else
@@ -524,6 +539,16 @@ void LvlItemProperties::openNpcProps(LevelNPC &npc, bool isPlacingNew, bool dont
     resetBox(isPlacingNew);
 
     m_curItemType = ItemTypes::LVL_NPC;
+    
+    std::ofstream MyFile;
+    MyFile.open("PGE_setEntity.txt");
+    MyFile << "2";
+    MyFile.close();
+    
+    std::ofstream MyFile2;
+    MyFile2.open("PGE_setNPCEntity.txt");
+    MyFile2 << std::to_string(LvlPlacingItems::npcSet.id);
+    MyFile2.close();
 
     if(isPlacingNew)
         m_currentNpcArrayId = -1;
@@ -753,6 +778,11 @@ void LvlItemProperties::closeProps()
     m_externalLock = true;
     m_internalLock = true;
     LvlPlacingItems::npcSpecialAutoIncrement = false;
+    
+    std::ofstream MyFile;
+    MyFile.open("PGE_setEntity.txt");
+    MyFile << "0";
+    MyFile.close();
 }
 
 void LvlItemProperties::resetBox(bool isPlacingNew)

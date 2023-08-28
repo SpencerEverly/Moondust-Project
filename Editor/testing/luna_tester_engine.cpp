@@ -64,6 +64,8 @@
 #include <common_features/logger.h>
 #include <dev_console/devconsole.h>
 #include <main_window/global_settings.h>
+#include <main_window/dock/lvl_item_properties.h>
+#include <editing/_scenes/level/lvl_item_placing.h>
 
 #include "qfile_dialogs_default_options.hpp"
 
@@ -1378,7 +1380,14 @@ bool LunaTesterEngine::sendLevelData(LevelData &lvl)
     // Extra flags
     JSONparams["godMode"] = t.xtra_god;
     JSONparams["showFPS"] = t.xtra_showFPS;
-
+    
+    int npcEditorFinalID = LvlPlacingItems::npcSet.id;
+    int blockEditorFinalID = LvlPlacingItems::blockSet.id;
+    
+    JSONparams["npcEditorID"] = npcEditorFinalID;
+    JSONparams["blockEditorID"] = blockEditorFinalID;
+    JSONparams["currentEntity"] = t.entityType;
+    
     QString LVLRawData;
     if(hasLvlxSupport && !lvl.meta.smbx64strict)
     {
@@ -1408,6 +1417,11 @@ bool LunaTesterEngine::sendLevelData(LevelData &lvl)
     }
     LogWarning("<- Fail to send level data and testing request into LunaTester!");
     return false;
+}
+
+void LunaTesterEngine::runLoop()
+{
+    
 }
 
 void LunaTesterEngine::stopEditorMusic()

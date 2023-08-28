@@ -159,7 +159,6 @@ cd "%SRCDIR%"
 echo.
 echo =========BUILT!!===========
 echo.
-exit /B 0
 goto quit
 
 :cleanX
@@ -217,7 +216,6 @@ rem ------------------------------------------------------------
 :updateSubModules
 set PATH=%PATH%;%CD%\_common
 git submodule foreach submodule-update.sh
-exit /B 0
 goto quit
 
 
@@ -236,7 +234,6 @@ echo.
 git submodule foreach submodule-update.sh
 echo.
 echo ==== Fixed! ====
-exit /B 0
 goto quit
 
 rem ------------------------------------------------------------
@@ -255,3 +252,4 @@ exit /B 1
 :quit
 PATH=%OldPATH%
 if "%NoPause%"=="0" pause
+exit /B 1

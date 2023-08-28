@@ -82,6 +82,7 @@ struct SETTINGS_TestSettings
     int  p2_state = 1;
     int  p2_vehicleID = 0;
     int  p2_vehicleType = 0;
+    int  entityType = 0;
 };
 
 struct SETTINGS_ScreenGrabSettings

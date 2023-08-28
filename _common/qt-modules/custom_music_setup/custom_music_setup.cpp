@@ -50,6 +50,11 @@ CustomMusicSetup::MusicType CustomMusicSetup::detectType(const QString &music)
     {
         "pttune", "ptcop"
     };
+    
+    const QStringList commonFormatSuffix =
+    {
+        "ogg"
+    };
 
     QString fName;
     if(music.contains('|'))
@@ -68,6 +73,8 @@ CustomMusicSetup::MusicType CustomMusicSetup::detectType(const QString &music)
         return GME;
     else if(pxtoneSuffix.contains(suffix))
         return PXTONE;
+    else if(commonFormatSuffix.contains(suffix))
+        return COMMON;
     else
         return Unsupported;
 }
@@ -86,6 +93,9 @@ void CustomMusicSetup::initSetup()
     on_pxtoneTempoReset_clicked();
 
     ui->gmeTrackNumber->setValue(0);
+
+    ui->commonMultiTrackChannelsNumberBox->setEnabled(ui->commonEnableMultiTracks->isChecked());
+    ui->commonMultiTracksNumberBox->setEnabled(ui->commonEnableMultiTracks->isChecked());
 
     setCurrentData(ui->midiExAdlBank, adlDefaultBank);
     ui->midiExAdlCustomBank->clear();
@@ -482,7 +492,68 @@ void CustomMusicSetup::parseSettings()
         }
 
         break;
+    
+    case COMMON:
+        value_opened = 0;
 
+        for(i = 0; i < maxlen && keepLoop; i++)
+        {
+            char c = args[i];
+            if(value_opened == 1)
+            {
+                if((c == ';') || (c == '\0'))
+                {
+                    arg[j] = '\0';
+                    switch(type)
+                    {
+                        case 'm1':
+                            {
+                                ui->commonMultiTrackChannelsNumberBox->setEnabled(ui->commonEnableMultiTracks->isChecked());
+                                ui->commonMultiTracksNumberBox->setEnabled(ui->commonEnableMultiTracks->isChecked());
+                            }
+                            break;
+                        case 'c':
+                            {
+                                int channels = QString(arg + 1).toInt();
+                                if(channels <= 0)
+                                    channels = 1;
+                                ui->commonMultiTrackChannelsNumberBox->setValue(channels);
+                            }
+                            break;
+                        case 'r':
+                            {
+                                double tracks = QString(arg + 1).toInt();
+                                if(tracks <= 0)
+                                    tracks = 1;
+                                ui->commonMultiTracksNumberBox->setValue(tracks);
+                            }
+                            break;
+                        case '\0':
+                            break;
+                        default:
+                            break;
+                    }
+                    value_opened = 0;
+                }
+                type = c;
+                value_opened = 1;
+                arg[j++] = c;
+            }
+            else
+            {
+                if(c == '\0')
+                {
+                    keepLoop = false;
+                    break;
+                }
+                type = c;
+                value_opened = 1;
+                j = 0;
+            }
+        }
+        break;
+
+    
     default:
         break;
     }
@@ -680,6 +751,20 @@ void CustomMusicSetup::buildSettings()
 
         m_music = m_musicName + (m_musicArgs.isEmpty() ? QString() : "|" + m_musicArgs);
     }
+    else if(m_type == COMMON)
+    {
+        int v;
+        
+        v = checkboxToInt(ui->commonEnableMultiTracks);
+        if(v >= 1)
+            m_musicArgs += "m1;";
+        if(int(ui->commonMultiTrackChannelsNumberBox->value()) != 100)
+            m_musicArgs += "c" + QString::number(ui->commonMultiTrackChannelsNumberBox->value()) + ";";
+        if(int(ui->commonMultiTracksNumberBox->value()) != 100)
+            m_musicArgs += "r" + QString::number(ui->commonMultiTracksNumberBox->value()) + ";";
+
+        m_music = m_musicName + (m_musicArgs.isEmpty() ? QString() : "|" + m_musicArgs);
+    }
     else
         m_music = m_musicName;
 
@@ -700,6 +785,8 @@ void CustomMusicSetup::updateVisibiltiy()
         ui->setupZone->insertTab(0, ui->tabChiptune, tr("Chiptune"));
     if(m_type == PXTONE)
         ui->setupZone->insertTab(0, ui->tabPxTone, "PXTONE");
+    if(m_type == COMMON)
+        ui->setupZone->insertTab(0, ui->tabCommon, "Common");
 
     ui->midiSetupADL->setVisible((m_type == MIDI && synType == MIDI_ADLMIDI) ||
                                  m_type == ADLMIDI);
@@ -719,6 +806,12 @@ void CustomMusicSetup::updateVisibiltiy()
     ui->midiGain->setVisible(hasGain);
     ui->midiGainAbs->setVisible(hasGain);
     ui->midiGainReset->setVisible(hasGain);
+    
+    if(m_type == COMMON)
+    {
+        ui->commonMultiTrackChannelsNumberBox->setEnabled(ui->commonEnableMultiTracks->isChecked());
+        ui->commonMultiTracksNumberBox->setEnabled(ui->commonEnableMultiTracks->isChecked());
+    }
 
     adjustSize();
     update();
