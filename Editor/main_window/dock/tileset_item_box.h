@@ -27,6 +27,8 @@
 #include "mwdock_base.h"
 
 #include <data_configs/obj_tilesets.h>
+#include <common_features/items.h>
+#include <tools/tilesets/tilesetitembutton.h>
 
 class MainWindow;
 class QScrollArea;
@@ -69,15 +71,21 @@ public slots:
     QVector<SimpleTileset> loadCustomTilesets();
     void makeCurrentTileset();
     void makeAllTilesets();
+    void contextMenuRequest(QPoint pos, TilesetItemButton* button);
+    bool tileIsFavorite(int type, int id);
 
 protected:
     virtual void focusInEvent(QFocusEvent * ev);
 
 private:
+    SimpleTileset m_favorites;
     QList<QLineEdit*> m_searchBoxes;
+    QMap<int, QList<uint>> favTilesetContentsMap;
     Ui::TilesetItemBox *ui;
     bool m_lockSettings = false;
-    bool isItemFoundBySearch(uint type, uint id, QString searchText, QGraphicsScene* scene);
+    bool isItemFoundBySearch(int type, uint id, QString searchText, QGraphicsScene* scene);
+    void UpdateFavouritesTileset(int itemType, uint id);
+    template <typename T> void onCustomContextMenu(QPoint pos, bool isWorldMap, TilesetItemButton* button, PGE_DataArray<T> &dataArray);
 };
 
 #endif // TILESET_ITEM_BOX_H

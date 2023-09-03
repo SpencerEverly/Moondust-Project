@@ -42,8 +42,12 @@ public:
     unsigned int id() const;
     bool isItemSet();
 
+    void setFavorite(bool favorite);
+    bool favorite();
+
 signals:
-    void clicked(int itemType, unsigned long id);
+    void leftClicked(int itemType, unsigned long id);
+    void rightClicked(const QPoint &pos, TilesetItemButton* button);
 public slots:
 
 protected:
@@ -57,6 +61,7 @@ private:
     unsigned int m_id;
     QPixmap m_drawItem;
     QGraphicsScene *scn;
+    bool isFavorite;
 };
 
 #endif // TILESETITEMBUTTON_H

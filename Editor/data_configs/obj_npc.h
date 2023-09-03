@@ -22,6 +22,7 @@
 
 #include <QString>
 #include <QPixmap>
+#include "obj_baseitem.h"
 #include <ConfigPackManager/level/config_npc.h>
 
 // //Defines:// //
@@ -29,21 +30,9 @@
 //  npc_Markers //
 // //////////// //
 
-struct obj_npc
+struct obj_npc : obj_baseitem<NpcSetup>
 {
-    bool            isValid = false;
-    unsigned long   animator_id = 0;
-    QPixmap        *cur_image = nullptr;
-    QPixmap        *cur_icon = nullptr;
-    QPixmap         image;
-    QPixmap         icon;
-
-    /*!
-     * \brief Quickly copies all properties except images
-     * \param Target bgo configuration body
-     */
     void copyTo(obj_npc &npc);
-    NpcSetup setup;
 };
 
 struct npc_Markers

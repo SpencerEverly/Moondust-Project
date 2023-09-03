@@ -21,24 +21,12 @@
 #define OBJ_BGO_H
 
 #include <QPixmap>
+#include "obj_baseitem.h"
 #include <ConfigPackManager/level/config_bgo.h>
 
-struct obj_bgo
+struct obj_bgo : obj_baseitem<BgoSetup>
 {
-    bool isValid = false;
-    unsigned long animator_id = 0;
-    QPixmap  *cur_image = nullptr;
-    QPixmap  *cur_icon = nullptr;
-    QPixmap image;
-    QPixmap icon;
-
-    /*!
-     * \brief Quickly copies all properties except images
-     * \param Target bgo configuration body
-     */
     void copyTo(obj_bgo &bgo);
-
-    BgoSetup setup;
 };
 
 #endif // OBJ_BGO_H

@@ -23,26 +23,27 @@
 
 #include <PGEString.h>
 #include <stdint.h>
+#include "config_baseitem.h"
 
 class IniProcessing;
 struct NPCConfigFile;
 
-struct NpcSetup
+struct NpcSetup : BaseSetup
 {
     /**
-     * @brief Parse opened NPC config INI section
-     * @param setup [_in] pointer to initialized INI manager with opened NPC section
-     * @param npcImgPath [_in] path to NPC images folder
-     * @param merge_with [_in] Merge settings with one other
-     * @param error [_out] Error string
-     * @return true if config parsed successfully, false on erros
+     * @brief Read data from the external INI file and fill the config
+     * @param setup [_in] Instance of opened INI file processor
+     * @param imgPath [_in] Folder path where images are stored
+     * @param defaultGrid [_in] Default grid size
+     * @param merge_with [_in] Another element config to use as source of default values
+     * @param error [_out] Output string for error messages writing
+     * @return
      */
-    bool parse(IniProcessing *setup,
-               PGEString npcImgPath,
+    bool parse(IniProcessing* setup,
+               PGEString imgPath,
                uint32_t defaultGrid,
                const NpcSetup* merge_with = nullptr,
-               PGEString *error=nullptr);
-
+               PGEString *error = nullptr);
     /**
      * @brief Merges SMBX64-NPC.txt structure with default global NPC-configuration of specific NPC-ID and returns merged configuration
      * @param local SMBX64-NPC.txt structure readen from a file
@@ -53,22 +54,6 @@ struct NpcSetup
                      uint32_t captured_w = 0,
                      uint32_t captured_h = 0);
 
-    //! Element type ID
-    uint64_t        id = 0;
-    //! Understandible name of element
-    PGEString       name;
-    //! Filter group name
-    PGEString       group = "_NoGroup";
-    //! Filter category name
-    PGEString       category = "_Other";
-    //! Detailed description of element
-    PGEString       description = "";
-    //! Main sprite image file
-    PGEString       image_n;
-    //! (Optional) Main sprite mask image file
-    PGEString       mask_n;
-    //! (Optional) In-editor icon for item boxes
-    PGEString       icon_n;
     //! Filename of the NPC AI Lua controller script
     PGEString       algorithm_script;
     //!Name of global level function to process NPC death effect
@@ -187,12 +172,6 @@ struct NpcSetup
     int32_t         special_spin_value_offset = 0;
     //! Special option Spinbox: allow "auto-increment" feature to be used with line drawing tool, otherwise, hide it for this NPC
     bool            special_spin_allow_autoincrement = true;
-
-    //! Extra Settings JSON layout file name
-    PGEString       extra_settings = "";
-
-    //! Is this a meta-object that should be never shown in game or exported images (screenshots)
-    bool            is_meta_object = false;
 
     //;game process
     //! [Gameplay] Scores code are will be added to player on beating this NPC

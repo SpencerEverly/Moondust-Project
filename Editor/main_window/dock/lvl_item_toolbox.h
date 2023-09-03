@@ -5,6 +5,8 @@
 #include <QDockWidget>
 #include <QMenu>
 #include "mwdock_base.h"
+#include <QListView>
+#include <common_features/items.h>
 
 class QTabWidget;
 class QListWidgetItem;
@@ -70,6 +72,8 @@ private:
 
     bool m_lockGroup = false;
     bool m_lockCategory = false;
+
+    template <typename T> void onCustomContextMenu(const QPoint &pos, QListView* itemList, ItemBoxListModel* model, PGE_DataArray<T> &dataArray);
 };
 
 #endif // LVL_ITEM_TOOLBOX_H

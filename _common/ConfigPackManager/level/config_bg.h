@@ -22,25 +22,26 @@
 
 #include <PGEString.h>
 #include <stdint.h>
+#include "config_baseitem.h"
 
 class IniProcessing;
 
-struct BgSetup
+struct BgSetup : BaseSetup
 {
     /**
      * @brief Read data from the external INI file and fill the config
      * @param setup [_in] Instance of opened INI file processor
-     * @param bgImgPath [_in] Folder path where images are stored
+     * @param imgPath [_in] Folder path where images are stored
      * @param defaultGrid [_in] Default grid size
      * @param merge_with [_in] Another element config to use as source of default values
      * @param error [_out] Output string for error messages writing
      * @return
      */
-    bool parse(IniProcessing *setup,
-               PGEString bgImgPath,
-               uint32_t defaultGrid,
-               const BgSetup *merge_with = nullptr,
-               PGEString *error = nullptr);
+    bool parse(IniProcessing* setup,
+                       PGEString imgPath,
+                       uint32_t defaultGrid,
+                       const BgSetup* merge_with = nullptr,
+                       PGEString *error = nullptr);
 
     /**
      * @brief Legacy BG: background type
@@ -100,10 +101,6 @@ struct BgSetup
     /*
      *  Generic properties
      */
-    //! ID of background
-    uint64_t        id = 0ul;
-    //! Name of background
-    PGEString       name;
     /// Default color to fill background.
     /*!
         "Auto" means fill color will be picked up from left-top pixel of background image or black
@@ -113,10 +110,6 @@ struct BgSetup
     /*
      *  First image (Single-row, Tiled and Double-row background)
      */
-    //! Filename for first image
-    PGEString       image_n;
-    //! Icon that will be shown in the backgrounds list
-    PGEString       icon_n;
     //! Type of background
     uint32_t        type = BG_TYPE_SingleRow;
     //! Horizontal parallax coefficient

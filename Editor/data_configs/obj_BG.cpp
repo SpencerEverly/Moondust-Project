@@ -27,15 +27,9 @@
 
 void obj_BG::copyTo(obj_BG &bg)
 {
-    /* for internal usage */
-    bg.isValid         = isValid;
-    bg.animator_id     = animator_id;
-    bg.cur_image       = cur_image;
-    if(!cur_image)
-        bg.cur_image   = &image;
+    this->copyBase(bg);
     if(!cur_image_second)
         bg.cur_image_second = &image;
-    bg.setup = setup;
 }
 
 bool DataConfig::loadLevelBackground(obj_BG &sbg,

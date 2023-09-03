@@ -34,71 +34,22 @@ bool NpcSetup::parse(IniProcessing *setup,
                      const NpcSetup *merge_with,
                      PGEString *error)
 {
+    bool canParse = baseParse(setup, npcImgPath, 0, merge_with, error);
+    if (!canParse) {
+        return false;
+    }
+
 #define pMerge(param, def) (merge_with ? pgeConstReference(merge_with->param) : pgeConstReference(def))
 #define pMergeMe(param) (merge_with ? pgeConstReference(merge_with->param) : pgeConstReference(param))
 #define pAlias(paramName, destValue) setup->read(paramName, destValue, destValue)
 
-    int errCode = PGE_ImageInfo::ERR_OK;
-    PGEString section;
     /*************Buffers*********************/
     uint32_t defGFX_h = 0;
     int combobox_size = 0;
 
     /*************Buffers*********************/
-    if(!setup)
-    {
-        if(error)
-            *error = "setup QSettings is null!";
-        return false;
-    }
 
-    section = StdToPGEString(setup->group());
-    setup->read("name", name, pMerge(name, section));
-
-    if(name.size() == 0)
-    {
-        if(error)
-            *error = section + " Item name isn't defined";
-        return false;
-    }
-
-    setup->read("group", group, pMergeMe(group));
-    setup->read("category", category, pMergeMe(category));
-    setup->read("description", description, pMerge(description, ""));
-
-    setup->read("image", image_n, pMergeMe(image_n));
-#ifdef PGE_EDITOR // alternative image for Editor
-    pAlias("editor-image", image_n);
-#endif
-
-    if(!merge_with && !PGE_ImageInfo::getImageSize(npcImgPath + image_n, &gfx_w, &gfx_h, &errCode))
-    {
-        if(error)
-        {
-            switch(errCode)
-            {
-            case PGE_ImageInfo::ERR_UNSUPPORTED_FILETYPE:
-                *error = "Unsupported or corrupted file format: " + npcImgPath + image_n;
-                break;
-
-            case PGE_ImageInfo::ERR_NOT_EXISTS:
-                *error = "image file is not exist: " + npcImgPath + image_n;
-                break;
-
-            default:
-            case PGE_ImageInfo::ERR_CANT_OPEN:
-                *error = "Can't open image file: " + npcImgPath + image_n;
-                break;
-            }
-        }
-
-        return false;
-    }
-
-    assert(merge_with || ((gfx_w > 0) && (gfx_h > 0) && "Width or height of image has zero or negative value!"));
-    mask_n = PGE_ImageInfo::getMaskName(image_n);
-
-    setup->read("icon", icon_n, pMerge(icon_n, PGESTRING()));
+    PGEString section = StdToPGEString(setup->group());
 
     setup->read("algorithm",        algorithm_script,   pMerge(algorithm_script, (section + ".lua")));
     setup->read("default-effect",   effect_1,           pMerge(effect_1, 10u));

@@ -22,6 +22,7 @@
 #include <QScrollArea>
 #include <QTabBar>
 #include <QToolButton>
+#include <qmath.h>
 
 #include <common_features/items.h>
 #include <common_features/logger.h>
@@ -83,6 +84,7 @@ TilesetItemBox::TilesetItemBox(QWidget *parent) :
     m_lastVisibilityState = isVisible();
     mw()->docks_level_and_world.
     addState(this, &m_lastVisibilityState);
+
 }
 
 
@@ -443,12 +445,187 @@ void TilesetItemBox::clearTilesetGroups()
     }
 }
 
-bool TilesetItemBox::isItemFoundBySearch(uint type, uint id, QString searchText, QGraphicsScene* scene) {
+bool TilesetItemBox::isItemFoundBySearch(int type, uint id, QString searchText, QGraphicsScene* scene) {
     QString tooltip = Items::getSearchData(type, id, scene);
     if (tooltip.contains(searchText, Qt::CaseInsensitive) || id == searchText.toUInt()) {
         return true;
     }
     return false;
+}
+
+void TilesetItemBox::UpdateFavouritesTileset(int itemType, uint id)
+{
+    if (m_favorites.tileSetName == "") {
+        m_favorites = SimpleTileset();
+        m_favorites.tileSetName = "★ Favorites";
+        m_favorites.fileName = "__favorites";
+        m_favorites.type = -1;
+        m_favorites.customDir = true;
+    }
+
+    int targetSize = qCeil(qSqrt(m_favorites.items.size() + 1));
+    bool found = false;
+    m_favorites.cols = targetSize;
+    m_favorites.rows = targetSize;
+    int column = 0;
+    int row = 0;
+    for (int i = 0; i < m_favorites.items.size(); i++) {
+        if (i >= m_favorites.items.size()) {
+            break;
+        }
+        if (!found && m_favorites.items[i].type == itemType && m_favorites.items[i].id == id) {
+            found = true;
+            favTilesetContentsMap[m_favorites.items[i].type].removeOne(m_favorites.items[i].id);
+            m_favorites.items.removeAt(i);
+
+            i--;
+        } else {
+            m_favorites.items[i].col = column;
+            m_favorites.items[i].row = row;
+            column++;
+            if (column >= targetSize) {
+                column = 0;
+                row++;
+            }
+        }
+    }
+    if (!found) {
+        SimpleTilesetItem t = SimpleTilesetItem();
+        t.id = id;
+        t.type = itemType;
+        t.col = column;
+        t.row = row;
+        m_favorites.items.append(t);
+        if (!favTilesetContentsMap.contains(t.type)) {
+            favTilesetContentsMap.insert(t.type, QList<uint>());
+        }
+
+        favTilesetContentsMap[t.type].append(t.id);
+    }
+
+    QString fileName = "__favorites.tileset.ini";
+
+    //Filter input from forbidden characters
+    fileName = util::filePath(fileName);
+
+    QString savePath;
+
+    EditBase *edit = mw()->activeBaseEditWin();
+    if (edit == nullptr) {
+        return;
+    }
+
+    QFileInfo ourFile(edit->currentFile());
+
+    savePath = ourFile.absoluteDir().path() + "/" + ourFile.completeBaseName() + "/";
+
+    QDir target(savePath);
+    if(!target.exists()) target.mkpath(savePath);
+
+    tileset::SaveSimpleTileset(savePath + fileName, m_favorites);
+
+    makeSelectedTileset(0);
+}
+
+bool TilesetItemBox::tileIsFavorite(int type, int id) {
+    return favTilesetContentsMap[type].contains(id);
+}
+
+template <typename T> void TilesetItemBox::onCustomContextMenu(QPoint pos, bool isWorldMap, TilesetItemButton* button, PGE_DataArray<T> &dataArray) {
+    QString episodeDir;
+    QString customDir;
+    EditBase *e;
+    int itemID = button->id();
+
+    if (isWorldMap) {
+        WorldEdit *edit = mw()->activeWldEditWin();
+        if(!edit)
+            return;
+        episodeDir = edit->WldData.meta.path;
+        e = edit;
+    } else {
+        LevelEdit *edit = mw()->activeLvlEditWin();
+        if(!edit)
+            return;
+        episodeDir = edit->LvlData.meta.path;
+        customDir  = edit->LvlData.meta.path + "/" + edit->LvlData.meta.filename;
+        e = edit;
+    }
+
+    QMenu itemMenu(this);
+
+    if(e->isUntitled())
+    {
+        QAction *nothing = itemMenu.addAction(tr("<Save file first>"));
+        nothing->setEnabled(false);
+        itemMenu.exec(pos);
+        return;
+    }
+
+    bool isFavorite = TilesetItemBox::tileIsFavorite(button->itemType(), button->id());
+    QAction *favoriteToggle = itemMenu.addAction(tr(isFavorite ? "Unfavorite" : "Favorite"));
+    favoriteToggle->setCheckable(true);
+    favoriteToggle->setChecked(isFavorite);
+    itemMenu.addSeparator();
+
+    T &block = dataArray[itemID];
+    QString newImg = block.setup.image_n;
+    if(newImg.endsWith(".gif", Qt::CaseInsensitive))
+    newImg.replace(newImg.size() - 4, 4, ".png");
+    QPixmap &orig = block.image;
+
+    QAction *copyToC = nullptr;
+    if (!isWorldMap) {
+        copyToC = itemMenu.addAction(tr("Copy graphic to custom folder"));
+    }
+    QAction *copyToE = itemMenu.addAction(tr("Copy graphic to episode folder"));
+    QAction *reply = itemMenu.exec(pos);
+    if (reply == favoriteToggle) {
+        TilesetItemBox::UpdateFavouritesTileset(button->itemType(), button->id());
+        if (ui->TileSetsCategories->currentIndex() > 0) {
+            button->repaint();
+        }
+    }else if(copyToC != nullptr && reply == copyToC)
+    {
+        QDir cDir(customDir);
+        if(!cDir.exists())
+                cDir.mkpath(customDir);
+        if(!QFile::exists(customDir + "/" + newImg))
+                orig.save(customDir + "/" + newImg, "PNG");
+    }
+    else if(reply == copyToE)
+    {
+        if(!QFile::exists(episodeDir + "/" + newImg))
+            orig.save(episodeDir + "/" + newImg, "PNG");
+    }
+}
+
+void TilesetItemBox::contextMenuRequest(QPoint pos, TilesetItemButton* button) {
+    switch (button->itemType()) {
+        case ItemTypes::LVL_Block:
+            TilesetItemBox::onCustomContextMenu(pos, false, button, mw()->configs.main_block);
+            break;
+        case ItemTypes::LVL_BGO:
+            TilesetItemBox::onCustomContextMenu(pos, false, button, mw()->configs.main_bgo);
+            break;
+        case ItemTypes::LVL_NPC:
+            TilesetItemBox::onCustomContextMenu(pos, false, button, mw()->configs.main_npc);
+            break;
+        case ItemTypes::WLD_Level:
+            TilesetItemBox::onCustomContextMenu(pos, true, button, mw()->configs.main_wlevels);
+            break;
+        case ItemTypes::WLD_Scenery:
+            TilesetItemBox::onCustomContextMenu(pos, true, button, mw()->configs.main_wscene);
+            break;
+        case ItemTypes::WLD_Tile:
+            TilesetItemBox::onCustomContextMenu(pos, true, button, mw()->configs.main_wtiles);
+            break;
+        case ItemTypes::WLD_Path:
+            TilesetItemBox::onCustomContextMenu(pos, true, button, mw()->configs.main_wpaths);
+            break;
+        default:
+            break;
+    }
 }
 
 void TilesetItemBox::makeSelectedTileset(int tabIndex)
@@ -551,7 +728,8 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                                 tButton->applySize(32, 32);
                                 tButton->applyItem(type, item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(type, tileSet.items[k].id, searchBarText, scene));
                                 tsLayout->addWidget(tButton, item.row, item.col);
-                                connect(tButton, SIGNAL(clicked(int, ulong)), mw(), SLOT(SwitchPlacingItem(int, ulong)));
+                                connect(tButton, SIGNAL(leftClicked(int,ulong)), mw(), SLOT(SwitchPlacingItem(int,ulong)));
+                                connect(tButton, SIGNAL(rightClicked(QPoint,TilesetItemButton*)), this, SLOT(contextMenuRequest(QPoint,TilesetItemButton*)));
                             }
                             break;
                         }
@@ -625,14 +803,17 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                     l->addWidget(tButton, (int)item.row, (int)item.col);
                     if(item.col >= mostRighter)
                         mostRighter = item.col + 1;
-                    connect(tButton, SIGNAL(clicked(int, ulong)), mw(), SLOT(SwitchPlacingItem(int, ulong)));
+                    connect(tButton, SIGNAL(leftClicked(int,ulong)), mw(), SLOT(SwitchPlacingItem(int,ulong)));
+                    connect(tButton, SIGNAL(rightClicked(QPoint,TilesetItemButton*)), this, SLOT(contextMenuRequest(QPoint,TilesetItemButton*)));
                 }
-                QPushButton *b = new QPushButton(Themes::icon(Themes::pencil), "", tilesetNameWrapper);
-                b->setProperty("tileset-file-name", ts.fileName);
-                b->setMaximumSize(32, 32);
-                b->setFlat(true);
-                l->addWidget(b, 0, (int)mostRighter);
-                connect(b, SIGNAL(clicked()), this, SLOT(editSelectedTileset()));
+                if (ts.fileName != m_favorites.fileName) {
+                    QPushButton *b = new QPushButton(Themes::icon(Themes::pencil), "", tilesetNameWrapper);
+                    b->setProperty("tileset-file-name", ts.fileName);
+                    b->setMaximumSize(32, 32);
+                    b->setFlat(true);
+                    l->addWidget(b, 0, (int)mostRighter);
+                    connect(b, SIGNAL(clicked()), this, SLOT(editSelectedTileset()));
+                }
             }
         }
     }
@@ -676,10 +857,15 @@ QVector<SimpleTileset> TilesetItemBox::loadCustomTilesets()
                 SimpleTileset xxx;
                 if(tileset::OpenSimpleTileset(p + file, xxx))
                 {
-                    xxx.customDir = (p == path + cfolder);
-                    ctsets.push_back(xxx);
+                    if (xxx.fileName != m_favorites.fileName) {
+                        xxx.customDir = (p == path + cfolder);
+                        ctsets.push_back(xxx);
+                    }
                 }
             }
+        }
+        if (!m_favorites.items.empty()) {
+            ctsets.push_front(m_favorites);
         }
     }
     return ctsets;
@@ -696,6 +882,35 @@ void TilesetItemBox::makeCurrentTileset()
 void TilesetItemBox::makeAllTilesets()
 {
     if(m_lockSettings) return;
+
+    QString fileName = "__favorites.tileset.ini";
+
+    //Filter input from forbidden characters
+    fileName = util::filePath(fileName);
+
+    QString savePath;
+    EditBase *edit = mw()->activeBaseEditWin();
+    if (edit == nullptr) {
+        return;
+    }
+    QFileInfo ourFile(edit->currentFile());
+    savePath = ourFile.absoluteDir().path() + "/" + ourFile.completeBaseName() + "/";
+
+    QDir target(savePath);
+    if(!target.exists()) {
+        return;
+    }
+    if (m_favorites.tileSetName == "") {
+        tileset::OpenSimpleTileset(savePath + fileName, m_favorites);
+
+        foreach (SimpleTilesetItem i, m_favorites.items) {
+            if (!favTilesetContentsMap.contains(i.type)) {
+                favTilesetContentsMap.insert(i.type, QList<uint>());
+            }
+
+            favTilesetContentsMap[i.type].append(i.id);
+        }
+    }
 
     using namespace pge_tilesetbox;
     QTabWidget *cat = ui->TileSetsCategories;

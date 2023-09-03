@@ -27,17 +27,7 @@
 
 void obj_block::copyTo(obj_block &block)
 {
-    /* for internal usage */
-    block.isValid         = isValid;
-    block.animator_id     = animator_id;
-    block.cur_image       = cur_image;
-    block.cur_icon        = cur_icon;
-
-    if(!cur_image)
-        block.cur_image   = &image;
-    if(!cur_icon)
-        block.cur_icon    = &icon;
-    block.setup = setup;
+    this->copyBase(block);
 }
 
 /*!
