@@ -31,3 +31,6 @@
 	path = _Libs/libpng
 	url = https://github.com/WohlSoft/libpng.git
 	branch = moondust
+[submodule "_common/PGE_File_Formats"]
+	path = _common/PGE_File_Formats
+	url = https://github.com/SpencerEverly/PGE-File-Library-STL.git
