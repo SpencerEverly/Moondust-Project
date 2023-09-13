@@ -306,6 +306,14 @@ public:
     //Common items
     //! Music ID which will be reserved for custom music on levels
     uint64_t music_custom_id;
+    //! Music ID which will be reserved for custom music on levels 2
+    uint64_t music_custom_id2;
+    //! Music ID which will be reserved for custom music on levels 3
+    uint64_t music_custom_id3;
+    //! Music ID which will be reserved for custom music on levels 4
+    uint64_t music_custom_id4;
+    //! Music ID which will be reserved for custom music on levels 5
+    uint64_t music_custom_id5;
     //! Music ID which will be reserved for custom music on world maps
     uint64_t music_w_custom_id;
     //! Available config pack standard level music set

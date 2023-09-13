@@ -10,6 +10,7 @@
 class MainWindow;
 class QPushButton;
 class QSpacerItem;
+class QString;
 class JsonSettingsWidget;
 
 namespace Ui {
@@ -57,6 +58,7 @@ private slots:
     void on_LVLPropsUnderWater_clicked(bool checked);
 
     void on_LVLPropsMusicNumber_currentIndexChanged(int index);
+    void on_LVLPropsMusicCustomSlot_currentIndexChanged(int index);
     void on_LVLPropsMusicCustomEn_toggled(bool checked);
     void on_LVLPropsMusicCustomBrowse_clicked();
     void on_musicSetup_clicked();

@@ -72,6 +72,11 @@ void DataConfig::loadMusic()
         musicset.read("total-special", music_spc_total, 0);
 
         musicset.read("level-custom-music-id", music_custom_id,     24);
+        musicset.read("level-custom-music-id2", music_custom_id2,     57);
+        musicset.read("level-custom-music-id3", music_custom_id3,     58);
+        musicset.read("level-custom-music-id4", music_custom_id4,     59);
+        musicset.read("level-custom-music-id5", music_custom_id5,     60);
+        
         musicset.read("world-custom-music-id", music_w_custom_id,   17);
         total_data += music_lvl_total;
         total_data += music_wld_total;
@@ -192,11 +197,18 @@ void DataConfig::loadMusic()
             }
 
             musicset.read("file", smusic_lvl.file, "");
-            if(smusic_lvl.file.isEmpty()&&(i != music_custom_id))
+            if(smusic_lvl.file.isEmpty()&&(i != music_custom_id)&&(i != music_custom_id2)&&(i != music_custom_id3)&&(i != music_custom_id4)&&(i != music_custom_id5))
             {
                 addError(QString("LVL-Music-%1 Item file isn't defined").arg(i));
                 valid=false;
             }
+            
+            if (i == music_custom_id2 || i == music_custom_id3 || i == music_custom_id4 || i == music_custom_id5)
+            {
+                // Skip storing audio for custom music indexes above 1
+                continue;
+            }
+            
             smusic_lvl.id = i;
             main_music_lvl.storeElement(int(i), smusic_lvl, valid);
         }
@@ -250,6 +262,12 @@ void DataConfig::loadMusic()
             auto key = QString("level-music-%1").arg(i).toStdString();
             if(!subMusic.contains(key))
                 continue; // Do nothing if key doesn't exist
+            
+            if (i == music_custom_id2 || i == music_custom_id3 || i == music_custom_id4 || i == music_custom_id5)
+            {
+                // Skip storing audio for custom music indexes above 1
+                continue;
+            }
 
             auto &mus = main_music_lvl[i];
             subMusic.beginGroup(key);

@@ -149,3 +149,4 @@ PVS-Studio.pri
 
 *.directory
 
+Editor/main_window/dock/lvl_sctc_props.ui.autosave

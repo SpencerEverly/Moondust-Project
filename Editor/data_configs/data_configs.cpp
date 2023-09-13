@@ -41,6 +41,11 @@ DataConfig::DataConfig()
     total_data = 0;
 
     music_custom_id = 1;
+    music_custom_id2 = 57;
+    music_custom_id3 = 58;
+    music_custom_id4 = 59;
+    music_custom_id5 = 60;
+    
     music_w_custom_id = 1;
 
     defaultGrid.general = 0;
