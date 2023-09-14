@@ -520,28 +520,31 @@ void LvlSectionProps::on_cancelResize_clicked()
 
 void LvlSectionProps::on_LVLPropsMusicNumberV2_clicked()
 {
-    ItemSelectDialog *itemList = new ItemSelectDialog(&mw()->configs, ItemSelectDialog::TAB_MUSICLEVEL, 0, 0, 0, 0, 0, 0, 0, 0, 0, this, ItemSelectDialog::TAB_MUSICLEVEL);
-    util::DialogToCenter(itemList, true);
-    int musicIDToChangeTo;
-
-    if(itemList->exec() == QDialog::Accepted)
+    if(mw()->activeChildWindow() == MainWindow::WND_Level)
     {
         LevelEdit *edit = mw()->activeLvlEditWin();
         if(!edit) return;
         
-        musicIDToChangeTo = itemList->musicIDLevel;
-        obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicIDToChangeTo];
-        
-        edit->LvlData.sections[edit->LvlData.CurSection].music_id = musicIDToChangeTo;
-        
-        if(edit->LvlData.sections[edit->LvlData.CurSection].music_id > 0)
-            ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
-        else if(edit->LvlData.sections[edit->LvlData.CurSection].music_id <= 0)
-            ui->LVLPropsMusicNumberV2->setText("[Silence]");
-        
-        loadMusic();
+        ItemSelectDialog *itemList = new ItemSelectDialog(&mw()->configs, ItemSelectDialog::TAB_MUSICLEVEL, 0, 0, 0, 0, 0, 0, 0, 0, 0, this, ItemSelectDialog::TAB_MUSICLEVEL);
+        util::DialogToCenter(itemList, true);
+        int musicIDToChangeTo;
+
+        if(itemList->exec() == QDialog::Accepted)
+        {
+            musicIDToChangeTo = itemList->musicIDLevel;
+            obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicIDToChangeTo];
+            
+            edit->LvlData.sections[edit->LvlData.CurSection].music_id = musicIDToChangeTo;
+            
+            if(edit->LvlData.sections[edit->LvlData.CurSection].music_id > 0)
+                ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
+            else if(edit->LvlData.sections[edit->LvlData.CurSection].music_id <= 0)
+                ui->LVLPropsMusicNumberV2->setText("[Silence]");
+            
+            loadMusic();
+        }
+        delete itemList;
     }
-    delete itemList;
 }
 
 
