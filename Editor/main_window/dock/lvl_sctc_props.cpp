@@ -400,9 +400,9 @@ void LvlSectionProps::refreshFileData()
         {
             ui->LVLPropsMusicNumberV2->setEnabled(true);
             obj_music &musicLevelItem = mw()->configs.main_music_lvl[edit->LvlData.sections[edit->LvlData.CurSection].music_id];
-            if(edit->LvlData.sections[edit->LvlData.CurSection].music_id != 0)
+            if(edit->LvlData.sections[edit->LvlData.CurSection].music_id > 0)
                 ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
-            else
+            else if(edit->LvlData.sections[edit->LvlData.CurSection].music_id <= 0)
                 ui->LVLPropsMusicNumberV2->setText("[Silence]");
         }
         
@@ -532,11 +532,12 @@ void LvlSectionProps::on_LVLPropsMusicNumberV2_clicked()
         musicIDToChangeTo = itemList->musicIDLevel;
         obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicIDToChangeTo];
         
-        if(edit->LvlData.sections[edit->LvlData.CurSection].music_id != 0)
-            ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
-        else
-            ui->LVLPropsMusicNumberV2->setText("[Silence]");
         edit->LvlData.sections[edit->LvlData.CurSection].music_id = musicIDToChangeTo;
+        
+        if(edit->LvlData.sections[edit->LvlData.CurSection].music_id > 0)
+            ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
+        else if(edit->LvlData.sections[edit->LvlData.CurSection].music_id <= 0)
+            ui->LVLPropsMusicNumberV2->setText("[Silence]");
         
         loadMusic();
     }
