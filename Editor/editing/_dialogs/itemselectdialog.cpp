@@ -711,6 +711,15 @@ ItemSelectDialog::ItemSelectDialog(DataConfig *conf, int tabs, int npcExtraData,
             m_levelMusicModel->setSortSkipFirst(true);
             m_levelMusicModel->addElement(empMusic);
         }
+        
+        ItemBoxListModel::Element e;
+        e.pixmap = QPixmap(":/toolbar/playmusic.png");
+        e.name = "[Silence]";
+        e.description = QString("ID: %1").arg(0);
+        e.elementId = 0;
+        e.isCustom = false;
+        e.isValid = true;
+        m_levelMusicModel->addElement(e);
 
         for(int i = 1; i < conf->main_music_lvl.size(); i++)
         {

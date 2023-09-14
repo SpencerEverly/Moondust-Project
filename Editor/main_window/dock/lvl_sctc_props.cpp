@@ -532,7 +532,10 @@ void LvlSectionProps::on_LVLPropsMusicNumberV2_clicked()
         musicIDToChangeTo = itemList->musicIDLevel;
         obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicIDToChangeTo];
         
-        ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
+        if(edit->LvlData.sections[edit->LvlData.CurSection].music_id != 0)
+            ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
+        else
+            ui->LVLPropsMusicNumberV2->setText("[Silence]");
         edit->LvlData.sections[edit->LvlData.CurSection].music_id = musicIDToChangeTo;
         
         loadMusic();
