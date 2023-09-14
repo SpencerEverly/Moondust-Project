@@ -21,6 +21,7 @@
 #include <editing/_scenes/level/lvl_history_manager.h>
 #include <common_features/json_settings_widget.h>
 #include <main_window/dock/lvl_events_box.h>
+#include <editing/_dialogs/itemselectdialog.h>
 
 #include <ui_mainwindow.h>
 #include <mainwindow.h>
@@ -247,7 +248,8 @@ void LvlSectionProps::initDefaults()
     eventsSctBg->setMinimumHeight(80);
 
     LogDebug(QString("Set level Section Data"));
-    ui->LVLPropsMusicNumber->clear();
+
+    ui->LVLPropsMusicNumberV2->setText("[Silence]");
     ui->imageSelector->clear();
     ui->imageSelector->setMinimumHeight(80);
     
@@ -263,7 +265,6 @@ void LvlSectionProps::initDefaults()
 
     eventsSctBg->addItem(empty, tr("[No image]"), 0);
     eventsSctBg->setItem(0);
-    ui->LVLPropsMusicNumber->addItem(tr("[Silence]"), QVariant::fromValue<unsigned long>(0));
     eventsSctMus->addItem(tr("[Silence]"), QVariant::fromValue<unsigned long>(0));
 
     PGE_DataArray<obj_BG > &main_bg = mw()->configs.main_bg;
@@ -309,27 +310,6 @@ void LvlSectionProps::initDefaults()
         eventsSctBg->addItem(bgThumb, bgTitle, bgD.setup.id);
     }
 
-    PGE_DataArray<obj_music > &main_music_lvl = mw()->configs.main_music_lvl;
-    
-    uint64_t music_custom_id2 = mw()->configs.music_custom_id2;
-    uint64_t music_custom_id3 = mw()->configs.music_custom_id3;
-    uint64_t music_custom_id4 = mw()->configs.music_custom_id4;
-    uint64_t music_custom_id5 = mw()->configs.music_custom_id5;
-    
-    for(int i = 1; i < main_music_lvl.size(); i++)
-    {
-        const obj_music &mus = main_music_lvl[i];
-        
-        if (i == music_custom_id2 || i == music_custom_id3 || i == music_custom_id4 || i == music_custom_id5)
-        {
-            // Skip storing audio for custom music indexes above 1
-            continue;
-        }
-        
-        ui->LVLPropsMusicNumber->addItem(mus.name, QString::number(mus.id));
-        eventsSctMus->addItem(mus.name, QString::number(mus.id));
-    }
-
     mw()->dock_LvlEvents->setEventToolsLocked(false);
     m_externalLock = false;
 
@@ -354,17 +334,6 @@ void LvlSectionProps::refreshFileData()
         ui->LVLProp_CurSect->setText(QString::number(edit->LvlData.CurSection));
 
         ui->imageSelector->setItem(edit->LvlData.sections[edit->LvlData.CurSection].background);
-
-        ui->LVLPropsMusicNumber->setCurrentIndex(0);
-        for(int i = 0; i < ui->LVLPropsMusicNumber->count(); i++)
-        {
-            if((unsigned long)ui->LVLPropsMusicNumber->itemData(i).toInt() ==
-               edit->LvlData.sections[edit->LvlData.CurSection].music_id)
-            {
-                ui->LVLPropsMusicNumber->setCurrentIndex(i);
-                break;
-            }
-        }
 
         ui->LVLPropsWrapHorizontal->setChecked(edit->LvlData.sections[edit->LvlData.CurSection].wrap_h);
         ui->LVLPropsWrapVertical->setChecked(edit->LvlData.sections[edit->LvlData.CurSection].wrap_v);
@@ -410,6 +379,33 @@ void LvlSectionProps::refreshFileData()
             ui->LVLPropsMusicCustomEn->setChecked((edit->LvlData.sections[edit->LvlData.CurSection].music_id == mw()->configs.music_custom_id5));
             ui->musicSetup->setVisible(CustomMusicSetup::settingsNeeded(musFile5));
         }
+        
+        if(ui->LVLPropsMusicCustomEn->isChecked())
+        {
+            ui->LVLPropsMusicNumberV2->setEnabled(false);
+            ui->LVLPropsMusicNumberV2->setText("[Custom]");
+            
+            if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 0)
+                edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id;
+            else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 1)
+                edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id2;
+            else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 2)
+                edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id3;
+            else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 3)
+                edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id4;
+            else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 4)
+                edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id5;
+        }
+        else
+        {
+            ui->LVLPropsMusicNumberV2->setEnabled(true);
+            obj_music &musicLevelItem = mw()->configs.main_music_lvl[edit->LvlData.sections[edit->LvlData.CurSection].music_id];
+            if(edit->LvlData.sections[edit->LvlData.CurSection].music_id != 0)
+                ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
+            else
+                ui->LVLPropsMusicNumberV2->setText("[Silence]");
+        }
+        
         
         ui->LVLPropsMusicCustomSlot->setCurrentIndex(index);
         
@@ -519,6 +515,29 @@ void LvlSectionProps::on_cancelResize_clicked()
         if(!edit) return;
         mw()->on_actionResizeCancel_triggered();
     }
+}
+
+
+void LvlSectionProps::on_LVLPropsMusicNumberV2_clicked()
+{
+    ItemSelectDialog *itemList = new ItemSelectDialog(&mw()->configs, ItemSelectDialog::TAB_MUSICLEVEL, 0, 0, 0, 0, 0, 0, 0, 0, 0, this, ItemSelectDialog::TAB_MUSICLEVEL);
+    util::DialogToCenter(itemList, true);
+    int musicIDToChangeTo;
+
+    if(itemList->exec() == QDialog::Accepted)
+    {
+        LevelEdit *edit = mw()->activeLvlEditWin();
+        if(!edit) return;
+        
+        musicIDToChangeTo = itemList->musicIDLevel;
+        obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicIDToChangeTo];
+        
+        ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
+        edit->LvlData.sections[edit->LvlData.CurSection].music_id = musicIDToChangeTo;
+        
+        loadMusic();
+    }
+    delete itemList;
 }
 
 
@@ -656,29 +675,6 @@ void LvlSectionProps::loadMusic()
     mw()->setMusic();
 }
 
-
-void LvlSectionProps::on_LVLPropsMusicNumber_currentIndexChanged(int index)
-{
-    if(m_externalLock) return;
-
-    unsigned int test = index;
-    ui->LVLPropsMusicCustomEn->setChecked(test == mw()->configs.music_custom_id);
-
-    if(mw()->activeChildWindow() == MainWindow::WND_Level)
-    {
-        LevelEdit *edit = mw()->activeLvlEditWin();
-        if(!edit) return;
-
-        QList<QVariant> musicData;
-        musicData.push_back(edit->LvlData.sections[edit->LvlData.CurSection].music_id);
-        musicData.push_back(ui->LVLPropsMusicNumber->currentIndex());
-        edit->scene->m_history->addChangeSectionSettings(edit->LvlData.CurSection, HistorySettings::SETTING_SECMUSIC, QVariant(musicData));
-        edit->LvlData.sections[edit->LvlData.CurSection].music_id = ui->LVLPropsMusicNumber->currentIndex();
-        if(ui->LVLPropsMusicNumber->hasFocus()) edit->LvlData.meta.modified = true;
-    }
-    loadMusic();
-}
-
 void LvlSectionProps::on_LVLPropsMusicCustomEn_toggled(bool checked)
 {
     if(m_externalLock) return;
@@ -687,7 +683,6 @@ void LvlSectionProps::on_LVLPropsMusicCustomEn_toggled(bool checked)
     {
         if(checked)
         {
-            ui->LVLPropsMusicNumber->setCurrentIndex(mw()->configs.music_custom_id);
             if(mw()->activeChildWindow() == MainWindow::WND_Level)
             {
                 LevelEdit *edit = mw()->activeLvlEditWin();
@@ -695,10 +690,38 @@ void LvlSectionProps::on_LVLPropsMusicCustomEn_toggled(bool checked)
 
                 QList<QVariant> musicData;
                 musicData.push_back(edit->LvlData.sections[edit->LvlData.CurSection].music_id);
-                musicData.push_back(ui->LVLPropsMusicNumber->currentIndex());
                 edit->scene->m_history->addChangeSectionSettings(edit->LvlData.CurSection, HistorySettings::SETTING_SECMUSIC, QVariant(musicData));
-                edit->LvlData.sections[edit->LvlData.CurSection].music_id = ui->LVLPropsMusicNumber->currentIndex();
                 edit->LvlData.meta.modified = true;
+                
+                ui->LVLPropsMusicNumberV2->setEnabled(false);
+                ui->LVLPropsMusicNumberV2->setText("[Custom]");
+                
+                if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 0)
+                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id;
+                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 1)
+                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id2;
+                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 2)
+                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id3;
+                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 3)
+                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id4;
+                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 4)
+                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id5;
+                
+                loadMusic();
+            }
+        }
+        else
+        {
+            if(mw()->activeChildWindow() == MainWindow::WND_Level)
+            {
+                LevelEdit *edit = mw()->activeLvlEditWin();
+                if(!edit) return;
+                
+                ui->LVLPropsMusicNumberV2->setEnabled(true);
+                edit->LvlData.sections[edit->LvlData.CurSection].music_id = 1;
+                obj_music &musicLevelItem = mw()->configs.main_music_lvl[edit->LvlData.sections[edit->LvlData.CurSection].music_id];
+                ui->LVLPropsMusicNumberV2->setText(musicLevelItem.name);
+                loadMusic();
             }
         }
     }

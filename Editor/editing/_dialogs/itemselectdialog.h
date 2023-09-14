@@ -48,7 +48,8 @@ public:
     explicit ItemSelectDialog(DataConfig *configs, int tabs, int npcExtraData = 0,
                               int curSelIDBlock = 0, int curSelIDBGO = 0, int curSelIDNPC = 0,
                               int curSelIDTile = 0, int curSelIDScenery = 0, int curSelIDPath = 0,
-                              int curSelIDLevel = 0, int curSelIDMusic = 0, QWidget *parent = nullptr,
+                              int curSelIDLevel = 0, int curSelIDMusic = 0,
+                              QWidget *parent = nullptr,
                               int noEmptyTypes = 0);
     ~ItemSelectDialog();
 
@@ -61,6 +62,7 @@ public:
     int pathID;     QList<int> pathIDs;
     int levelID;    QList<int> levelIDs;
     int musicID;    QList<int> musicIDs;
+    int musicIDLevel;    QList<int> musicIDLevels;
     QString musicFile;
 
     bool isCoin;
@@ -74,7 +76,8 @@ public:
         TAB_SCENERY = 1 << 4,
         TAB_PATH = 1 << 5,
         TAB_LEVEL = 1 << 6,
-        TAB_MUSIC = 1 << 7
+        TAB_MUSIC = 1 << 7,
+        TAB_MUSICLEVEL = 1 << 8
     };
 
     enum NpcExtraFlags
@@ -110,6 +113,7 @@ private slots:
     void SelListPath_itemDoubleClicked(const QModelIndex &index);
     void SelListLevel_itemDoubleClicked(const QModelIndex &index);
     void SelListMusic_itemDoubleClicked(const QModelIndex &index);
+    void SelListMusicLevel_itemDoubleClicked(const QModelIndex &index);
 
 private:
     void selectListItem(QListView *w, ItemBoxListModel *m, int itemId);
@@ -142,6 +146,7 @@ private:
     ItemBoxListModel *m_pathModel = nullptr;
     ItemBoxListModel *m_levelModel = nullptr;
     ItemBoxListModel *m_musboxModel = nullptr;
+    ItemBoxListModel *m_levelMusicModel = nullptr;
 
     QString m_allLabel = "[all]";
 
@@ -154,6 +159,7 @@ private:
     QMenu   m_pathFilterSetup;
     QMenu   m_levelFilterSetup;
     QMenu   m_musicFilterSetup;
+    QMenu   m_musicLevelFilterSetup;
 
     QList<QWidget *> extraBlockWid;
     QList<QWidget *> extraBGOWid;
@@ -163,6 +169,7 @@ private:
     QList<QWidget *> extraPathWid;
     QList<QWidget *> extraLevelWid;
     QList<QWidget *> extraMusicWid;
+    QList<QWidget *> extraMusicLvlWid;
 
     QString worldMapRoot;
 

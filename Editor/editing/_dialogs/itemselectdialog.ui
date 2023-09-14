@@ -14,7 +14,7 @@
    <string>Select Item</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../_resources/editor.qrc">
+   <iconset>
     <normaloff>:/toolbar/dock/level.png</normaloff>:/toolbar/dock/level.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -23,7 +23,7 @@
      <item>
       <widget class="QTabWidget" name="Sel_TabCon_ItemType">
        <property name="currentIndex">
-        <number>0</number>
+        <number>8</number>
        </property>
        <widget class="QWidget" name="Sel_Tab_Block">
         <attribute name="title">
@@ -108,7 +108,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -201,7 +201,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -294,7 +294,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -422,7 +422,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -562,7 +562,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -693,7 +693,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -833,7 +833,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -845,7 +845,7 @@
        </widget>
        <widget class="QWidget" name="Sel_Tab_Music">
         <attribute name="title">
-         <string>Music</string>
+         <string>World Music</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_9">
          <property name="leftMargin">
@@ -936,7 +936,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../_resources/editor.qrc">
+            <iconset>
              <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
            </property>
            <property name="popupMode">
@@ -945,6 +945,73 @@
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QWidget" name="Sel_Tab_LevelMusic">
+        <attribute name="title">
+         <string>Level Music</string>
+        </attribute>
+        <widget class="QLineEdit" name="Sel_Text_MusicLevel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>46</x>
+           <y>20</y>
+           <width>304</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="Sel_Label_FilterMusicLevel">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>31</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Filter:</string>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="Sel_FilterSetupMusicBoxLevel">
+         <property name="geometry">
+          <rect>
+           <x>350</x>
+           <y>20</y>
+           <width>24</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string notr="true"/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::InstantPopup</enum>
+         </property>
+        </widget>
+        <widget class="QListView" name="Sel_List_MusicLevel">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>70</y>
+           <width>377</width>
+           <height>353</height>
+          </rect>
+         </property>
+        </widget>
        </widget>
       </widget>
      </item>

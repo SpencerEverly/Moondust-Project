@@ -41,6 +41,8 @@ public slots:
 
     void on_applyResize_clicked();
     void on_cancelResize_clicked();
+    
+    void on_LVLPropsMusicNumberV2_clicked();
 
     void on_LVLPropsMusicCustom_editingFinished();
     void backgroundImageChanged(int index);
@@ -57,7 +59,7 @@ private slots:
     void on_LVLPropsNoTBack_clicked(bool checked);
     void on_LVLPropsUnderWater_clicked(bool checked);
 
-    void on_LVLPropsMusicNumber_currentIndexChanged(int index);
+    //void on_LVLPropsMusicNumber_currentIndexChanged(int index);
     void on_LVLPropsMusicCustomSlot_currentIndexChanged(int index);
     void on_LVLPropsMusicCustomEn_toggled(bool checked);
     void on_LVLPropsMusicCustomBrowse_clicked();
