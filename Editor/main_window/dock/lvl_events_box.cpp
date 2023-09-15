@@ -668,6 +668,7 @@ void LvlEventsBox::eventSectionSettingsSync()
             
             ui->LVLEventSctMusList->setCurrentIndex(0);
             SectionSet.music_id = 0;
+            ui->LVLEventSctMusListV2->setText("[Silence]");
 
             break;
         }
