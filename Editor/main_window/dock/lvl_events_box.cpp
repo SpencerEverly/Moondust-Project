@@ -667,8 +667,13 @@ void LvlEventsBox::eventSectionSettingsSync()
             m_lockEventSectionDataList = true;
             
             ui->LVLEventSctMusList->setCurrentIndex(0);
-            SectionSet.music_id = 0;
-            ui->LVLEventSctMusListV2->setText("[Silence]");
+            
+            obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicID];
+            
+            if(musicID > 0)
+                ui->LVLEventSctMusListV2->setText(musicLevelItem.name);
+            else if(musicID <= 0)
+                ui->LVLEventSctMusListV2->setText("[Silence]");
 
             break;
         }
