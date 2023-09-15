@@ -14,6 +14,8 @@ class QComboBox;
 class QPushButton;
 class QToolButton;
 class ImageSelector;
+class QAbstractButton;
+class QCheckBox;
 
 namespace Ui {
 class LvlEventsBox;
@@ -38,7 +40,7 @@ public:
     bool m_externalLock = false;
     QComboBox* cbox_layer_to_move();
     QComboBox* cbox_event_trigger();
-    QComboBox* cbox_sct_mus();
+    QPushButton* cbox_sct_mus();
     ImageSelector* cbox_sct_bg();
     QToolButton *button_event_dupe();
 
@@ -116,7 +118,10 @@ private slots:
     void on_LVLEvent_SctMus_none_clicked();
     void on_LVLEvent_SctMus_reset_clicked();
     void on_LVLEvent_SctMus_define_clicked();
-    void on_LVLEvent_SctMus_List_currentIndexChanged(int index);
+    void on_LVLEventSctMusList_currentIndexChanged(int index);
+    
+    void on_LVLEventSctMusCustomCheckbox_toggled(bool checked);
+    void on_LVLEventSctMusListV2_clicked();
 
     void on_LVLEvent_SctBg_none_clicked();
     void on_LVLEvent_SctBg_reset_clicked();

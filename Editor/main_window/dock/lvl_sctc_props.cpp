@@ -255,7 +255,7 @@ void LvlSectionProps::initDefaults()
     
     ui->LVLPropsMusicCustomSlot->setCurrentIndex(0);
 
-    eventsSctMus->clear(); //Music list in events
+    eventsSctMus->setText("[Silence]"); //Music list in events
     eventsSctBg->clear();  //Background list in events
 
     QPixmap empty(100, 70);
@@ -265,7 +265,6 @@ void LvlSectionProps::initDefaults()
 
     eventsSctBg->addItem(empty, tr("[No image]"), 0);
     eventsSctBg->setItem(0);
-    eventsSctMus->addItem(tr("[Silence]"), QVariant::fromValue<unsigned long>(0));
 
     PGE_DataArray<obj_BG > &main_bg = mw()->configs.main_bg;
     for(int i = 1; i < main_bg.size(); i++)

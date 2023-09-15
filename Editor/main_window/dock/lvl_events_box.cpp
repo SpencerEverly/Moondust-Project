@@ -25,12 +25,16 @@
 #include <main_window/dock/lvl_item_properties.h>
 #include <main_window/dock/lvl_search_box.h>
 #include <main_window/dock/lvl_warp_props.h>
+#include <editing/_dialogs/itemselectdialog.h>
 
 #include <ui_mainwindow.h>
 #include <mainwindow.h>
 
 #include "lvl_events_box.h"
 #include "ui_lvl_events_box.h"
+
+#include <QCheckBox>
+#include <QAbstractButton>
 
 LvlEventsBox::LvlEventsBox(QWidget *parent) :
     QDockWidget(parent),
@@ -100,9 +104,9 @@ QComboBox *LvlEventsBox::cbox_event_trigger()
     return ui->LVLEvent_TriggerEvent;
 }
 
-QComboBox *LvlEventsBox::cbox_sct_mus()
+QPushButton *LvlEventsBox::cbox_sct_mus()
 {
-    return ui->LVLEvent_SctMus_List;
+    return ui->LVLEventSctMusListV2;
 }
 
 ImageSelector *LvlEventsBox::cbox_sct_bg()
@@ -632,34 +636,38 @@ void LvlEventsBox::eventSectionSettingsSync()
             ui->LVLEvent_SctSize_Set->setEnabled(true);
             break;
         }
-
-        ui->LVLEvent_SctMus_List->setEnabled(false);
+        
         long musicID = SectionSet.music_id;
 
         switch(musicID)
         {
         case -1:
+            ui->LVLEventSctMusListV2->setEnabled(false);
+            ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
+            ui->LVLEventSctMusList->setEnabled(false);
+            
             ui->LVLEvent_SctMus_none->setChecked(true);
             break;
 
         case -2:
+            ui->LVLEventSctMusListV2->setEnabled(false);
+            ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
+            ui->LVLEventSctMusList->setEnabled(false);
+            
             ui->LVLEvent_SctMus_reset->setChecked(true);
             break;
 
         default:
             ui->LVLEvent_SctMus_define->setChecked(true);
-            ui->LVLEvent_SctMus_List->setEnabled(true);
+            
+            ui->LVLEventSctMusListV2->setEnabled(true);
+            ui->LVLEventSctMusCustomCheckbox->setEnabled(true);
+            ui->LVLEventSctMusList->setEnabled(false);
+            
             m_lockEventSectionDataList = true;
-            ui->LVLEvent_SctMus_List->setCurrentIndex(0);
-
-            for(int q = 0; q < ui->LVLEvent_SctMus_List->count(); q++)
-            {
-                if(ui->LVLEvent_SctMus_List->itemData(q).toInt() == musicID)
-                {
-                    ui->LVLEvent_SctMus_List->setCurrentIndex(q);
-                    break;
-                }
-            }
+            
+            ui->LVLEventSctMusList->setCurrentIndex(0);
+            SectionSet.music_id = 0;
 
             break;
         }
@@ -1958,8 +1966,13 @@ void LvlEventsBox::on_LVLEvent_SctMus_none_clicked()
         LevelEdit *edit = mw()->activeLvlEditWin();
 
         if(!edit) return;
-
-        ui->LVLEvent_SctMus_List->setEnabled(false);
+        
+        ui->LVLEventSctMusListV2->setEnabled(false);
+        ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
+        ui->LVLEventSctMusList->setEnabled(false);
+        
+        ui->LVLEventSctMusList->setCurrentIndex(0);
+        
         m_lockEventSectionDataList = true;
         long i = getEventArrayIndex();
 
@@ -1992,8 +2005,13 @@ void LvlEventsBox::on_LVLEvent_SctMus_reset_clicked()
         LevelEdit *edit = mw()->activeLvlEditWin();
 
         if(!edit) return;
-
-        ui->LVLEvent_SctMus_List->setEnabled(false);
+        
+        ui->LVLEventSctMusListV2->setEnabled(false);
+        ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
+        ui->LVLEventSctMusList->setEnabled(false);
+        
+        ui->LVLEventSctMusList->setCurrentIndex(0);
+        
         m_lockEventSectionDataList = true;
         long i = getEventArrayIndex();
 
@@ -2026,8 +2044,13 @@ void LvlEventsBox::on_LVLEvent_SctMus_define_clicked()
         LevelEdit *edit = mw()->activeLvlEditWin();
 
         if(!edit) return;
-
-        ui->LVLEvent_SctMus_List->setEnabled(true);
+        
+        ui->LVLEventSctMusListV2->setEnabled(true);
+        ui->LVLEventSctMusCustomCheckbox->setEnabled(true);
+        ui->LVLEventSctMusList->setEnabled(false);
+        
+        ui->LVLEventSctMusList->setCurrentIndex(0);
+        
         m_lockEventSectionDataList = true;
         long i = getEventArrayIndex();
 
@@ -2039,21 +2062,15 @@ void LvlEventsBox::on_LVLEvent_SctMus_define_clicked()
         QList<QVariant> musData;
         musData.push_back((qlonglong)m_curSectionField);
         musData.push_back((qlonglong)SectionSet.music_id);
-        musData.push_back((qlonglong)ui->LVLEvent_SctMus_List->currentData().toInt());
         edit->scene->m_history->addChangeEventSettings(event.meta.array_id, HistorySettings::SETTING_EV_SECMUS, QVariant(musData));
-        SectionSet.music_id = ui->LVLEvent_SctMus_List->currentData().toInt();
     }
 
     m_lockEventSectionDataList = false;
 }
 
-void LvlEventsBox::on_LVLEvent_SctMus_List_currentIndexChanged(int index)
+void LvlEventsBox::on_LVLEventSctMusListV2_clicked()
 {
     if(m_internalLock || m_externalLock) return;
-
-    if(m_lockEventSectionDataList) return;
-
-    if(index < 0) return;
 
     int WinType = mw()->activeChildWindow();
 
@@ -2062,7 +2079,7 @@ void LvlEventsBox::on_LVLEvent_SctMus_List_currentIndexChanged(int index)
         LevelEdit *edit = mw()->activeLvlEditWin();
 
         if(!edit) return;
-
+        
         m_lockEventSectionDataList = true;
         long i = getEventArrayIndex();
 
@@ -2071,12 +2088,122 @@ void LvlEventsBox::on_LVLEvent_SctMus_List_currentIndexChanged(int index)
         LevelSMBX64Event &event = edit->LvlData.events[i];
         checkSectionSet(event.sets, m_curSectionField);
         LevelEvent_Sets &SectionSet = event.sets[m_curSectionField];
-        QList<QVariant> musData;
-        musData.push_back((qlonglong)m_curSectionField);
-        musData.push_back((qlonglong)SectionSet.music_id);
-        musData.push_back((qlonglong)ui->LVLEvent_SctMus_List->itemData(index).toInt());
-        edit->scene->m_history->addChangeEventSettings(event.meta.array_id, HistorySettings::SETTING_EV_SECMUS, QVariant(musData));
-        SectionSet.music_id = ui->LVLEvent_SctMus_List->itemData(index).toInt();
+        
+        ItemSelectDialog *itemList = new ItemSelectDialog(&mw()->configs, ItemSelectDialog::TAB_MUSICLEVEL, 0, 0, 0, 0, 0, 0, 0, 0, 0, this, ItemSelectDialog::TAB_MUSICLEVEL);
+        util::DialogToCenter(itemList, true);
+        int musicIDToChangeTo;
+
+        if(itemList->exec() == QDialog::Accepted)
+        {
+            musicIDToChangeTo = itemList->musicIDLevel;
+            obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicIDToChangeTo];
+            
+            SectionSet.music_id = musicIDToChangeTo;
+            
+            if(SectionSet.music_id > 0)
+                ui->LVLEventSctMusListV2->setText(musicLevelItem.name);
+            else if(SectionSet.music_id <= 0)
+                ui->LVLEventSctMusListV2->setText("[Silence]");
+        }
+        delete itemList;
+    }
+}
+
+void LvlEventsBox::on_LVLEventSctMusCustomCheckbox_toggled(bool checked)
+{
+    if(m_internalLock || m_externalLock) return;
+
+    int WinType = mw()->activeChildWindow();
+    
+    LevelEdit *edit = mw()->activeLvlEditWin();
+
+    if(!edit) return;
+    
+    m_lockEventSectionDataList = true;
+    long i = getEventArrayIndex();
+
+    if(i < 0) return;
+
+    LevelSMBX64Event &event = edit->LvlData.events[i];
+    checkSectionSet(event.sets, m_curSectionField);
+    LevelEvent_Sets &SectionSet = event.sets[m_curSectionField];
+    QList<QVariant> musData;
+    musData.push_back((qlonglong)m_curSectionField);
+    musData.push_back((qlonglong)SectionSet.music_id);
+    edit->scene->m_history->addChangeEventSettings(event.meta.array_id, HistorySettings::SETTING_EV_SECMUS, QVariant(musData));
+
+    if(WinType == MainWindow::WND_Level)
+    {
+        if(checked)
+        {
+            ui->LVLEventSctMusListV2->setEnabled(false);
+            ui->LVLEventSctMusListV2->setText("[Custom]");
+            
+            ui->LVLEventSctMusList->setEnabled(true);
+            
+            int index = ui->LVLEventSctMusList->currentData().toInt();
+            
+            if(index == 0)
+                SectionSet.music_id = mw()->configs.music_custom_id;
+            else if(index == 1)
+                SectionSet.music_id = mw()->configs.music_custom_id2;
+            else if(index == 2)
+                SectionSet.music_id = mw()->configs.music_custom_id3;
+            else if(index == 3)
+                SectionSet.music_id = mw()->configs.music_custom_id4;
+            else if(index == 4)
+                SectionSet.music_id = mw()->configs.music_custom_id5;
+        }
+        else
+        {
+            ui->LVLEventSctMusList->setEnabled(false);
+            
+            SectionSet.music_id = 0;
+            ui->LVLEventSctMusListV2->setText("[Silence]");
+            
+            ui->LVLEventSctMusListV2->setEnabled(true);
+        }
+    }
+}
+
+void LvlEventsBox::on_LVLEventSctMusList_currentIndexChanged(int index)
+{
+    if(m_internalLock || m_externalLock) return;
+
+    if(index < 0) return;
+
+    int WinType = mw()->activeChildWindow();
+    
+    LevelEdit *edit = mw()->activeLvlEditWin();
+
+    if(!edit) return;
+
+    m_lockEventSectionDataList = true;
+    long i = getEventArrayIndex();
+
+    if(i < 0) return;
+
+    LevelSMBX64Event &event = edit->LvlData.events[i];
+    checkSectionSet(event.sets, m_curSectionField);
+    LevelEvent_Sets &SectionSet = event.sets[m_curSectionField];
+    QList<QVariant> musData;
+    musData.push_back((qlonglong)m_curSectionField);
+    musData.push_back((qlonglong)SectionSet.music_id);
+    musData.push_back((qlonglong)ui->LVLEventSctMusList->itemData(index).toInt());
+    edit->scene->m_history->addChangeEventSettings(event.meta.array_id, HistorySettings::SETTING_EV_SECMUS, QVariant(musData));
+
+    if(WinType == MainWindow::WND_Level)
+    {
+        if(index == 0)
+            SectionSet.music_id = mw()->configs.music_custom_id;
+        else if(index == 1)
+            SectionSet.music_id = mw()->configs.music_custom_id2;
+        else if(index == 2)
+            SectionSet.music_id = mw()->configs.music_custom_id3;
+        else if(index == 3)
+            SectionSet.music_id = mw()->configs.music_custom_id4;
+        else if(index == 4)
+            SectionSet.music_id = mw()->configs.music_custom_id5;
     }
 
     m_lockEventSectionDataList = false;
