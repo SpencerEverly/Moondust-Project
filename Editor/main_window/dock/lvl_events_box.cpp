@@ -1958,8 +1958,6 @@ void LvlEventsBox::on_LVLEvent_SctMus_none_clicked()
 {
     if(m_internalLock || m_externalLock) return;
 
-    if(m_lockEventSectionDataList) return;
-
     int WinType = mw()->activeChildWindow();
 
     if(WinType == MainWindow::WND_Level)
@@ -1997,8 +1995,6 @@ void LvlEventsBox::on_LVLEvent_SctMus_reset_clicked()
 {
     if(m_internalLock || m_externalLock) return;
 
-    if(m_lockEventSectionDataList) return;
-
     int WinType = mw()->activeChildWindow();
 
     if(WinType == MainWindow::WND_Level)
@@ -2035,8 +2031,6 @@ void LvlEventsBox::on_LVLEvent_SctMus_reset_clicked()
 void LvlEventsBox::on_LVLEvent_SctMus_define_clicked()
 {
     if(m_internalLock || m_externalLock) return;
-
-    if(m_lockEventSectionDataList) return;
 
     int WinType = mw()->activeChildWindow();
 
