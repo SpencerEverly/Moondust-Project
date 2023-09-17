@@ -16,7 +16,7 @@ elif [[ "$reponame" == "harfbuzz" || "$reponame" == "libjpeg" ]]; then
     git checkout main
     git pull origin main
 else
-    echo "Branch master"
-    git checkout master
-    git pull origin master
+    echo "Branch smbxplus"
+    git checkout smbxplus
+    git pull origin smbxplus
 fi
