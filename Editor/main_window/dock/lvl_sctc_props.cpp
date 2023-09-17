@@ -128,6 +128,7 @@ void LvlSectionProps::setSMBX64Strict(bool en)
     ui->extraSettings->setEnabled(!en);
     
     ui->LVLPropsMusicCustomSlot->setEnabled(!en);
+    ui->LVLPropsEnableQuickDeath->setEnabled(!en);
 }
 
 void LvlSectionProps::re_translate()
@@ -311,6 +312,19 @@ void LvlSectionProps::initDefaults()
 
     mw()->dock_LvlEvents->setEventToolsLocked(false);
     m_externalLock = false;
+    
+    if(mw()->activeChildWindow() == MainWindow::WND_Level)
+    {
+        LevelEdit *edit = mw()->activeLvlEditWin();
+        
+        if(edit)
+        {
+            if(edit->LvlData.quickDeathToggle == 1)
+                ui->LVLPropsEnableQuickDeath->setChecked(true);
+            else
+                ui->LVLPropsEnableQuickDeath->setChecked(false);
+        }
+    }
 
     //Set current data
     refreshFileData();
@@ -477,6 +491,23 @@ void LvlSectionProps::on_LVLPropsUnderWater_clicked(bool checked)
         edit->scene->m_history->addChangeSectionSettings(edit->LvlData.CurSection, HistorySettings::SETTING_SECUNDERWATER, QVariant(checked));
         edit->LvlData.sections[edit->LvlData.CurSection].underwater = checked;
         edit->LvlData.meta.modified = true;
+    }
+}
+
+
+
+//Global level settings
+void LvlSectionProps::on_LVLPropsEnableQuickDeath_clicked(bool checked)
+{
+    if(mw()->activeChildWindow() == MainWindow::WND_Level)
+    {
+        LevelEdit *edit = mw()->activeLvlEditWin();
+        if(!edit) return;
+        
+        if(checked)
+            edit->LvlData.quickDeathToggle = 1;
+        else
+            edit->LvlData.quickDeathToggle = 0;
     }
 }
 

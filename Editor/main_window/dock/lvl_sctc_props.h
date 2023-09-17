@@ -64,6 +64,8 @@ private slots:
     void on_LVLPropsMusicCustomEn_toggled(bool checked);
     void on_LVLPropsMusicCustomBrowse_clicked();
     void on_musicSetup_clicked();
+    
+    void on_LVLPropsEnableQuickDeath_clicked(bool checked);
 
 protected:
     virtual void focusInEvent(QFocusEvent * ev);
