@@ -418,7 +418,8 @@ public:
         PLC_Water,
         PLC_Door,
         PLC_PlayerPoint,
-        PLC_Section
+        PLC_Section,
+        PLC_Rooms
     };
     int m_placingItemType;
 
