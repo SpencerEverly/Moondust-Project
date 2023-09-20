@@ -723,7 +723,7 @@ ItemSelectDialog::ItemSelectDialog(DataConfig *conf, int tabs, int npcExtraData,
 
         for(int i = 1; i < conf->main_music_lvl.size(); i++)
         {
-            if (i == conf->music_custom_id || i == conf->music_custom_id2 || i == conf->music_custom_id3 || i == conf->music_custom_id4 || i == conf->music_custom_id5)
+            if (i == conf->music_custom_id)
             {
                 // Skip storing audio for custom music indexes
                 continue;

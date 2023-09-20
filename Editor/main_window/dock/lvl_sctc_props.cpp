@@ -679,16 +679,7 @@ void LvlSectionProps::on_LVLPropsMusicCustomEn_toggled(bool checked)
                 ui->LVLPropsMusicNumberV2->setEnabled(false);
                 ui->LVLPropsMusicNumberV2->setText("[Custom]");
                 
-                if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 0)
-                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id;
-                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 1)
-                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id2;
-                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 2)
-                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id3;
-                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 3)
-                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id4;
-                else if(edit->LvlData.sections[edit->LvlData.CurSection].music_file_section == 4)
-                    edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id5;
+                edit->LvlData.sections[edit->LvlData.CurSection].music_id = mw()->configs.music_custom_id;
                 
                 loadMusic();
             }
