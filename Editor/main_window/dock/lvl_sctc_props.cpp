@@ -127,7 +127,6 @@ void LvlSectionProps::setSMBX64Strict(bool en)
 
     ui->extraSettings->setEnabled(!en);
     
-    ui->LVLPropsMusicCustomSlotV2->setEnabled(!en);
     ui->LVLPropsEnableQuickDeath->setEnabled(!en);
 }
 
@@ -253,8 +252,6 @@ void LvlSectionProps::initDefaults()
     ui->LVLPropsMusicNumberV2->setText("[Silence]");
     ui->imageSelector->clear();
     ui->imageSelector->setMinimumHeight(80);
-    
-    ui->LVLPropsMusicCustomSlotV2->setValue(0);
 
     eventsSctMus->setText("[Silence]"); //Music list in events
     eventsSctBg->clear();  //Background list in events
@@ -353,8 +350,6 @@ void LvlSectionProps::refreshFileData()
         ui->LVLPropsOffScr->setChecked(edit->LvlData.sections[edit->LvlData.CurSection].OffScreenEn);
         ui->LVLPropsNoTBack->setChecked(edit->LvlData.sections[edit->LvlData.CurSection].lock_left_scroll);
         ui->LVLPropsUnderWater->setChecked(edit->LvlData.sections[edit->LvlData.CurSection].underwater);
-        
-        int index = edit->LvlData.sections[edit->LvlData.CurSection].music_file_section;
 
         QString musFile = edit->LvlData.sections[edit->LvlData.CurSection].music_file;
 
@@ -378,9 +373,6 @@ void LvlSectionProps::refreshFileData()
             else if(edit->LvlData.sections[edit->LvlData.CurSection].music_id <= 0)
                 ui->LVLPropsMusicNumberV2->setText("[Silence]");
         }
-        
-        
-        ui->LVLPropsMusicCustomSlot->setCurrentIndex(index);
         
         updateExtraSettingsWidget();
 
@@ -465,9 +457,13 @@ void LvlSectionProps::on_LVLPropsEnableQuickDeath_clicked(bool checked)
         if(!edit) return;
         
         if(checked)
+        {
             //edit->LvlData.quickDeathToggle = 1;
+        }
         else
+        {
             //edit->LvlData.quickDeathToggle = 0;
+        }
     }
 }
 
