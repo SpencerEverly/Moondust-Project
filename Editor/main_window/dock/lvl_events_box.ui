@@ -183,9 +183,9 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>-663</y>
+       <y>-1369</y>
        <width>269</width>
-       <height>2240</height>
+       <height>2210</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -1080,50 +1080,6 @@
               <property name="text">
                <string>Custom</string>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="LVLEventSctMusList">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="mouseTracking">
-               <bool>false</bool>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::ClickFocus</enum>
-              </property>
-              <item>
-               <property name="text">
-                <string>Music 1</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Music 2</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Music 3</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Music 4</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Music 5</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item>

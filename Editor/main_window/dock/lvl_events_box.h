@@ -118,7 +118,6 @@ private slots:
     void on_LVLEvent_SctMus_none_clicked();
     void on_LVLEvent_SctMus_reset_clicked();
     void on_LVLEvent_SctMus_define_clicked();
-    void on_LVLEventSctMusList_currentIndexChanged(int index);
     
     void on_LVLEventSctMusCustomCheckbox_toggled(bool checked);
     void on_LVLEventSctMusListV2_clicked();

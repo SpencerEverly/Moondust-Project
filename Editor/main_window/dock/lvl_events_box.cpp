@@ -644,7 +644,6 @@ void LvlEventsBox::eventSectionSettingsSync()
         case -1:
             ui->LVLEventSctMusListV2->setEnabled(false);
             ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
-            ui->LVLEventSctMusList->setEnabled(false);
             
             ui->LVLEvent_SctMus_none->setChecked(true);
             break;
@@ -652,7 +651,6 @@ void LvlEventsBox::eventSectionSettingsSync()
         case -2:
             ui->LVLEventSctMusListV2->setEnabled(false);
             ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
-            ui->LVLEventSctMusList->setEnabled(false);
             
             ui->LVLEvent_SctMus_reset->setChecked(true);
             break;
@@ -662,11 +660,8 @@ void LvlEventsBox::eventSectionSettingsSync()
             
             ui->LVLEventSctMusListV2->setEnabled(true);
             ui->LVLEventSctMusCustomCheckbox->setEnabled(true);
-            ui->LVLEventSctMusList->setEnabled(false);
             
             m_lockEventSectionDataList = true;
-            
-            ui->LVLEventSctMusList->setCurrentIndex(0);
             
             obj_music &musicLevelItem = mw()->configs.main_music_lvl[musicID];
             
@@ -1973,9 +1968,6 @@ void LvlEventsBox::on_LVLEvent_SctMus_none_clicked()
         
         ui->LVLEventSctMusListV2->setEnabled(false);
         ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
-        ui->LVLEventSctMusList->setEnabled(false);
-        
-        ui->LVLEventSctMusList->setCurrentIndex(0);
         
         m_lockEventSectionDataList = true;
         long i = getEventArrayIndex();
@@ -2010,9 +2002,6 @@ void LvlEventsBox::on_LVLEvent_SctMus_reset_clicked()
         
         ui->LVLEventSctMusListV2->setEnabled(false);
         ui->LVLEventSctMusCustomCheckbox->setEnabled(false);
-        ui->LVLEventSctMusList->setEnabled(false);
-        
-        ui->LVLEventSctMusList->setCurrentIndex(0);
         
         m_lockEventSectionDataList = true;
         long i = getEventArrayIndex();
@@ -2047,9 +2036,6 @@ void LvlEventsBox::on_LVLEvent_SctMus_define_clicked()
         
         ui->LVLEventSctMusListV2->setEnabled(true);
         ui->LVLEventSctMusCustomCheckbox->setEnabled(true);
-        ui->LVLEventSctMusList->setEnabled(false);
-        
-        ui->LVLEventSctMusList->setCurrentIndex(0);
         
         m_lockEventSectionDataList = true;
         long i = getEventArrayIndex();
@@ -2139,74 +2125,16 @@ void LvlEventsBox::on_LVLEventSctMusCustomCheckbox_toggled(bool checked)
             ui->LVLEventSctMusListV2->setEnabled(false);
             ui->LVLEventSctMusListV2->setText("[Custom]");
             
-            ui->LVLEventSctMusList->setEnabled(true);
-            
-            int index = ui->LVLEventSctMusList->currentData().toInt();
-            
-            if(index == 0)
-                SectionSet.music_id = mw()->configs.music_custom_id;
-            else if(index == 1)
-                SectionSet.music_id = mw()->configs.music_custom_id2;
-            else if(index == 2)
-                SectionSet.music_id = mw()->configs.music_custom_id3;
-            else if(index == 3)
-                SectionSet.music_id = mw()->configs.music_custom_id4;
-            else if(index == 4)
-                SectionSet.music_id = mw()->configs.music_custom_id5;
+            SectionSet.music_id = mw()->configs.music_custom_id;
         }
         else
         {
-            ui->LVLEventSctMusList->setEnabled(false);
-            
             SectionSet.music_id = 0;
             ui->LVLEventSctMusListV2->setText("[Silence]");
             
             ui->LVLEventSctMusListV2->setEnabled(true);
         }
     }
-}
-
-void LvlEventsBox::on_LVLEventSctMusList_currentIndexChanged(int index)
-{
-    if(m_internalLock || m_externalLock) return;
-
-    if(index < 0) return;
-
-    int WinType = mw()->activeChildWindow();
-    
-    LevelEdit *edit = mw()->activeLvlEditWin();
-
-    if(!edit) return;
-
-    m_lockEventSectionDataList = true;
-    long i = getEventArrayIndex();
-
-    if(i < 0) return;
-
-    LevelSMBX64Event &event = edit->LvlData.events[i];
-    checkSectionSet(event.sets, m_curSectionField);
-    LevelEvent_Sets &SectionSet = event.sets[m_curSectionField];
-    QList<QVariant> musData;
-    musData.push_back((qlonglong)m_curSectionField);
-    musData.push_back((qlonglong)SectionSet.music_id);
-    musData.push_back((qlonglong)ui->LVLEventSctMusList->itemData(index).toInt());
-    edit->scene->m_history->addChangeEventSettings(event.meta.array_id, HistorySettings::SETTING_EV_SECMUS, QVariant(musData));
-
-    if(WinType == MainWindow::WND_Level)
-    {
-        if(index == 0)
-            SectionSet.music_id = mw()->configs.music_custom_id;
-        else if(index == 1)
-            SectionSet.music_id = mw()->configs.music_custom_id2;
-        else if(index == 2)
-            SectionSet.music_id = mw()->configs.music_custom_id3;
-        else if(index == 3)
-            SectionSet.music_id = mw()->configs.music_custom_id4;
-        else if(index == 4)
-            SectionSet.music_id = mw()->configs.music_custom_id5;
-    }
-
-    m_lockEventSectionDataList = false;
 }
 
 void LvlEventsBox::on_LVLEvent_SctBg_none_clicked()
