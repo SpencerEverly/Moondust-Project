@@ -1910,8 +1910,10 @@ void JsonSettingsWidget::loadLayoutEntries(JsonSettingsWidget::SetupStack setupT
                 settingsGroup.addButton = addButton;
                 m_instantiatedQJsonLists.insert(id, settingsGroup);
 
-                // Keep track of the number of items
+                // Keep track of the items and their count
                 m_setupStack.setValue(setupTree.getPropertyId("count"), 0);
+                int maxNum = retrieve_property(setupTree, "count", 0).toInt();
+                setupTree.m_setupTree.push("items");
 
                 // Connect the button
                 QObject::connect(addButton, static_cast<void(QPushButton::*)(bool)>(&QPushButton::clicked),
@@ -1927,7 +1929,6 @@ void JsonSettingsWidget::loadLayoutEntries(JsonSettingsWidget::SetupStack setupT
                 l->addWidget(subGroup, row, 0, 1, 2);
 
                 // Add pre-existing elements
-                int maxNum = retrieve_property(setupTree, "count", 0).toInt();
                 for (int i = 0; i < maxNum; i++) {
                     AddListElement(setupTree, id);
                 }
@@ -1936,8 +1937,8 @@ void JsonSettingsWidget::loadLayoutEntries(JsonSettingsWidget::SetupStack setupT
                 if (maxNum>0) {
                     emit settingsChanged();
                 }
-
                 // Done
+                setupTree.m_setupTree.pop();
                 setupTree.m_setupTree.pop();
                 row++;
             }
@@ -1951,7 +1952,9 @@ void JsonSettingsWidget::AddListElement(SetupStack setupTree, QString id) {
     int idx = settingsGroup.size;
     settingsGroup.size++;
     const QString id2 = setupTree.getPropertyId(QString::number(idx));
+    setupTree.m_setupTree.pop();
     m_setupStack.setValue(setupTree.getPropertyId("count"), settingsGroup.size);
+    setupTree.m_setupTree.push("items");
 
     if (settingsGroup.maxSize > 0 && settingsGroup.size == settingsGroup.maxSize) {
         settingsGroup.addButton->setEnabled(false);
@@ -2007,7 +2010,9 @@ void JsonSettingsWidget::RemoveListElement(SetupStack setupTree, QString id, QFr
     // Remove the data
     m_setupStack.removeElement(setupTree.getPropertyId(QString::number(num)));
     setupTree.m_setupCache = m_setupStack.m_setupCache;
+    setupTree.m_setupTree.pop();
     m_setupStack.setValue(setupTree.getPropertyId("count"), m_instantiatedQJsonLists[id].size);
+    setupTree.m_setupTree.push("items");
 
     // Remove the last widget
     QWidget* last = m_instantiatedQJsonLists[id].groupBox->findChild<QWidget*>(setupTree.getPropertyId(QString::number(count-1)), Qt::FindChildrenRecursively);

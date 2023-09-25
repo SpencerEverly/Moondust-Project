@@ -65,13 +65,12 @@ static const char *g_messageToUser =
     "SDL2 " STR(SDL_MAJOR_VERSION) "." STR(SDL_MINOR_VERSION) "." STR(SDL_PATCHLEVEL) "\n"
     "SDL Mixer X " STR(SDL_MIXER_MAJOR_VERSION) "." STR(SDL_MIXER_MINOR_VERSION) "." STR(SDL_MIXER_PATCHLEVEL) "\n"
     "================================================\n"
-    " Please send this log file to the developers by one of ways:\n"
-    " - Via contact form:          https://wohlsoft.ru/contacts/\n"
-    " - Official forums:           https://wohlsoft.ru/forum/\n"
-    " - Make issue at GitHub repo: https://github.com/WohlSoft/Moondust-Project\n"
+    " Please send this log file to the developers via one of these methods:\n"
+    " - Contact us on Discord:     https://discord.gg/aCZqadJ"
+    " - Make issue at GitHub repo: https://github.com/Emral/Moondust-Project-SMBX2\n"
     "================================================\n"
     "Important note: please don't post this report at third-party forums\n"
-    "and chat servers (including ANY SMBX-related community servers with\n"
+    "and chat servers (including ANY Wohlsoft/Moondust community servers with\n"
     "no exceptions). Otherwise, you have an EXTREMELY SMALL CHANCE of\n"
     "getting the proper support. We can give you a support at OFFICIAL\n"
     "RESOURCES listed above only.\n"
@@ -270,7 +269,7 @@ void CrashHandler::crashBySIGNAL(int signalid)
         break;
     }
 
-    doCrashScreenAndCleanup(QObject::tr("We're sorry, but PGE Editor has crashed. \nReason: %1\n\n").arg(sigtype));
+    doCrashScreenAndCleanup(QObject::tr("We're sorry, but the SMBX2 Editor has crashed. \nReason: %1\n\n").arg(sigtype));
     std::exit(signalid);
 }
 
@@ -481,17 +480,17 @@ void CrashHandler::on_copyReport_clicked()
 
 void CrashHandler::on_pgeRepoButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/WohlSoft/Moondust-Project/issues/new/choose"));
+    QDesktopServices::openUrl(QUrl("https://github.com/Emral/Moondust-Project-SMBX2/issues/new/choose"));
 }
 
 void CrashHandler::on_pgeForumButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://wohlsoft.ru/forum/"));
+    //QDesktopServices::openUrl(QUrl("https://wohlsoft.ru/forum/"));
 }
 
 void CrashHandler::on_pgeDiscordButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl("http://wohlsoft.ru/chat/"));
+    QDesktopServices::openUrl(QUrl("https://discord.gg/aCZqadJ"));
 }
 
 void CrashHandler::on_exitButton_clicked()

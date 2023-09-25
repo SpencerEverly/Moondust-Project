@@ -14,19 +14,32 @@
    <string>Crash</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../_resources/editor.qrc">
+   <iconset resource="../_resources/toolbar/toolbar.qrc">
     <normaloff>:/toolbar/dock/bookmarks.png</normaloff>:/toolbar/dock/bookmarks.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1000,0" columnminimumwidth="160,0,0">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
+   <item row="5" column="1">
+    <widget class="QPushButton" name="pgeRepoButton">
+     <property name="text">
+      <string>Make an issue at GitHub repository (Emral/Moondust-Project-SMBX2)</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0" colspan="3">
     <widget class="QPlainTextEdit" name="crashData"/>
    </item>
-   <item row="5" column="0">
-    <widget class="QPushButton" name="copyReport">
-     <property name="text">
-      <string>Copy report into clipboard</string>
+   <item row="9" column="0" colspan="2">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="notifyLabel">
@@ -35,23 +48,27 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="0" colspan="2">
-    <widget class="QLabel" name="reportTips">
+   <item row="8" column="0" colspan="2">
+    <widget class="QLabel" name="reportNote">
      <property name="text">
-      <string>While making a report, please explain what you did to cause a crash error.
-- Please give a list of actions you did to cause a crash. 
-- If a crash happened with editing a specific file, please attach it to the report.
-- What operating system you are using?</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Important note:&lt;/span&gt; please don't post this report at third-party forums and chat servers (including Moondust's forums and chatrooms). Otherwise, you have &lt;span style=&quot; font-weight:700;&quot;&gt;an extremely small chance of getting the proper support&lt;/span&gt;. We can give you a support at official resources listed above only.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
     </widget>
    </item>
+   <item row="9" column="2">
+    <widget class="QPushButton" name="exitButton">
+     <property name="text">
+      <string>Exit from application</string>
+     </property>
+    </widget>
+   </item>
    <item row="6" column="1">
     <widget class="QPushButton" name="pgeDiscordButton">
      <property name="text">
-      <string>Join the official Moondust Discord server to submit the report</string>
+      <string>Join the SMBX2 discord server to submit the report</string>
      </property>
     </widget>
    </item>
@@ -83,57 +100,23 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="1">
-    <widget class="QPushButton" name="pgeForumButton">
+   <item row="5" column="0">
+    <widget class="QPushButton" name="copyReport">
      <property name="text">
-      <string>Post a report at WohlSoft Forum (wohlsoft.ru/forum/)</string>
+      <string>Copy report into clipboard</string>
      </property>
     </widget>
    </item>
-   <item row="13" column="0" colspan="2">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="1">
-    <widget class="QPushButton" name="pgeRepoButton">
+   <item row="7" column="0" colspan="2">
+    <widget class="QLabel" name="reportTips">
      <property name="text">
-      <string>Make an issue at GitHub repository (WohlSoft/Moondust-Project)</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="2">
-    <widget class="QPushButton" name="exitButton">
-     <property name="text">
-      <string>Exit from application</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0" colspan="2">
-    <widget class="QLabel" name="reportNote">
-     <property name="text">
-      <string>&lt;b&gt;Important note:&lt;/b&gt; please don't post this report at third-party forums and chat servers (including ANY SMBX-related community servers with no exceptions). Otherwise, you have &lt;b&gt;an extremely small chance of getting the proper support&lt;/b&gt;. We can give you a support at official resources listed above only.</string>
+      <string>While making a report, please explain what you did to cause a crash error.
+- Please give a list of actions you did to cause a crash. 
+- If a crash happened with editing a specific file, please attach it to the report.
+- What operating system you are using?</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2" rowspan="8">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="../_resources/editor.qrc">:/crashdialogue/128.png</pixmap>
      </property>
     </widget>
    </item>
@@ -144,11 +127,10 @@
   <tabstop>copyReport</tabstop>
   <tabstop>pgeRepoButton</tabstop>
   <tabstop>pgeDiscordButton</tabstop>
-  <tabstop>pgeForumButton</tabstop>
   <tabstop>exitButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../_resources/editor.qrc"/>
+  <include location="../_resources/toolbar/toolbar.qrc"/>
  </resources>
  <connections/>
 </ui>
