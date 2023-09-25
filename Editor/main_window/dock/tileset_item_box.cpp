@@ -896,19 +896,20 @@ void TilesetItemBox::makeAllTilesets()
     QFileInfo ourFile(edit->currentFile());
     savePath = ourFile.absoluteDir().path() + "/" + ourFile.completeBaseName() + "/";
 
+    favTilesetContentsMap.clear();
+    m_favorites = SimpleTileset();
     QDir target(savePath);
-    if(!target.exists()) {
-        return;
-    }
-    if (m_favorites.tileSetName == "") {
-        tileset::OpenSimpleTileset(savePath + fileName, m_favorites);
+    if(target.exists()) {
+        if (m_favorites.tileSetName == "") {
+            tileset::OpenSimpleTileset(savePath + fileName, m_favorites);
 
-        foreach (SimpleTilesetItem i, m_favorites.items) {
-            if (!favTilesetContentsMap.contains(i.type)) {
-                favTilesetContentsMap.insert(i.type, QList<uint>());
+            foreach (SimpleTilesetItem i, m_favorites.items) {
+                if (!favTilesetContentsMap.contains(i.type)) {
+                    favTilesetContentsMap.insert(i.type, QList<uint>());
+                }
+
+                favTilesetContentsMap[i.type].append(i.id);
             }
-
-            favTilesetContentsMap[i.type].append(i.id);
         }
     }
 
