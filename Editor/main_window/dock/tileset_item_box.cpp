@@ -458,7 +458,7 @@ void TilesetItemBox::UpdateFavouritesTileset(int itemType, uint id)
     if (m_favorites.tileSetName == "") {
         m_favorites = SimpleTileset();
         m_favorites.tileSetName = "★ Favorites";
-        m_favorites.fileName = "__favorites";
+        m_favorites.fileName = "__favorites.tileset.ini";
         m_favorites.type = -1;
         m_favorites.customDir = true;
     }
