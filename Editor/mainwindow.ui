@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1675</width>
+    <width>1407</width>
     <height>435</height>
    </rect>
   </property>
@@ -90,8 +90,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1675</width>
-     <height>20</height>
+     <width>1407</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -394,7 +394,7 @@
       <string>LunaLUA scripts</string>
      </property>
      <property name="icon">
-      <iconset resource="_resources/editor.qrc">
+      <iconset resource="_resources/engines/engines.qrc">
        <normaloff>:/engines/lunalua/16.png</normaloff>:/engines/lunalua/16.png</iconset>
      </property>
      <addaction name="actionLunaLUA_lvl"/>
@@ -520,21 +520,26 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionReload"/>
+   <addaction name="separator"/>
    <addaction name="actionHandScroll"/>
    <addaction name="actionSelect"/>
    <addaction name="actionSelectOnly"/>
    <addaction name="actionEriser"/>
-   <addaction name="separator"/>
+   <addaction name="actionGridCustom"/>
+  </widget>
+  <widget class="QToolBar" name="EditorEffectToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
    <addaction name="actionPlayMusic"/>
    <addaction name="actionAnimation"/>
-   <addaction name="separator"/>
-   <addaction name="actionGridEn"/>
-   <addaction name="separator"/>
-   <addaction name="actionReload"/>
-   <addaction name="separator"/>
-   <addaction name="actionTilesetBox"/>
-   <addaction name="actionDebugger"/>
-   <addaction name="actionBookmarkBox"/>
   </widget>
   <widget class="QToolBar" name="LevelObjectToolbar">
    <property name="contextMenuPolicy">
@@ -559,19 +564,42 @@
    <addaction name="actionSetSecondPlayer"/>
    <addaction name="actionDrawWater"/>
    <addaction name="actionDrawSand"/>
-   <addaction name="separator"/>
+  </widget>
+  <widget class="QToolBar" name="LevelLocksToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
    <addaction name="actionLockBlocks"/>
    <addaction name="actionLockBGO"/>
    <addaction name="actionLockNPC"/>
    <addaction name="actionLockDoors"/>
    <addaction name="actionLockWaters"/>
-   <addaction name="separator"/>
+  </widget>
+  <widget class="QToolBar" name="DockToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
    <addaction name="actionLVLToolBox"/>
+   <addaction name="actionTilesetBox"/>
    <addaction name="actionSection_Settings"/>
    <addaction name="actionWarpsAndDoors"/>
    <addaction name="actionLayersBox"/>
    <addaction name="actionLevelEvents"/>
    <addaction name="actionLVLSearchBox"/>
+   <addaction name="actionBookmarkBox"/>
+   <addaction name="actionDebugger"/>
   </widget>
   <widget class="QToolBar" name="WorldObjectToolbar">
    <property name="windowTitle">
@@ -2997,11 +3025,116 @@ Objects will not be able to be placed on top of each other, and attempting to do
     <string>Bulk convert and repair of level and world files...</string>
    </property>
   </action>
+  <action name="actionGridDefault">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="_resources/toolbar/toolbar.qrc">
+     <normaloff>:/toolbar/edit/grid_snap_adaptive.png</normaloff>:/toolbar/edit/grid_snap_adaptive.png</iconset>
+   </property>
+   <property name="text">
+    <string>Default Grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Default Grid Snap (Depending on selected item)</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionGrid4">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="_resources/toolbar/toolbar.qrc">
+     <normaloff>:/toolbar/edit/grid_snap_4.png</normaloff>:/toolbar/edit/grid_snap_4.png</iconset>
+   </property>
+   <property name="text">
+    <string>4x4 Grid</string>
+   </property>
+   <property name="toolTip">
+    <string>4 Pixel Grid Snap</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionGrid8">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="_resources/toolbar/toolbar.qrc">
+     <normaloff>:/toolbar/edit/grid_snap_8.png</normaloff>:/toolbar/edit/grid_snap_8.png</iconset>
+   </property>
+   <property name="text">
+    <string>8x8 Grid</string>
+   </property>
+   <property name="toolTip">
+    <string>8 Pixel Grid Snap</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionGrid16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="_resources/toolbar/toolbar.qrc">
+     <normaloff>:/toolbar/edit/grid_snap_16.png</normaloff>:/toolbar/edit/grid_snap_16.png</iconset>
+   </property>
+   <property name="text">
+    <string>16x16 Grid</string>
+   </property>
+   <property name="toolTip">
+    <string>16 Pixel Grid Snap</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionGridCustom">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="_resources/toolbar/toolbar.qrc">
+     <normaloff>:/toolbar/edit/grid_snap_custom.png</normaloff>:/toolbar/edit/grid_snap_custom.png</iconset>
+   </property>
+   <property name="text">
+    <string>Grid Snap</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit  Grid Snap</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="_resources/editor.qrc"/>
   <include location="_resources/appicon/appicon.qrc"/>
+  <include location="_resources/engines/engines.qrc"/>
   <include location="_resources/sections/sections.qrc"/>
   <include location="_resources/toolbar/toolbar.qrc"/>
  </resources>

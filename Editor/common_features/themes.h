@@ -63,6 +63,7 @@ public:
 
         playmusic,
         grid_snap,
+        grid_custom,
         show_grid,
         camera_grid,
         animation,

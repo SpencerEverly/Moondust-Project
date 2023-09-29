@@ -95,7 +95,7 @@ void MainWindow::loadSettings()
     settings.beginGroup("Main");
     {
         //GlobalSettings::LastOpenDir = settings.value("lastpath", ".").toString();
-        GlobalSettings::LvlOpts.animationEnabled = settings.value("animation", true).toBool();
+        GlobalSettings::LvlOpts.animationEnabled = settings.value("animation", false).toBool();
         GlobalSettings::LvlOpts.collisionsEnabled = settings.value("collisions", true).toBool();
         GlobalSettings::LvlOpts.grid_show = settings.value("grid-show", false).toBool();
         GlobalSettings::LvlOpts.camera_grid_show = settings.value("camera-grid-show", false).toBool();

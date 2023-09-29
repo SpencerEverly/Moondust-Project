@@ -78,6 +78,9 @@ void Themes::init()
     icons_map[grid_snap]    = QIcon(":/toolbar/edit/grid_snap.png");
     icons_map_dark[grid_snap] = QIcon(":/toolbar/edit/grid_snap_dark.png");
 
+    icons_map[grid_custom]    = QIcon(":/toolbar/edit/grid_snap_custom.png");
+    icons_map_dark[grid_custom] = QIcon(":/toolbar/edit/grid_snap_custom_dark.png");
+
     icons_map[show_grid]    = QIcon(":/toolbar/view/show_grid.png");
     icons_map_dark[show_grid] = QIcon(":/toolbar/view/show_grid_dark.png");
     icons_map[camera_grid]  = QIcon(":/toolbar/view/camera_grid.png");
