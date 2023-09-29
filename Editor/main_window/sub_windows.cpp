@@ -244,11 +244,33 @@ void MainWindow::setActiveSubWindow(QWidget *window)
     if(!window)
         return;
     ui->centralWidget->setActiveSubWindow(qobject_cast<QMdiSubWindow *>(window));
+
+    LevelEdit* edit = activeLvlEditWin();
+    if (edit == nullptr) {
+        for (int i = 0; i <= 20; i++) {
+            setSectionUsed(i, false);
+        }
+    } else {
+        for (int i = 0; i <= 20; i++) {
+            setSectionUsed(i, !(edit->LvlData.sections[i].size_left == 0 && edit->LvlData.sections[i].size_right == 0));
+        }
+    }
 }
 
 void MainWindow::setActiveSubWindow(QMdiSubWindow *window)
 {
     ui->centralWidget->setActiveSubWindow(window);
+
+    LevelEdit* edit = activeLvlEditWin();
+    if (edit == nullptr) {
+        for (int i = 0; i <= 20; i++) {
+            setSectionUsed(i, false);
+        }
+    } else {
+        for (int i = 0; i <= 20; i++) {
+            setSectionUsed(i, !(edit->LvlData.sections[i].size_left == 0 && edit->LvlData.sections[i].size_right == 0));
+        }
+    }
 }
 
 

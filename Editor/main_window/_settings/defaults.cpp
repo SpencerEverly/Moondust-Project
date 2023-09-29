@@ -611,11 +611,16 @@ void MainWindow::setUiDefults()
     connect(this, &MainWindow::windowActiveLevelWorld, ui->actionCreateScriptEpisode, &QAction::setEnabled);
     connect(this, &MainWindow::windowActiveLevelWorld, ui->menuLunaLUA_scripts->menuAction(), &QAction::setEnabled);
 
-    for(size_t i = 0; i < m_sectionButtonsCount; i++)
+    for(size_t i = 0; i < m_sectionButtonsCount; i++) {
         connect(this, &MainWindow::windowActiveLevel,   m_sectionButtons[i], &QAction::setEnabled);
+    }
+    connect(this, &MainWindow::setSectionUsed, this, &MainWindow::on_section_use_update);
     connect(this, &MainWindow::windowActiveLevel,   ui->actionSectionMore, &QAction::setEnabled);
 }
 
+void MainWindow::on_section_use_update(int i, bool used) {
+    m_sectionButtons[i]->setIcon(used ? usedSectionIcons[i] : unusedSectionIcons[i]);
+}
 
 static int s_mw_setDockWidgetState(MainWindow *mw, QDockWidget *w, const EditorSetup::DefaultToolboxPositions::State &p)
 {

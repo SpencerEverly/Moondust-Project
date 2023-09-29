@@ -83,6 +83,8 @@ bool LevelEdit::newFile(DataConfig &configs, EditingSettings options)
     scene->drawSpace();
     scene->buildAnimators();
 
+
+
     if(!sceneCreated)
     {
         ui->graphicsView->setScene(scene);
@@ -94,6 +96,10 @@ bool LevelEdit::newFile(DataConfig &configs, EditingSettings options)
         scene->startAnimation();
     else
         stopAutoUpdateTimer();
+
+    for (int i = 0; i <= 20; i++) {
+        getMainWindow()->setSectionUsed(i, !(LvlData.sections[i].size_left == 0 && LvlData.sections[i].size_right == 0));
+    }
 
     return true;
 }
@@ -607,6 +613,10 @@ bool LevelEdit::loadFile(const QString &fileName, LevelData &FileData, DataConfi
     LvlData.meta.untitled = untitledstate;
     updateTitle();
     progress.deleteLater();
+
+    for (int i = 0; i <= 20; i++) {
+        getMainWindow()->setSectionUsed(i, !(LvlData.sections[i].size_left == 0 && LvlData.sections[i].size_right == 0));
+    }
 
     return true;
 }
