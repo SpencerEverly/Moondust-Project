@@ -61,6 +61,7 @@ ItemMsgBox::ItemMsgBox(Opened_By openedBy, QString text, bool isFriendly, QStrin
     ui->msgTextBoxTiny->setMaximumWidth(w_width + scrW + 18);
     ui->msgTextBoxTiny->setMinimumWidth(w_width + scrW + 18);
     ui->msgTextBoxTiny->appendPlainText(currentText);
+    ui->msgTextBox->appendPlainText(currentText);
     updateGeometry();
     on_msgTextBox_textChanged();
 }
