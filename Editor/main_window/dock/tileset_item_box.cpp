@@ -347,9 +347,9 @@ QWidget *TilesetItemBox::makeCategory(const QString &categoryItem, int visibilit
     menuButton->setPopupMode(QToolButton::InstantPopup);
     searchLabel = new QLabel(catWid);
     searchLabel->setText(tr("Search:"));
-    catLayout->addWidget(searchLabel, 0, 3, 1, 1);
+    catLayout->addWidget(searchLabel, 1, 0, 1, 1);
     searchLineEdit = new QLineEdit(catWid);
-    catLayout->addWidget(searchLineEdit, 0, 4, 1, 4);
+    catLayout->addWidget(searchLineEdit, 1, 1, 1, 4);
     connect(searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(makeCurrentTileset()));
     m_searchBoxes.append(searchLineEdit);
     catLayout->addWidget(menuButton, 0, 2, 1, 1);
@@ -368,7 +368,7 @@ QWidget *TilesetItemBox::makeCategory(const QString &categoryItem, int visibilit
     theLayOut = new FlowLayout(scrollWid);
     theLayOut->setSizeConstraint(QLayout::SetNoConstraint);
 
-    catLayout->addWidget(TileSets, 1, 0, 1, 8);
+    catLayout->addWidget(TileSets, 2, 0, 1, 8);
 
     TileSetsCategories->addTab(catWid, QString::number(visibility));
     TileSetsCategories->setTabText(TileSetsCategories->indexOf(catWid),categoryItem);
