@@ -56,6 +56,8 @@ bool GlobalSettings::MidMouse_allowSwitchToPlace= true;
 bool GlobalSettings::MidMouse_allowSwitchToDrag = true;
 
 bool GlobalSettings::Placing_dontShowPropertiesBox  = false;
+bool GlobalSettings::Placing_neverHidePropertiesBox  = false;
+bool GlobalSettings::Placing_OpenPropertiesBoxOnSelect = false;
 
 int  GlobalSettings::historyLimit   = 300;
 

@@ -26,18 +26,7 @@
 
 void obj_bgo::copyTo(obj_bgo &bgo)
 {
-    /* for internal usage */
-    bgo.isValid         = isValid;
-    bgo.animator_id     = animator_id;
-    bgo.cur_image       = cur_image;
-    bgo.cur_icon        = cur_icon;
-
-    if(!cur_image)
-        bgo.cur_image   = &image;
-    if(!cur_icon)
-        bgo.cur_icon    = &icon;
-
-    bgo.setup = setup;
+    this->copyBase(bgo);
 }
 
 /*!

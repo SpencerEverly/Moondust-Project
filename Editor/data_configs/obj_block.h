@@ -23,24 +23,12 @@
 #include <QString>
 #include <QPixmap>
 #include <QList>
+#include "obj_baseitem.h"
 #include <ConfigPackManager/level/config_block.h>
 
-struct obj_block
+struct obj_block : obj_baseitem<BlockSetup>
 {
-    bool isValid = false;
-    unsigned long animator_id = 0;
-    QPixmap *cur_image = nullptr;
-    QPixmap *cur_icon = nullptr;
-    QPixmap image;
-    QPixmap icon;
-
-    /*!
-     * \brief Quickly copies all properties except images
-     * \param Target bgo configuration body
-     */
     void copyTo(obj_block &block);
-
-    BlockSetup setup;
 };
 
 

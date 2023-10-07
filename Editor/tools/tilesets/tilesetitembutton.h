@@ -36,14 +36,18 @@ public:
 
     DataConfig *config() const;
     void setConfig(DataConfig *config);
-    void applyItem(const int &type_i, const int &id, const int &width = -1, const int &height = -1);
+    void applyItem(const int &type_i, const int &id, const int &width = -1, const int &height = -1, const bool notInSearch = false);
     void applySize(const int &width, const int &height);
     ItemTypes::itemTypes itemType() const;
     unsigned int id() const;
     bool isItemSet();
 
+    void setFavorite(bool favorite);
+    bool favorite();
+
 signals:
-    void clicked(int itemType, unsigned long id);
+    void leftClicked(int itemType, unsigned long id);
+    void rightClicked(const QPoint &pos, TilesetItemButton* button);
 public slots:
 
 protected:
@@ -57,6 +61,7 @@ private:
     unsigned int m_id;
     QPixmap m_drawItem;
     QGraphicsScene *scn;
+    bool isFavorite;
 };
 
 #endif // TILESETITEMBUTTON_H

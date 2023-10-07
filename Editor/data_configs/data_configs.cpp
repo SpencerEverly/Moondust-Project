@@ -437,6 +437,7 @@ bool DataConfig::loadFullConfig()
     QString preSetup_gfxLevel;
     QString preSetup_gfxWorldMap;
     QString preSetup_gfxCharacters;
+    QString preSetup_configBackground2;
     QString preSetup_custom;
     // PreSetup END
 
@@ -503,6 +504,8 @@ bool DataConfig::loadFullConfig()
         preSetup_gfxWorldMap = mainSet.value("graphics-worldmap", "data/graphics/worldmap").toQString();
         preSetup_gfxCharacters = mainSet.value("graphics-characters", "data/graphics/characters").toQString();
 
+        preSetup_configBackground2 = mainSet.value("config-background2", "data/config/backgrounds").toQString();
+
         localScriptName_lvl  = mainSet.value("local-script-name-lvl", "level.lua").toQString();
         commonScriptName_lvl = mainSet.value("common-script-name-lvl", "level.lua").toQString();
         localScriptName_wld  = mainSet.value("local-script-name-wld", "world.lua").toQString();
@@ -534,6 +537,9 @@ bool DataConfig::loadFullConfig()
             preSetup_gfxLevel = localSet.value("graphics-level", preSetup_gfxLevel).toQString();
             preSetup_gfxWorldMap = localSet.value("graphics-worldmap", preSetup_gfxWorldMap).toQString();
             preSetup_gfxCharacters = localSet.value("graphics-characters", preSetup_gfxCharacters).toQString();
+
+            preSetup_configBackground2 = localSet.value("config-background2", preSetup_configBackground2).toQString();
+
             preSetup_custom = localSet.value("custom-data", preSetup_custom).toQString();
             localSet.endGroup();
         }
@@ -563,6 +569,7 @@ bool DataConfig::loadFullConfig()
     dirs.glevel     = data_dir + preSetup_gfxLevel + "/";
     dirs.gworld     = data_dir + preSetup_gfxWorldMap + "/";
     dirs.gplayble   = data_dir + preSetup_gfxCharacters + "/";
+    dirs.cfgbackground2 = data_dir + preSetup_configBackground2 + "/";
     dirs.gcustom = preSetup_custom;
     // ================ Apply pre-Setup ================
 

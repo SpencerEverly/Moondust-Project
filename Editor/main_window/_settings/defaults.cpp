@@ -229,7 +229,7 @@ void MainWindow::setUiDefults()
 #endif
 
     {
-        QAction *action = ui->menuSetGridSize->addAction(tr("Default by item"));
+        QAction *action = ui->menuSetGridSize->addAction(tr("Default"));
         action->setData(0);
         connect(action, &QAction::triggered, this, &MainWindow::customGrid);
         ui->menuSetGridSize->addSeparator();
@@ -277,6 +277,10 @@ void MainWindow::setUiDefults()
         action->setData(-3);
         action->setShortcut(QKeySequence(Qt::Key_BracketLeft));
         connect(action, &QAction::triggered, this, &MainWindow::customGrid);
+
+        QToolButton* button = (QToolButton*)ui->EditionToolBar->widgetForAction(ui->actionGridCustom);
+        button->setPopupMode(QToolButton::InstantPopup);
+        button->setMenu(ui->menuSetGridSize);
     }
 
     {
@@ -428,8 +432,10 @@ void MainWindow::setUiDefults()
     ui->menuWorld->menuAction()->setEnabled(false);
     ui->menuTest->menuAction()->setEnabled(false);
 
+    ui->DockToolbar->setVisible(false);
     ui->LevelObjectToolbar->setVisible(false);
     ui->WorldObjectToolbar->setVisible(false);
+    ui->LevelLocksToolbar->setVisible(false);
 
     ui->actionLVLToolBox->setVisible(false);
     ui->actionWarpsAndDoors->setVisible(false);
@@ -460,9 +466,9 @@ void MainWindow::setUiDefults()
     GlobalSettings::font.reset(new QFont(qApp->font()));
 
     /*********************Music volume regulator*************************/
-    m_ui_musicVolume = new QSlider(Qt::Horizontal, ui->EditionToolBar);
-    m_ui_musicVolume->setMaximumWidth(70);
-    m_ui_musicVolume->setMinimumWidth(70);
+    m_ui_musicVolume = new QSlider(Qt::Horizontal, ui->EditorEffectToolBar);
+    m_ui_musicVolume->setMaximumWidth(60);
+    m_ui_musicVolume->setMinimumWidth(60);
     m_ui_musicVolume->setMinimum(0);
 #ifndef MIX_MAX_VOLUME
 #   define MIX_MAX_VOLUME 128
@@ -471,8 +477,7 @@ void MainWindow::setUiDefults()
     m_ui_musicVolume->setValue(GlobalSettings::musicVolume);
 
     MusPlayer.setVolume(m_ui_musicVolume->value());
-    ui->EditionToolBar->insertWidget(ui->actionAnimation, m_ui_musicVolume);
-    ui->EditionToolBar->insertSeparator(ui->actionAnimation);
+    ui->EditorEffectToolBar->insertWidget(ui->actionAnimation, m_ui_musicVolume);
     connect(m_ui_musicVolume, SIGNAL(valueChanged(int)), &MusPlayer, SLOT(setVolume(int)));
     /*********************Music volume regulator*************************/
 
@@ -540,6 +545,8 @@ void MainWindow::setUiDefults()
     connect(this, &MainWindow::windowActiveWorld,  ui->action_doSafeTestWld, &QAction::setVisible);
 
     connect(this, &MainWindow::windowActiveLevel, ui->LevelObjectToolbar, &QWidget::setVisible);
+    connect(this, &MainWindow::windowActiveLevel, ui->LevelLocksToolbar, &QWidget::setVisible);
+    connect(this, &MainWindow::windowActiveLevel, ui->DockToolbar, &QWidget::setVisible);
     connect(this, &MainWindow::windowActiveWorld, ui->WorldObjectToolbar, &QWidget::setVisible);
 
     connect(this, &MainWindow::windowActiveLevel, ui->actionLVLToolBox, &QAction::setVisible);
@@ -604,11 +611,16 @@ void MainWindow::setUiDefults()
     connect(this, &MainWindow::windowActiveLevelWorld, ui->actionCreateScriptEpisode, &QAction::setEnabled);
     connect(this, &MainWindow::windowActiveLevelWorld, ui->menuLunaLUA_scripts->menuAction(), &QAction::setEnabled);
 
-    for(size_t i = 0; i < m_sectionButtonsCount; i++)
+    for(size_t i = 0; i < m_sectionButtonsCount; i++) {
         connect(this, &MainWindow::windowActiveLevel,   m_sectionButtons[i], &QAction::setEnabled);
+    }
+    connect(this, &MainWindow::setSectionUsed, this, &MainWindow::on_section_use_update);
     connect(this, &MainWindow::windowActiveLevel,   ui->actionSectionMore, &QAction::setEnabled);
 }
 
+void MainWindow::on_section_use_update(int i, bool used) {
+    m_sectionButtons[i]->setIcon(used ? usedSectionIcons[i] : unusedSectionIcons[i]);
+}
 
 static int s_mw_setDockWidgetState(MainWindow *mw, QDockWidget *w, const EditorSetup::DefaultToolboxPositions::State &p)
 {

@@ -1,3 +1,9 @@
+Fork by Emral
+
+This fork requires Qt 5.15 minimum.
+
+-----------------
+
 Moondust Project by Wohlstand
 ===========
 Moondust Project (formerly known as PGE Project) is a free and open-source game engine and development kit for it, giving developers the ability to create platform games.

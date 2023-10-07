@@ -33,66 +33,18 @@ bool BgSetup::parse(IniProcessing *setup,
                     const BgSetup *merge_with,
                     PGEString *error)
 {
+    bool canParse = baseParse(setup, bgImgPath, 0, merge_with, error);
+    if (!canParse) {
+        return false;
+    }
+
 #define pMerge(param, def) (merge_with ? pgeConstReference(merge_with->param) : pgeConstReference(def))
 #define pMergeMe(param) (merge_with ? pgeConstReference(merge_with->param) : pgeConstReference(param))
 #define pAlias(paramName, destValue) setup->read(paramName, destValue, destValue)
-    int errCode = PGE_ImageInfo::ERR_OK;
-    PGEString section;
-    /*************Buffers*********************/
-    uint32_t    w = 0,
-                h = 0;
-    /*************Buffers*********************/
-    if(!setup)
-    {
-        if(error)
-            *error = "setup IniProcessing is null!";
-        return false;
-    }
 
-    section = StdToPGEString(setup->group());
-    setup->read("name", name, pMerge(name, section));
-
-    if(name.size() == 0)
-    {
-        if(error)
-            *error = section + ": item name isn't defined";
-        return false;
-    }
+    PGEString section = StdToPGEString(setup->group());
 
     setup->read("fill-color", fill_color, pMerge(fill_color, "auto"));
-
-    /*
-     *  First image
-     */
-    setup->read("image",    image_n, pMerge(image_n, ""));
-    if(!merge_with && !PGE_ImageInfo::getImageSize(bgImgPath + image_n, &w, &h, &errCode))
-    {
-        if(error)
-        {
-            switch(errCode)
-            {
-            case PGE_ImageInfo::ERR_UNSUPPORTED_FILETYPE:
-                *error = "Unsupported or corrupted file format: " + bgImgPath + image_n;
-                break;
-            case PGE_ImageInfo::ERR_NOT_EXISTS:
-                *error = "image file is not exist: " + bgImgPath + image_n;
-                break;
-            case PGE_ImageInfo::ERR_CANT_OPEN:
-                *error = "Can't open image file: " + bgImgPath + image_n;
-                break;
-            }
-        }
-        return false;
-    }
-
-    if(!merge_with && ((w == 0) || (h == 0)))
-    {
-        if(error)
-            *error = "Width or height of image has zero or negative value in image " + bgImgPath + image_n;
-        return false;
-    }
-
-    setup->read("icon", icon_n, pMerge(icon_n, ""));
 
     setup->readEnum("type", type,
                     pMerge(type, 0),

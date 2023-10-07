@@ -174,6 +174,10 @@ void MainWindow::updateMenus(QMdiSubWindow* subWindow, bool force)
         }
         ui->actionAnimation->setChecked( GlobalSettings::LvlOpts.animationEnabled );
         ui->actionCollisions->setChecked( GlobalSettings::LvlOpts.collisionsEnabled );
+
+        for (uint i = 0; i < m_sectionButtonsCount; i++) {
+            setSectionUsed(i, !(lvlWin->LvlData.sections[i].size_left == 0 && lvlWin->LvlData.sections[i].size_right == 0));
+        }
     }
     else
     if(winType==WND_World)

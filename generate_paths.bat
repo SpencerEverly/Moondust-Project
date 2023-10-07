@@ -70,7 +70,6 @@ echo =======================Detected CMake================================
 "%CMAKE_PATH%\cmake.exe" --version
 echo ===================================================================
 
-pause
 goto quit
 :edit
 start notepad _paths.bat

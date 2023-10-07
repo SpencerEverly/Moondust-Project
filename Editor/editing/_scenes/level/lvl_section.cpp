@@ -21,6 +21,9 @@
 #include <editing/edit_level/level_edit.h>
 #include <PGE_File_Formats/file_formats.h>
 
+#include <mainwindow.h>
+#include <ui_mainwindow.h>
+
 #include "lvl_scene.h"
 
 // /////////////////////////Init unused Section space as empty section///////////////////////////////
@@ -62,8 +65,7 @@ void LvlScene::InitSection(int sect)
         h = -200000 + 20000 * sect; //bottom
 
         w = -199200 + 20000 * sect; //right
-
-
+        m_mw->setSectionUsed(sect, true);
         bool found = false;
 
 #ifdef _DEBUG_

@@ -30,6 +30,7 @@
 #include "../../version.h"
 
 #define MOONDUST_HOMEPAGE "https://wohlsoft.ru/projects/Moondust/"
+#define FORK_URL "https://github.com/Emral/Moondust-Project-SMBX2"
 
 
 aboutDialog::aboutDialog(QWidget *parent) :
@@ -76,11 +77,13 @@ aboutDialog::aboutDialog(QWidget *parent) :
         "<br>"
         "%6:<br>"
         "<a href=\"" MOONDUST_HOMEPAGE "\">" MOONDUST_HOMEPAGE "</a><br>"
+        "%7:<br>"
+        "<a href=\"" FORK_URL "\">" FORK_URL "</a><br>"
         "<br>"
-        "%7"
+        "%8"
         "</div>")
-        .arg("Moondust Project")
-        .arg(tr("By Wohlstand"))
+        .arg("SMBX2 Editor")
+        .arg(tr("By SMBX2 Team, forked from Moondust Project by Wohlstand"))
         .arg(tr("Editor, version %1").arg(V_FILE_VERSION V_FILE_RELEASE))
         .arg(tr("Architecture: %1").arg(FILE_CPU))
         .arg(QString("<b>%1:</b> %2-%3, <b>%4:</b> <u>%5</u><br/>"
@@ -94,7 +97,8 @@ aboutDialog::aboutDialog(QWidget *parent) :
              .arg(sdlVer.major).arg(sdlVer.minor).arg(sdlVer.patch)
              .arg(mixerXVer->major).arg(mixerXVer->minor).arg(mixerXVer->patch)
             )
-        .arg(tr("Our project site"))
+        .arg(tr("Moondust Project Site"))
+        .arg(tr("Fork Repository"))
         .arg(tr("This program is distributed under %1").arg("<a href=\"http://www.gnu.org/licenses/gpl.html\">GNU GPLv3</a>"));
 
 /*

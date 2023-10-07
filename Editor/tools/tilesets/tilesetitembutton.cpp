@@ -18,7 +18,13 @@
 
 #include <common_features/items.h>
 #include <common_features/graphics_funcs.h>
+#include <common_features/util.h>
 
+#include <defines.h>
+
+#include <common_features/main_window_ptr.h>
+
+#include "main_window/dock/tileset_item_box.h"
 #include "tilesetitembutton.h"
 
 TilesetItemButton::TilesetItemButton(DataConfig *conf, QGraphicsScene *scene, QWidget *parent) :
@@ -42,13 +48,20 @@ void TilesetItemButton::setConfig(DataConfig *config)
     m_config = config;
 }
 
-void TilesetItemButton::applyItem(const int &type_i, const int &id, const int &width, const int &height)
+void TilesetItemButton::applyItem(const int &type_i, const int &id, const int &width, const int &height, const bool notInSearch)
 {
     int wid = (width == -1 ? contentsRect().width() : width);
     int hei = (height == -1 ? contentsRect().height() : height);
     QPixmap p;
     Items::getItemGFX(type_i, id, p, scn, false, QSize(wid, hei));
     setToolTip(Items::getTilesetToolTip(type_i, id, scn));
+
+    if (notInSearch) {
+        QImage image = p.toImage();
+        QImage grayImage = image.convertToFormat(QImage::Format_Grayscale16);
+        p = QPixmap::fromImage(grayImage);
+    }
+
     if(p.isNull())
     {
         m_drawItem = QPixmap(wid, hei);
@@ -69,7 +82,8 @@ void TilesetItemButton::paintEvent(QPaintEvent *ev)
 {
     QPainter painter;
     painter.begin(this);
-    painter.fillRect(contentsRect(), Qt::darkGray);
+    painter.fillRect(contentsRect(), MainWinConnect::pMainWin->dock_TilesetBox->tileIsFavorite(m_itemType, m_id) ? Qt::darkCyan : Qt::darkGray);
+    //painter.fillRect(contentsRect(), Qt::darkGray);
 
     if(!m_drawItem.isNull())
         painter.drawPixmap(contentsRect(),m_drawItem,m_drawItem.rect());
@@ -79,11 +93,16 @@ void TilesetItemButton::paintEvent(QPaintEvent *ev)
     QFrame::paintEvent(ev);
 }
 
-void TilesetItemButton::mousePressEvent(QMouseEvent *)
+void TilesetItemButton::mousePressEvent(QMouseEvent *ev)
 {
-    if(isItemSet())
-        emit clicked(static_cast<int>(m_itemType), (unsigned long)m_id);
-    setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    if(isItemSet()) {
+        if (ev->button() == Qt::LeftButton) {
+            emit leftClicked(static_cast<int>(m_itemType), (unsigned long)m_id);
+            setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        } else if (ev->button() == Qt::RightButton) {
+            emit rightClicked(ev->globalPos(), this);
+        }
+    }
 }
 
 void TilesetItemButton::mouseReleaseEvent(QMouseEvent *)

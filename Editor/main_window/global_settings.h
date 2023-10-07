@@ -154,6 +154,8 @@ public:
 
     //Placement mode flahs
     static bool Placing_dontShowPropertiesBox;
+    static bool Placing_neverHidePropertiesBox;
+    static bool Placing_OpenPropertiesBoxOnSelect;
 
     //!Max Limit if history elements
     static int  historyLimit;

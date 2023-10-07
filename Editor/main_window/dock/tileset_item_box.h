@@ -21,10 +21,14 @@
 #define TILESET_ITEM_BOX_H
 
 #include <QDockWidget>
+#include <QLineEdit>
 #include <QTabWidget>
+#include <QGraphicsScene>
 #include "mwdock_base.h"
 
 #include <data_configs/obj_tilesets.h>
+#include <common_features/items.h>
+#include <tools/tilesets/tilesetitembutton.h>
 
 class MainWindow;
 class QScrollArea;
@@ -54,12 +58,12 @@ public slots:
     void on_tilesetGroup_currentIndexChanged(int index);
 
     void setTabPosition(QTabWidget::TabPosition pos);
-
     void editSelectedTileset();
     QScrollArea *getFrameTilesetOfTab(QWidget *catTab);
     QTabBar *getGroupComboboxOfTab(QWidget *catTab);
     QWidget *findTabWidget(const QString &categoryItem);
-    QWidget *makeCategory(const QString &categoryItem);
+    bool categoryShouldBeVisible(int visibility);
+    QWidget *makeCategory(const QString &categoryItem, int visibility);
     void prepareCategoriesAndGroups();
     void prepareTilesetGroup(const SimpleTilesetGroup &tilesetGroups);
     void clearTilesetGroups();
@@ -67,13 +71,21 @@ public slots:
     QVector<SimpleTileset> loadCustomTilesets();
     void makeCurrentTileset();
     void makeAllTilesets();
+    void contextMenuRequest(QPoint pos, TilesetItemButton* button);
+    bool tileIsFavorite(int type, int id);
 
 protected:
     virtual void focusInEvent(QFocusEvent * ev);
 
 private:
+    SimpleTileset m_favorites;
+    QList<QLineEdit*> m_searchBoxes;
+    QMap<int, QList<uint>> favTilesetContentsMap;
     Ui::TilesetItemBox *ui;
     bool m_lockSettings = false;
+    bool isItemFoundBySearch(int type, uint id, QString searchText, QGraphicsScene* scene);
+    void UpdateFavouritesTileset(int itemType, uint id);
+    template <typename T> void onCustomContextMenu(QPoint pos, bool isWorldMap, TilesetItemButton* button, PGE_DataArray<T> &dataArray);
 };
 
 #endif // TILESET_ITEM_BOX_H

@@ -745,7 +745,9 @@ void LvlItemProperties::openNpcProps(LevelNPC &npc, bool isPlacingNew, bool dont
 
 void LvlItemProperties::closeProps()
 {
-    hide();
+    if (!GlobalSettings::Placing_neverHidePropertiesBox) {
+        hide();
+    }
     ui->blockProp->setVisible(false);
     ui->bgoProps->setVisible(false);
     ui->npcProps->setVisible(false);

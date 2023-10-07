@@ -1,5 +1,4 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/toolbar/goto">
         <file alias="left_bottom.png">goto/left_bottom.png</file>
         <file alias="left_bottom_dark.png">goto/left_bottom_dark.png</file>
@@ -79,6 +78,16 @@
         <file alias="paste.png">edit/paste.png</file>
         <file alias="redo.png">edit/redo.png</file>
         <file alias="undo.png">edit/undo.png</file>
+        <file alias="grid_snap_4.png">edit/grid_snap_4.png</file>
+        <file alias="grid_snap_4_dark.png">edit/grid_snap_4_dark.png</file>
+        <file alias="grid_snap_8.png">edit/grid_snap_8.png</file>
+        <file alias="grid_snap_8_dark.png">edit/grid_snap_8_dark.png</file>
+        <file alias="grid_snap_16.png">edit/grid_snap_16.png</file>
+        <file alias="grid_snap_16_dark.png">edit/grid_snap_16_dark.png</file>
+        <file alias="grid_snap_adaptive.png">edit/grid_snap_adaptive.png</file>
+        <file alias="grid_snap_adaptive_dark.png">edit/grid_snap_adaptive_dark.png</file>
+        <file alias="grid_snap_custom.png">edit/grid_snap_custom.png</file>
+        <file alias="grid_snap_custom_dark.png">edit/grid_snap_custom_dark.png</file>
     </qresource>
     <qresource prefix="/toolbar/dock">
         <file alias="bookmarks.png">dock/bookmarks.png</file>

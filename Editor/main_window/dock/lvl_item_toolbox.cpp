@@ -281,9 +281,8 @@ void LevelItemBox::initItemLists()
     mw()->ui->menuNew->setEnabled(true);
 }
 
-void LevelItemBox::on_BlockItemsList_customContextMenuRequested(const QPoint &pos)
-{
-    QModelIndexList list = ui->BlockItemsList->selectionModel()->selectedIndexes();
+template <typename T> void LevelItemBox::onCustomContextMenu(const QPoint &pos, QListView* itemList, ItemBoxListModel* model, PGE_DataArray<T> &dataArray) {
+    QModelIndexList list = itemList->selectionModel()->selectedIndexes();
     if(list.isEmpty())
         return;
     LevelEdit *edit = mw()->activeLvlEditWin();
@@ -293,11 +292,11 @@ void LevelItemBox::on_BlockItemsList_customContextMenuRequested(const QPoint &po
     QModelIndex item_i = list[0];
     QString episodeDir = edit->LvlData.meta.path;
     QString customDir  = edit->LvlData.meta.path + "/" + edit->LvlData.meta.filename;
-    if(!m_blockModel->data(item_i, ItemBoxListModel::ItemBox_ItemIsValid).toBool())
+    if(!model->data(item_i, ItemBoxListModel::ItemBox_ItemIsValid).toBool())
         return;
-    int itemID = m_blockModel->data(item_i, ItemBoxListModel::ItemBox_ItemId).toInt();
+    int itemID = model->data(item_i, ItemBoxListModel::ItemBox_ItemId).toInt();
 
-    obj_block &block = mw()->configs.main_block[itemID];
+    T &block = dataArray[itemID];
     QString newImg = block.setup.image_n;
     if(newImg.endsWith(".gif", Qt::CaseInsensitive))
         newImg.replace(newImg.size() - 4, 4, ".png");
@@ -309,13 +308,13 @@ void LevelItemBox::on_BlockItemsList_customContextMenuRequested(const QPoint &po
     {
         QAction *nothing = itemMenu.addAction(tr("<Save file first>"));
         nothing->setEnabled(false);
-        itemMenu.exec(ui->BlockItemsList->mapToGlobal(pos));
+        itemMenu.exec(itemList->mapToGlobal(pos));
         return;
     }
 
     QAction *copyToC = itemMenu.addAction(tr("Copy graphic to custom folder"));
     QAction *copyToE = itemMenu.addAction(tr("Copy graphic to episode folder"));
-    QAction *reply = itemMenu.exec(ui->BlockItemsList->mapToGlobal(pos));
+    QAction *reply = itemMenu.exec(itemList->mapToGlobal(pos));
 
     if(reply == copyToC)
     {
@@ -330,108 +329,21 @@ void LevelItemBox::on_BlockItemsList_customContextMenuRequested(const QPoint &po
         if(!QFile::exists(episodeDir + "/" + newImg))
             orig.save(episodeDir + "/" + newImg, "PNG");
     }
+}
+
+void LevelItemBox::on_BlockItemsList_customContextMenuRequested(const QPoint &pos)
+{
+    LevelItemBox::onCustomContextMenu(pos, ui->BlockItemsList, m_blockModel, mw()->configs.main_block);
 }
 
 void LevelItemBox::on_BGOItemsList_customContextMenuRequested(const QPoint &pos)
 {
-    QModelIndexList list = ui->BGOItemsList->selectionModel()->selectedIndexes();
-    if(list.isEmpty())
-        return;
-    LevelEdit *edit = mw()->activeLvlEditWin();
-    if(!edit)
-        return;
-
-    QModelIndex item_i = list[0];
-    QString episodeDir = edit->LvlData.meta.path;
-    QString customDir  = edit->LvlData.meta.path + "/" + edit->LvlData.meta.filename;
-    if(!m_bgoModel->data(item_i, ItemBoxListModel::ItemBox_ItemIsValid).toBool())
-        return;
-    int itemID = m_bgoModel->data(item_i, ItemBoxListModel::ItemBox_ItemId).toInt();
-
-    obj_bgo &bgo = mw()->configs.main_bgo[itemID];
-    QString newImg = bgo.setup.image_n;
-    if(newImg.endsWith(".gif", Qt::CaseInsensitive))
-        newImg.replace(newImg.size() - 4, 4, ".png");
-    QPixmap &orig = bgo.image;
-
-    QMenu itemMenu(this);
-
-    if(edit->isUntitled())
-    {
-        QAction *nothing = itemMenu.addAction(tr("<Save file first>"));
-        nothing->setEnabled(false);
-        itemMenu.exec(ui->BGOItemsList->mapToGlobal(pos));
-        return;
-    }
-
-    QAction *copyToC = itemMenu.addAction(tr("Copy graphic to custom folder"));
-    QAction *copyToE = itemMenu.addAction(tr("Copy graphic to episode folder"));
-    QAction *reply = itemMenu.exec(ui->BGOItemsList->mapToGlobal(pos));
-
-    if(reply == copyToC)
-    {
-        QDir cDir(customDir);
-        if(!cDir.exists())
-            cDir.mkpath(customDir);
-        if(!QFile::exists(customDir + "/" + newImg))
-            orig.save(customDir + "/" + newImg, "PNG");
-    }
-    else if(reply == copyToE)
-    {
-        if(!QFile::exists(episodeDir + "/" + newImg))
-            orig.save(episodeDir + "/" + newImg, "PNG");
-    }
+    LevelItemBox::onCustomContextMenu(pos, ui->BGOItemsList, m_bgoModel, mw()->configs.main_bgo);
 }
 
 void LevelItemBox::on_NPCItemsList_customContextMenuRequested(const QPoint &pos)
 {
-    QModelIndexList list = ui->NPCItemsList->selectionModel()->selectedIndexes();
-    if(list.isEmpty())
-        return;
-    LevelEdit *edit = mw()->activeLvlEditWin();
-    if(!edit)
-        return;
-
-    QModelIndex item_i = list[0];
-    QString episodeDir = edit->LvlData.meta.path;
-    QString customDir  = edit->LvlData.meta.path + "/" + edit->LvlData.meta.filename;
-    if(!m_npcModel->data(item_i, ItemBoxListModel::ItemBox_ItemIsValid).toBool())
-        return;
-    int itemID = m_npcModel->data(item_i, ItemBoxListModel::ItemBox_ItemId).toInt();
-
-    obj_npc &npc = mw()->configs.main_npc[itemID];
-    QString newImg = npc.setup.image_n;
-    if(newImg.endsWith(".gif", Qt::CaseInsensitive))
-        newImg.replace(newImg.size() - 4, 4, ".png");
-    QPixmap &orig = npc.image;
-
-    QMenu itemMenu(this);
-
-    if(edit->isUntitled())
-    {
-        QAction *nothing = itemMenu.addAction(tr("<Save file first>"));
-        nothing->setEnabled(false);
-        itemMenu.exec(ui->NPCItemsList->mapToGlobal(pos));
-        return;
-    }
-
-    QAction *copyToC = itemMenu.addAction(tr("Copy graphic to custom folder"));
-    QAction *copyToE = itemMenu.addAction(tr("Copy graphic to episode folder"));
-    QAction *reply = itemMenu.exec(ui->NPCItemsList->mapToGlobal(pos));
-
-    if(reply == copyToC)
-    {
-        QDir cDir(customDir);
-        if(!cDir.exists())
-            cDir.mkpath(customDir);
-        if(!QFile::exists(customDir + "/" + newImg))
-            orig.save(customDir + "/" + newImg, "PNG");
-    }
-    else if(reply == copyToE)
-    {
-        if(!QFile::exists(episodeDir + "/" + newImg))
-            orig.save(episodeDir + "/" + newImg, "PNG");
-    }
+    LevelItemBox::onCustomContextMenu(pos, ui->NPCItemsList, m_npcModel, mw()->configs.main_npc);
 }
 
 

@@ -273,6 +273,8 @@ void LvlScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
         }
         return;
+    } else if (GlobalSettings::Placing_OpenPropertiesBoxOnSelect) {
+        LvlScene::openProps();
     }
 
     if(m_editModeObj)

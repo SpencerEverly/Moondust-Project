@@ -95,7 +95,7 @@ void MainWindow::loadSettings()
     settings.beginGroup("Main");
     {
         //GlobalSettings::LastOpenDir = settings.value("lastpath", ".").toString();
-        GlobalSettings::LvlOpts.animationEnabled = settings.value("animation", true).toBool();
+        GlobalSettings::LvlOpts.animationEnabled = settings.value("animation", false).toBool();
         GlobalSettings::LvlOpts.collisionsEnabled = settings.value("collisions", true).toBool();
         GlobalSettings::LvlOpts.grid_show = settings.value("grid-show", false).toBool();
         GlobalSettings::LvlOpts.camera_grid_show = settings.value("camera-grid-show", false).toBool();
@@ -128,6 +128,8 @@ void MainWindow::loadSettings()
         GlobalSettings::MidMouse_allowSwitchToDrag = settings.value("editor-midmouse-allowdrag", true).toBool();
 
         GlobalSettings::Placing_dontShowPropertiesBox = settings.value("editor-placing-no-propsbox", false).toBool();
+        GlobalSettings::Placing_neverHidePropertiesBox = settings.value("editor-placing-propbox-nohide", false).toBool();
+        GlobalSettings::Placing_OpenPropertiesBoxOnSelect  = settings.value("editor-placing-propbox-autoopen", false).toBool();
 
         GlobalSettings::historyLimit = settings.value("history-limit", 300).toInt();
 
@@ -301,6 +303,9 @@ void MainWindow::saveSettings()
         settings.setValue("editor-midmouse-allowdrag", GlobalSettings::MidMouse_allowSwitchToDrag);
 
         settings.setValue("editor-placing-no-propsbox", GlobalSettings::Placing_dontShowPropertiesBox);
+        settings.setValue("editor-placing-propbox-nohide", GlobalSettings::Placing_neverHidePropertiesBox);
+        settings.setValue("editor-placing-propbox-autoopen", GlobalSettings::Placing_OpenPropertiesBoxOnSelect);
+
 
         settings.setValue("history-limit", GlobalSettings::historyLimit);
 

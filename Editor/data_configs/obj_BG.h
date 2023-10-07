@@ -23,25 +23,16 @@
 #include <QString>
 #include <QPixmap>
 #include <stdint.h>
+#include "obj_baseitem.h"
 #include <ConfigPackManager/level/config_bg.h>
 
-struct obj_BG
+struct obj_BG : obj_baseitem<BgSetup>
 {
-    bool isValid = false;
-    uint64_t  animator_id = 0;
-    QPixmap * cur_image = nullptr;
     QPixmap * cur_image_second = nullptr;
-    QPixmap image;
     QPixmap second_image;
     QColor  fill_color;
 
-    /*!
-     * \brief Quickly copies all properties except images
-     * \param Target bgo configuration body
-     */
     void copyTo(obj_BG &bg);
-
-    BgSetup setup;
 };
 
 #endif // OBJ_BG_H

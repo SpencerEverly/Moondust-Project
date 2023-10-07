@@ -901,6 +901,9 @@ public:
         const size_t m_sectionButtonsCount = 21;
         QAction *m_sectionButtons[21] = {0};
 
+    signals:
+        void setSectionUsed(int idx, bool isUsed);
+
     public slots:
         //Switch section
         void setCurrentLevelSection(int sectionId, int open = 0);
@@ -940,8 +943,12 @@ public:
         void on_actionSCT_RotateRight_triggered();
         void on_actionSCT_FlipHorizontal_triggered();
         void on_actionSCT_FlipVertical_triggered();
+        void on_section_use_update(int idx, bool used);
     private:
         void deleteLevelSection(LevelEdit *edit, int section, long margin);
+
+        QList<QIcon> unusedSectionIcons;
+        QList<QIcon> usedSectionIcons;
 
 // ////////////////////////////////////////////////////////
 
