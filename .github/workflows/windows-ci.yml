@@ -150,7 +150,7 @@ jobs:
         echo "====================================="
         cmake --version
         echo "====================================="
-        cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DCMAKE_INSTALL_PREFIX="`pwd`/bin-cmake-release" -DPGE_INSTALL_DIRECTORY="PGE_Project" ${{ matrix.config.extra_options }} .
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DCMAKE_INSTALL_PREFIX="`pwd`/bin-cmake-release" -DPGE_INSTALL_DIRECTORY="PGE_Project" ${{ matrix.config.extra_options }} .
 
     - name: Build
       shell: bash

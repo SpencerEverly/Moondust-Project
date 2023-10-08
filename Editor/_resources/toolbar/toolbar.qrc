@@ -78,8 +78,6 @@
         <file alias="paste.png">edit/paste.png</file>
         <file alias="redo.png">edit/redo.png</file>
         <file alias="undo.png">edit/undo.png</file>
-        <file alias="grid_snap_custom.png">edit/grid_snap_custom.png</file>
-        <file alias="grid_snap_custom_dark.png">edit/grid_snap_custom_dark.png</file>
     </qresource>
     <qresource prefix="/toolbar/dock">
         <file alias="bookmarks.png">dock/bookmarks.png</file>
