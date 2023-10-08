@@ -78,12 +78,6 @@
         <file alias="paste.png">edit/paste.png</file>
         <file alias="redo.png">edit/redo.png</file>
         <file alias="undo.png">edit/undo.png</file>
-        <file alias="grid_snap_4.png">edit/grid_snap_4.png</file>
-        <file alias="grid_snap_4_dark.png">edit/grid_snap_4_dark.png</file>
-        <file alias="grid_snap_8.png">edit/grid_snap_8.png</file>
-        <file alias="grid_snap_8_dark.png">edit/grid_snap_8_dark.png</file>
-        <file alias="grid_snap_16.png">edit/grid_snap_16.png</file>
-        <file alias="grid_snap_16_dark.png">edit/grid_snap_16_dark.png</file>
         <file alias="grid_snap_adaptive.png">edit/grid_snap_adaptive.png</file>
         <file alias="grid_snap_adaptive_dark.png">edit/grid_snap_adaptive_dark.png</file>
         <file alias="grid_snap_custom.png">edit/grid_snap_custom.png</file>
