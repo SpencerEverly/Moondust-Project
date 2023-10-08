@@ -58,7 +58,7 @@ void TilesetItemButton::applyItem(const int &type_i, const int &id, const int &w
 
     if (notInSearch) {
         QImage image = p.toImage();
-        QImage grayImage = image.convertToFormat(QImage::Format_Grayscale16);
+        QImage grayImage = image.convertToFormat(QImage::Format_Grayscale8);
         p = QPixmap::fromImage(grayImage);
     }
 
