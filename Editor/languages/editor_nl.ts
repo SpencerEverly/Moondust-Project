@@ -3895,142 +3895,142 @@ Wilt u uw wijzigingen opslaan?</translation>
 <context>
     <name>LevelProps</name>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="32"/>
+        <location filename="../main_window/dock/levelprops.ui" line="32"/>
         <source>Level Properties</source>
         <translation>Niveau Instellingen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="75"/>
+        <location filename="../main_window/dock/levelprops.ui" line="75"/>
         <source>General</source>
         <translation>Algemeen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="96"/>
+        <location filename="../main_window/dock/levelprops.ui" line="96"/>
         <source>No settings available</source>
         <translation>Geen instellingen beschikbaar</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="158"/>
+        <location filename="../main_window/dock/levelprops.ui" line="158"/>
         <source>Disable player controls</source>
         <translation>Spelerbesturing uitschakelen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="164"/>
+        <location filename="../main_window/dock/levelprops.ui" line="164"/>
         <source>Drop</source>
         <translation>Droppen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="171"/>
+        <location filename="../main_window/dock/levelprops.ui" line="171"/>
         <source>Jump</source>
         <translation>Springen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="178"/>
+        <location filename="../main_window/dock/levelprops.ui" line="178"/>
         <source>Left</source>
         <translation>Links</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="185"/>
+        <location filename="../main_window/dock/levelprops.ui" line="185"/>
         <source>Alt-Jump</source>
         <translation>Alt-springen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="192"/>
+        <location filename="../main_window/dock/levelprops.ui" line="192"/>
         <source>Right</source>
         <translation>Rechts</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="199"/>
+        <location filename="../main_window/dock/levelprops.ui" line="199"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="206"/>
+        <location filename="../main_window/dock/levelprops.ui" line="206"/>
         <source>Alt-Run</source>
         <translation>Alt-Lopen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="213"/>
+        <location filename="../main_window/dock/levelprops.ui" line="213"/>
         <source>Run</source>
         <translation>Lopen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="220"/>
+        <location filename="../main_window/dock/levelprops.ui" line="220"/>
         <source>Up</source>
         <translation>Boven</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="227"/>
+        <location filename="../main_window/dock/levelprops.ui" line="227"/>
         <source>Down</source>
         <translation>Onder</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="308"/>
+        <location filename="../main_window/dock/levelprops.ui" line="308"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="130"/>
+        <location filename="../main_window/dock/levelprops.ui" line="130"/>
         <source>Physics</source>
         <translation>Fysica</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="137"/>
+        <location filename="../main_window/dock/levelprops.ui" line="137"/>
         <source>Default</source>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="145"/>
+        <location filename="../main_window/dock/levelprops.ui" line="145"/>
         <source>Physics type:</source>
         <translation>Omgevingsfysica:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="240"/>
+        <location filename="../main_window/dock/levelprops.ui" line="240"/>
         <source>Timer</source>
         <translation>Timer</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="277"/>
+        <location filename="../main_window/dock/levelprops.ui" line="277"/>
         <source>Time limit:</source>
         <translation>Tijdslimiet:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="284"/>
+        <location filename="../main_window/dock/levelprops.ui" line="284"/>
         <source>Timer type:</source>
         <translation>Timer actie:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="291"/>
+        <location filename="../main_window/dock/levelprops.ui" line="291"/>
         <source>Event:</source>
         <translation>Event:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="246"/>
+        <location filename="../main_window/dock/levelprops.ui" line="246"/>
         <source>Enable</source>
         <translation>Inschakelen</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="314"/>
+        <location filename="../main_window/dock/levelprops.ui" line="314"/>
         <source>Level name:</source>
         <translation>Niveau naam:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="253"/>
+        <location filename="../main_window/dock/levelprops.ui" line="253"/>
         <source> sec.</source>
         <translation> sec.</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="264"/>
+        <location filename="../main_window/dock/levelprops.ui" line="264"/>
         <source>Kill all players</source>
         <translation>Alle spelers doden</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="269"/>
+        <location filename="../main_window/dock/levelprops.ui" line="269"/>
         <source>Trigger event</source>
         <translation>Event activeren</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.cpp" line="98"/>
+        <location filename="../main_window/dock/levelprops.cpp" line="98"/>
         <source>Error in the file %1:
 %2</source>
         <translation>Fout in het bestand %1:

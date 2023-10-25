@@ -3895,142 +3895,142 @@ Do you want to save your changes?</source>
 <context>
     <name>LevelProps</name>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="32"/>
+        <location filename="../main_window/dock/levelprops.ui" line="32"/>
         <source>Level Properties</source>
         <translation>레벨 속성</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="75"/>
+        <location filename="../main_window/dock/levelprops.ui" line="75"/>
         <source>General</source>
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="96"/>
+        <location filename="../main_window/dock/levelprops.ui" line="96"/>
         <source>No settings available</source>
         <translation>사용 가능한 설정이 없음</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="130"/>
+        <location filename="../main_window/dock/levelprops.ui" line="130"/>
         <source>Physics</source>
         <translation>물리</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="137"/>
+        <location filename="../main_window/dock/levelprops.ui" line="137"/>
         <source>Default</source>
         <translation>기본</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="145"/>
+        <location filename="../main_window/dock/levelprops.ui" line="145"/>
         <source>Physics type:</source>
         <translation>물리 유형:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="158"/>
+        <location filename="../main_window/dock/levelprops.ui" line="158"/>
         <source>Disable player controls</source>
         <translation>플레이어 컨트롤 비활성화</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="164"/>
+        <location filename="../main_window/dock/levelprops.ui" line="164"/>
         <source>Drop</source>
         <translation>드롭</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="171"/>
+        <location filename="../main_window/dock/levelprops.ui" line="171"/>
         <source>Jump</source>
         <translation>점프</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="178"/>
+        <location filename="../main_window/dock/levelprops.ui" line="178"/>
         <source>Left</source>
         <translation>왼쪽</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="185"/>
+        <location filename="../main_window/dock/levelprops.ui" line="185"/>
         <source>Alt-Jump</source>
         <translation>Alt-점프</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="192"/>
+        <location filename="../main_window/dock/levelprops.ui" line="192"/>
         <source>Right</source>
         <translation>오른쪽</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="199"/>
+        <location filename="../main_window/dock/levelprops.ui" line="199"/>
         <source>Start</source>
         <translation>시작</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="206"/>
+        <location filename="../main_window/dock/levelprops.ui" line="206"/>
         <source>Alt-Run</source>
         <translation>Alt-달리기</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="213"/>
+        <location filename="../main_window/dock/levelprops.ui" line="213"/>
         <source>Run</source>
         <translation>달리기</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="220"/>
+        <location filename="../main_window/dock/levelprops.ui" line="220"/>
         <source>Up</source>
         <translation>위</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="227"/>
+        <location filename="../main_window/dock/levelprops.ui" line="227"/>
         <source>Down</source>
         <translation>아래</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="240"/>
+        <location filename="../main_window/dock/levelprops.ui" line="240"/>
         <source>Timer</source>
         <translation>타이머</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="246"/>
+        <location filename="../main_window/dock/levelprops.ui" line="246"/>
         <source>Enable</source>
         <translation>활성화</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="253"/>
+        <location filename="../main_window/dock/levelprops.ui" line="253"/>
         <source> sec.</source>
         <translation> 초.</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="264"/>
+        <location filename="../main_window/dock/levelprops.ui" line="264"/>
         <source>Kill all players</source>
         <translation>모든 플레이어 킬</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="269"/>
+        <location filename="../main_window/dock/levelprops.ui" line="269"/>
         <source>Trigger event</source>
         <translation>트리거 이벤트</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="277"/>
+        <location filename="../main_window/dock/levelprops.ui" line="277"/>
         <source>Time limit:</source>
         <translation>시간 제한:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="284"/>
+        <location filename="../main_window/dock/levelprops.ui" line="284"/>
         <source>Timer type:</source>
         <translation>타이머 동작:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="291"/>
+        <location filename="../main_window/dock/levelprops.ui" line="291"/>
         <source>Event:</source>
         <translation>이벤트:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="308"/>
+        <location filename="../main_window/dock/levelprops.ui" line="308"/>
         <source>Title</source>
         <translation>제목</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.ui" line="314"/>
+        <location filename="../main_window/dock/levelprops.ui" line="314"/>
         <source>Level name:</source>
         <translation>레벨 이름:</translation>
     </message>
     <message>
-        <location filename="../editing/edit_level/levelprops.cpp" line="98"/>
+        <location filename="../main_window/dock/levelprops.cpp" line="98"/>
         <source>Error in the file %1:
 %2</source>
         <translation>파일에 오류가 있습니다 %1:

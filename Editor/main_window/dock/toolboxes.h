@@ -16,6 +16,7 @@
 #include "lvl_search_box.h"
 #include "lvl_layers_box.h"
 #include "lvl_events_box.h"
+#include "lvl_props_box.h"
 
 //World map specific toolboxes
 #include "wld_settings_box.h"

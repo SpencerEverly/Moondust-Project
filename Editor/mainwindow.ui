@@ -591,6 +591,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionLevelProp"/>
    <addaction name="actionLVLToolBox"/>
    <addaction name="actionTilesetBox"/>
    <addaction name="actionSection_Settings"/>
@@ -1430,8 +1431,15 @@
    </property>
   </action>
   <action name="actionLevelProp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="_resources/toolbar/toolbar.qrc">
+     <normaloff>:/toolbar/dock/levelprops.png</normaloff>:/toolbar/dock/levelprops.png</iconset>
    </property>
    <property name="text">
     <string>Properties...</string>

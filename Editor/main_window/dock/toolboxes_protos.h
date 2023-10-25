@@ -9,6 +9,7 @@ class BookmarksBox;
 class DebuggerBox;
 class VariablesBox;
 
+class LevelProps;
 class LvlItemProperties;
 class LvlWarpBox;
 class LvlSectionProps;
@@ -31,6 +32,7 @@ class WldSearchBox;
     friend class VariablesBox;\
     \
     friend class LevelItemBox;\
+    friend class LevelProps;\
     friend class LvlItemProperties;\
     friend class LvlWarpBox;\
     friend class LvlSectionProps;\

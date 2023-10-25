@@ -160,6 +160,7 @@ void MainWindow::loadSettings()
         loadToolboxProps(settings, QStringLiteral("level-layers"),      dock_LvlLayers,         configs.editor.default_visibility.lvl_layers,       configs.editor.default_visibility_enforce.lvl_layers,   configs.editor.default_widget_state.level_layers_box);
         loadToolboxProps(settings, QStringLiteral("level-events"),      dock_LvlEvents,         configs.editor.default_visibility.lvl_events,       configs.editor.default_visibility_enforce.lvl_events,   configs.editor.default_widget_state.level_classic_events_box);
         loadToolboxProps(settings, QStringLiteral("level-search"),      dock_LvlSearchBox,      configs.editor.default_visibility.lvl_search,       configs.editor.default_visibility_enforce.lvl_search,  configs.editor.default_widget_state.level_search_box);
+        loadToolboxProps(settings, QStringLiteral("level-properties"),  dock_LevelProps,        configs.editor.default_visibility.level_props,       configs.editor.default_visibility_enforce.level_props,  configs.editor.default_widget_state.level_properties);
 
         loadToolboxProps(settings, QStringLiteral("world-item-box"),    dock_WldItemBox,        configs.editor.default_visibility.wld_itembox,      configs.editor.default_visibility_enforce.wld_itembox,   configs.editor.default_widget_state.world_item_browser);
         loadToolboxProps(settings, QStringLiteral("world-muscboxes-box"), dock_WldMusicBoxes,   configs.editor.default_visibility.wld_musicboxes,   configs.editor.default_visibility_enforce.wld_musicboxes,configs.editor.default_widget_state.world_music_boxes);
@@ -280,6 +281,8 @@ void MainWindow::saveSettings()
         saveToolboxProps(settings, QStringLiteral("level-layers"),      dock_LvlLayers);
         saveToolboxProps(settings, QStringLiteral("level-events"),      dock_LvlEvents);
         saveToolboxProps(settings, QStringLiteral("level-search"),      dock_LvlSearchBox);
+        saveToolboxProps(settings, QStringLiteral("level-properties"),      dock_LevelProps);
+
 
         saveToolboxProps(settings, QStringLiteral("world-item-box"),    dock_WldItemBox);
         saveToolboxProps(settings, QStringLiteral("world-muscboxes-box"), dock_WldMusicBoxes);

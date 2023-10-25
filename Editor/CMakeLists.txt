@@ -145,7 +145,6 @@ list(APPEND PGE_EDITOR_UI
     editing/_dialogs/user_data_edit.ui
     editing/_dialogs/wld_setpoint.ui
     editing/edit_level/leveledit.ui
-    editing/edit_level/levelprops.ui
     editing/edit_level/lvl_clone_section.ui
     editing/edit_npc/npcedit.ui
     editing/edit_world/world_edit.ui
@@ -158,6 +157,7 @@ list(APPEND PGE_EDITOR_UI
     main_window/dock/lvl_item_properties.ui
     main_window/dock/lvl_item_toolbox.ui
     main_window/dock/lvl_layers_box.ui
+    main_window/dock/lvl_props_box.ui
     main_window/dock/lvl_sctc_props.ui
     main_window/dock/lvl_search_box.ui
     main_window/dock/lvl_warp_props.ui
@@ -304,7 +304,6 @@ list(APPEND PGE_EDITOR_SRCS
     editing/_dialogs/wld_setpoint.cpp
     editing/edit_base.cpp
     editing/edit_level/level_edit.cpp
-    editing/edit_level/levelprops.cpp
     editing/edit_level/lvl_clone_section.cpp
     editing/edit_level/lvl_draw.cpp
     editing/edit_level/lvl_edit_control.cpp
@@ -406,6 +405,7 @@ list(APPEND PGE_EDITOR_SRCS
     main_window/dock/lvl_item_properties.cpp
     main_window/dock/lvl_item_toolbox.cpp
     main_window/dock/lvl_layers_box.cpp
+    main_window/dock/lvl_props_box.cpp
     main_window/dock/lvl_sctc_props.cpp
     main_window/dock/lvl_search_box.cpp
     main_window/dock/lvl_warp_props.cpp

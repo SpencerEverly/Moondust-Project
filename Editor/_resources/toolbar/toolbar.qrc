@@ -89,6 +89,7 @@
         <file alias="item_browser_world.png">dock/item_browser_world.png</file>
         <file alias="layers.png">dock/layers.png</file>
         <file alias="level.png">dock/level.png</file>
+        <file alias="levelprops.png">dock/levelprops.png</file>
         <file alias="level16.png">dock/level16.png</file>
         <file alias="musicboxes.png">dock/musicboxes.png</file>
         <file alias="properties.png">dock/properties.png</file>

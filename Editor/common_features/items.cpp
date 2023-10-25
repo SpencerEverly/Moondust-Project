@@ -34,7 +34,10 @@ void Items::getItemGFX(const obj_npc *inObj, QPixmap &outImg, bool whole, QSize 
         const QPixmap *srcIcon = inObj->cur_icon ? inObj->cur_icon : &inObj->icon;
 
         if(whole) // Return the whole sprite
-            outImg = *srcImage;
+            outImg = srcImage->copy(0,
+                                    inObj->setup.gfx_h * inObj->setup.display_frame,
+                                    inObj->setup.gfx_w,
+                                    inObj->setup.gfx_h);
         else if(srcIcon && !srcIcon->isNull()) // return icon if not null
             outImg = *srcIcon;
         else
@@ -62,8 +65,19 @@ inline void TPL_getItemGFX(const OBJ_ITEM *inObj, QPixmap &outImg, bool whole, Q
         const QPixmap *srcImage = inObj->cur_image ? inObj->cur_image : &inObj->image;
         const QPixmap *srcIcon = inObj->cur_icon ? inObj->cur_icon : &inObj->icon;
 
-        if(whole) // Return the whole sprite
+        if(whole){ // Return the whole sprite
             outImg = *srcImage;
+            if(inObj->setup.animated) // return one of animation frames
+            {
+                double h = srcImage->height();
+                double frames = inObj->setup.frames;
+                int frameHeight = Maths::iRound(h / frames);
+                outImg =  srcImage->copy(0,
+                                        frameHeight * inObj->setup.display_frame,
+                                        srcImage->width(),
+                                        frameHeight);
+            }
+        }
         else if(srcIcon && !srcIcon->isNull()) // return icon if not null
             outImg = *srcIcon;
         else if(inObj->setup.animated) // return one of animation frames

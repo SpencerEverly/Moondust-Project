@@ -19,16 +19,32 @@
 #include <PGE_File_Formats/lvl_filedata.h>
 #include <common_features/json_settings_widget.h>
 
+#include <ui_mainwindow.h>
 #include <mainwindow.h>
+#include <QLineEdit>
 
-#include "levelprops.h"
-#include <ui_levelprops.h>
+#include "lvl_props_box.h"
+#include <ui_lvl_props_box.h>
+#include <editing/_dialogs/savingnotificationdialog.h>
 
 
-LevelProps::LevelProps(LevelData &FileData, QWidget *parent) :
-    QDialog(parent),
+LevelProps::LevelProps(QWidget *parent) :
+    QDockWidget(parent),
+    MWDock_Base(parent),
     ui(new Ui::LevelProps)
 {
+    setVisible(false);
+    setAttribute(Qt::WA_ShowWithoutActivating);
+    ui->setupUi(this);
+
+    mw()->addDockWidget(Qt::RightDockWidgetArea, this);
+    connect(mw(), SIGNAL(languageSwitched()), this, SLOT(re_translate()));
+
+    connect(this, SIGNAL(visibilityChanged(bool)), mw()->ui->actionLevelProp, SLOT(setChecked(bool)));
+    connect(mw(), SIGNAL(setSMBX64Strict(bool)),
+            this, SLOT(setSMBX64Strict(bool)));
+    m_lastVisibilityState = isVisible();
+    mw()->docks_level.addState(this, &m_lastVisibilityState);
     if(parent)
     {
         if(std::strcmp(parent->metaObject()->className(), "MainWindow") == 0)
@@ -36,37 +52,54 @@ LevelProps::LevelProps(LevelData &FileData, QWidget *parent) :
         else
             m_mw = nullptr;
     }
+}
 
+void LevelProps::loadData(LevelData &FileData) {
     m_currentData = &FileData;
-    ui->setupUi(this);
-    ui->LVLPropLevelTitle->setText(m_currentData->LevelName);
-#ifndef DEBUG_BUILD
-    ui->wipTab->setVisible(false);
-    ui->settingsTabs->removeTab(1);
-#endif
-    m_extraSettingsSpacer.reset(new QSpacerItem(100, 999999, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    ui->LevelTitle->setText(m_currentData->LevelName);
     initAdvancedSettings();
 }
 
 LevelProps::~LevelProps()
 {
     if(m_extraSettings.get())
-        ui->advancedSettings->layout()->removeWidget(m_extraSettings.get()->getWidget());
-    ui->advancedSettings->layout()->removeItem(m_extraSettingsSpacer.get());
+        ui->frame->layout()->removeWidget(m_extraSettings.get()->getWidget());
     m_extraSettings.reset();
-    m_extraSettingsSpacer.reset();
     delete ui;
 }
 
-void LevelProps::on_LVLPropButtonBox_accepted()
-{
-    m_levelTitle = ui->LVLPropLevelTitle->text().trimmed().simplified().remove('\"');
-    accept();
+void LevelProps::on_LevelTitle_editingFinished() {
+    m_levelTitle = ui->LevelTitle->text().trimmed().simplified().remove('\"');
+
+    if (m_currentData == nullptr) {
+        return;
+    }
+
+    m_currentData->LevelName = m_levelTitle;
+    m_currentData->meta.modified = true;
+    LevelEdit* e = mw()->activeLvlEditWin();
+    e->setWindowTitle(QString(m_levelTitle.isEmpty() ? e->userFriendlyCurrentFile() : m_levelTitle).replace("&", "&&&"));
+    mw()->updateWindowMenu();
 }
 
-void LevelProps::on_LVLPropButtonBox_rejected()
+void LevelProps::setSMBX64Strict(bool en)
 {
-    reject();
+    DataConfig &c = mw()->configs;
+
+    ui->advancedSettings->setEnabled(!en);
+}
+
+void LevelProps::re_translate()
+{
+    ui->retranslateUi(this);
+    //initDefaults();
+}
+
+void LevelProps::focusInEvent(QFocusEvent *ev)
+{
+    QDockWidget::focusInEvent(ev);
+    //ev->accept();
+    //qApp->setActiveWindow(mw());
 }
 
 void LevelProps::initAdvancedSettings()
@@ -85,9 +118,13 @@ void LevelProps::initAdvancedSettings()
 
     QByteArray rawLayout = layoutFile.readAll();
 
-    ui->advancedSettings->setEnabled(!m_currentData->meta.smbx64strict);
+    ui->frame->setEnabled(!m_currentData->meta.smbx64strict);
 
-    m_extraSettings.reset(new JsonSettingsWidget(ui->advancedSettings));
+    if(m_extraSettings.get())
+        ui->advancedSettings->layout()->removeWidget(m_extraSettings.get()->getWidget());
+
+    m_extraSettings.reset(new JsonSettingsWidget(ui->frame));
+
     if(m_extraSettings)
     {
         m_extraSettings->setSearchDirectories(m_currentData->meta.path, m_currentData->meta.filename);
@@ -95,19 +132,17 @@ void LevelProps::initAdvancedSettings()
         if(!m_extraSettings->loadLayout(m_currentData->custom_params.toUtf8(), rawLayout))
         {
             LogWarning(m_extraSettings->errorString());
-            ui->advancedNone->setText(tr("Error in the file %1:\n%2")
-                                      .arg(esLayoutFile)
-                                      .arg(m_extraSettings->errorString()));
-            ui->advancedNone->setStyleSheet("*{background-color: #FF0000;}");
+            ui->noSettings->setText(tr("Error in the file %1:\n%2")
+                                          .arg(esLayoutFile)
+                                          .arg(m_extraSettings->errorString()));
+            ui->noSettings->setStyleSheet("*{background-color: #FF0000;}");
         }
         auto *widget = m_extraSettings->getWidget();
         if(widget)
         {
-            ui->advancedSettings->layout()->addWidget(widget);
-            if(m_extraSettings->spacerNeeded())
-                ui->advancedSettings->layout()->addItem(m_extraSettingsSpacer.get());
+            ui->frame->layout()->addWidget(widget);
             JsonSettingsWidget::connect(m_extraSettings.get(), &JsonSettingsWidget::settingsChanged, this, &LevelProps::onExtraSettingsChanged);
-            ui->advancedNone->setVisible(false);
+            ui->noSettings->setVisible(false);
         }
     }
     layoutFile.close();
@@ -117,4 +152,6 @@ void LevelProps::onExtraSettingsChanged()
 {
     m_customParams = m_extraSettings->saveSettings();
     LogDebug("Extra Settings change: " + m_customParams);
+    m_currentData->custom_params = m_customParams;
+    m_currentData->meta.modified = true;
 }
