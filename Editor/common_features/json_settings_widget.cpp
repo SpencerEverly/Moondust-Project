@@ -1903,7 +1903,7 @@ void JsonSettingsWidget::loadLayoutEntries(JsonSettingsWidget::SetupStack setupT
                 setupTree.m_setupTree.push(name);
 
                 // Create the settings group object to organize data
-                JsonListSettingsGroup settingsGroup = JsonListSettingsGroup();
+                JsonSettingsWidget::JsonListSettingsGroup settingsGroup = JsonSettingsWidget::JsonListSettingsGroup();
                 settingsGroup.groupBox = itemGroup;
                 settingsGroup.children = children;
                 settingsGroup.maxSize = o["max-items"].toInt(0);
