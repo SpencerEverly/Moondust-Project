@@ -82,7 +82,7 @@ void TilesetItemButton::paintEvent(QPaintEvent *ev)
 {
     QPainter painter;
     painter.begin(this);
-    painter.fillRect(contentsRect(), MainWinConnect::pMainWin->dock_TilesetBox->tileIsFavorite(m_itemType, m_id) ? Qt::darkCyan : Qt::darkGray);
+    painter.fillRect(contentsRect(), MainWinConnect::pMainWin->dock_TilesetBox->tileIsFavorite(m_itemType, m_id) ? Qt::darkCyan : qApp->palette().mid());
     //painter.fillRect(contentsRect(), Qt::darkGray);
 
     if(!m_drawItem.isNull())
