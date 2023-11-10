@@ -100,6 +100,7 @@ void FileListBrowser::buildFileList()
 void FileListBrowser::addItem(QString item)
 {
     ui->FileList->addItem(item);
+    m_files.append(item);
     if(m_lastCurrentFile == item)
     {
         QList<QListWidgetItem *> list = ui->FileList->findItems(item, Qt::MatchFixedString);
@@ -140,6 +141,21 @@ void FileListBrowser::on_buttonBox_accepted()
         if(fileWalker.isRunning())
             fileWalker.cancel();
         accept();
+    }
+}
+
+void FileListBrowser::on_search_textChanged() {
+    ui->FileList->clear();
+    for(int i = 0; i < m_files.count(); i++) {
+        if (m_files[i].toLower().contains(ui->search->text().toLower())) {
+            ui->FileList->addItem(m_files[i]);
+        }
+    }
+    ui->FileList->sortItems(Qt::AscendingOrder);
+    if(ui->FileList->count() > 0)
+    {
+        ui->FileList->setCurrentRow(0);
+        ui->FileList->scrollToTop();
     }
 }
 

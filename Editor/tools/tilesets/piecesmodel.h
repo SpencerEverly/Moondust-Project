@@ -55,13 +55,6 @@ public:
         GFX_World
     };
 
-    enum SearchType
-    {
-        Search_ByName = 0,
-        Search_ById,
-        Search_ByIdContained
-    };
-
     enum SortType
     {
         Sort_ByName,
@@ -89,7 +82,7 @@ public:
     void addElement(const int &id);
     void addElementsEnd();
 
-    void setFilter(const QString &criteria, int searchType = 0);
+    void setFilter(const QString &criteria);
     void setSort(int sortType = 0, bool backward = false);
 
 private:
@@ -111,7 +104,6 @@ private:
     QList<int>      m_elementsVisibleMap;
 
     QString m_filterCriteria;
-    int     m_filterSearchType = Search_ByName;
     void    updateVisibilityMap();
 
     int     m_sortType = Sort_ByName;

@@ -437,6 +437,11 @@ void TilesetItemBox::clearTilesetGroups()
             ++i;
             continue;
         }
+        if(cat->tabText(i) == "Global")
+        {
+            ++i;
+            continue;
+        }
 
         QWidget *acCat = cat->widget(i);
         cat->removeTab(i);
@@ -644,7 +649,7 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
         scene = wldEdit->scene;
 
     QTabWidget *cat = ui->TileSetsCategories;
-    if(!(cat->tabText(tabIndex) == "Custom"))
+    if(!(cat->tabText(tabIndex) == "Custom" || cat->tabText(tabIndex) == "Global"))
     {
         QWidget *current = cat->widget(tabIndex);
         if(!current)
@@ -664,6 +669,8 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
         QWidget *scrollWid = currentFrame->widget();
         if(!scrollWid)
             return;
+
+        int earlyTabCount = ui->global_cat->isVisible() ? 2 : 1;
 
         qDeleteAll(scrollWid->findChildren<QGroupBox *>());
 
@@ -698,7 +705,7 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                     {
                         if(s == tileSet.fileName)
                         {
-                            QString searchBarText = m_searchBoxes[tabIndex - 1]->text();
+                            QString searchBarText = m_searchBoxes[tabIndex - earlyTabCount]->text();
                             bool includeTilesetInSearch = false;
                             for (int i = 0; i < tileSet.items.size(); ++i) {
                                 int type = tileSet.items[i].type;
@@ -764,8 +771,15 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                         .arg(scrollWid->layout()->geometry().height())
                         , "Debug");
 #endif
-
-        QVector<SimpleTileset> cTileSets = loadCustomTilesets();
+        QVector<SimpleTileset> cTileSets;
+        QString searchString;
+        if (cat->tabText(tabIndex) == "Global") {
+            cTileSets = mw()->configs.global_tilesets;
+            searchString = ui->globalTilesetSearchEdit->text();
+        } else {
+            cTileSets = loadCustomTilesets();
+            searchString = ui->customTilesetSearchEdit->text();
+        }
         if(!cTileSets.isEmpty())
         {
             for(auto &ts : cTileSets)
@@ -777,12 +791,12 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                         if (type == -1) {
                             type = ts.type;
                         }
-                    if (TilesetItemBox::isItemFoundBySearch(type, ts.items[i].id, ui->customTilesetSearchEdit->text(), scene)) {
+                    if (TilesetItemBox::isItemFoundBySearch(type, ts.items[i].id, searchString, scene)) {
                         includeTilesetInSearch = true;
                         break;
                     }
                 }
-                if(!includeTilesetInSearch && !ts.tileSetName.contains(ui->customTilesetSearchEdit->text(), Qt::CaseInsensitive))
+                if(!includeTilesetInSearch && !ts.tileSetName.contains(searchString, Qt::CaseInsensitive))
                     continue;
 
                 auto *tilesetNameWrapper = new QGroupBox(ts.tileSetName, scrollWid);
@@ -799,7 +813,7 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                         type = ts.type;
                     }
                     tButton->applySize(32, 32);
-                    tButton->applyItem(type, (int)item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(type, ts.items[k].id, ui->customTilesetSearchEdit->text(), scene));
+                    tButton->applyItem(type, (int)item.id, -1, -1, !TilesetItemBox::isItemFoundBySearch(type, ts.items[k].id, searchString, scene));
                     l->addWidget(tButton, (int)item.row, (int)item.col);
                     if(item.col >= mostRighter)
                         mostRighter = item.col + 1;
@@ -896,6 +910,7 @@ void TilesetItemBox::makeAllTilesets()
     QFileInfo ourFile(edit->currentFile());
     savePath = ourFile.absoluteDir().path() + "/" + ourFile.completeBaseName() + "/";
 
+    ui->global_cat->setVisible(mw()->configs.global_tilesets.count() > 0);
     favTilesetContentsMap.clear();
     m_favorites = SimpleTileset();
     QDir target(savePath);

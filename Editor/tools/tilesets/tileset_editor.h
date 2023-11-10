@@ -47,7 +47,7 @@ public:
         GFX_World
     };
 
-    void openTileset(QString filePath, bool isCustom);
+    void openTileset(QString filePath, QString openPath);
     void loadSimpleTileset(const SimpleTileset &tileset, bool isCustom);
 
 private slots:
@@ -55,11 +55,13 @@ private slots:
     void setUpItems(int type);
     void setUpTileset(int type);
     void on_SaveTileset_clicked();
+    void on_SaveGlobal_clicked();
 
     void on_OpenTileset_clicked();
 
-    void on_customOnly_clicked();
-    void on_defaultOnly_clicked();
+    void on_radioButtonAll_clicked();
+    void on_radioButtonCustom_clicked();
+    void on_radioButtonDefault_clicked();
     void showEvent( QShowEvent * event );
     void showNotify();
     void on_delete_me_clicked();

@@ -55,13 +55,15 @@ TilesetEditor::TilesetEditor(DataConfig *conf, QGraphicsScene *scene, QWidget *p
             m_mode = GFX_World;
     }
 
-    ui->customOnly->setVisible(m_mode != GFX_Staff);
-    ui->defaultOnly->setVisible(m_mode != GFX_Staff);
+    ui->radioButtonAll->setVisible(m_mode != GFX_Staff);
+    ui->radioButtonCustom->setVisible(m_mode != GFX_Staff);
+    ui->radioButtonDefault->setVisible(m_mode != GFX_Staff);
+    ui->SaveGlobal->setVisible(m_mode != GFX_Staff);
     ui->specific->setVisible(m_mode != GFX_Staff);
     ui->specific->setChecked(m_mode != GFX_Staff);
     ui->delete_me->setVisible(false);
 
-    ui->tilesetLayoutWidgetContainer->insertWidget(0, m_tileset = (new tileset(conf, ItemTypes::LVL_Block, nullptr, 32, 3, 3, scn)));
+    ui->tilesetLayoutWidgetContainer->insertWidget(0, m_tileset = (new tileset(conf, ItemTypes::LVL_Block, nullptr, 32, 5, 5, scn)));
 
     m_model = new ElementsListModel(conf, ElementsListModel::LEVELPIECE_BLOCK, 32, nullptr, this);
     ui->listView->setModel(m_model);
@@ -108,16 +110,6 @@ TilesetEditor::TilesetEditor(DataConfig *conf, QGraphicsScene *scene, QWidget *p
     connect(ui->spin_height, SIGNAL(valueChanged(int)), this, SLOT(update()));
 
     {
-        QAction *searchByName = m_searchSetup.addAction(tr("Search by Name", "Element search criteria"));
-        searchByName->setCheckable(true);
-        searchByName->setChecked(true);
-
-        QAction *searchById = m_searchSetup.addAction(tr("Search by ID", "Element search criteria"));
-        searchById->setCheckable(true);
-
-        QAction *searchByIdContained = m_searchSetup.addAction(tr("Search by ID (Contained)", "Element search criteria"));
-        searchByIdContained->setCheckable(true);
-
         m_searchSetup.addSeparator();
         QMenu   *sortBy = m_searchSetup.addMenu(tr("Sort by", "Search settings pop-up menu, sort submenu"));
 
@@ -131,36 +123,6 @@ TilesetEditor::TilesetEditor(DataConfig *conf, QGraphicsScene *scene, QWidget *p
         sortBy->addSeparator();
         QAction *sortBackward = sortBy->addAction(tr("Descending", "Descending sorting order"));
         sortBackward->setCheckable(true);
-
-        m_searchSetup.connect(searchByName, &QAction::triggered,
-        [=](bool)
-        {
-            searchByName->setChecked(true);
-            searchById->setChecked(false);
-            searchByIdContained->setChecked(false);
-            m_searchBy = ElementsListModel::Search_ByName;
-            ui->search->clear();
-        });
-
-        m_searchSetup.connect(searchById, &QAction::triggered,
-        [=](bool)
-        {
-            searchByName->setChecked(false);
-            searchById->setChecked(true);
-            searchByIdContained->setChecked(false);
-            m_searchBy = ElementsListModel::Search_ById;
-            ui->search->clear();
-        });
-
-        m_searchSetup.connect(searchByIdContained, &QAction::triggered,
-        [=](bool)
-        {
-            searchByName->setChecked(false);
-            searchById->setChecked(false);
-            searchByIdContained->setChecked(true);
-            m_searchBy = ElementsListModel::Search_ByIdContained;
-            ui->search->clear();
-        });
 
         m_searchSetup.connect(sortByName, &QAction::triggered,
         [=](bool)
@@ -220,8 +182,8 @@ void TilesetEditor::setUpTileset(int type)
 
 void TilesetEditor::setUpItems(int type)
 {
-    bool custom = ((m_mode != GFX_Staff) && (ui->customOnly->isChecked()));
-    bool defstuff = ((m_mode != GFX_Staff) && (ui->defaultOnly->isChecked()));
+    bool custom = ((m_mode != GFX_Staff) && (ui->radioButtonCustom->isChecked()));
+    bool defstuff = ((m_mode != GFX_Staff) && (ui->radioButtonDefault->isChecked()));
 
     LvlScene *lvl_scene = dynamic_cast<LvlScene *>(scn);
     WldScene *wld_scene = dynamic_cast<WldScene *>(scn);
@@ -549,6 +511,38 @@ void TilesetEditor::on_SaveTileset_clicked()
     ui->delete_me->setVisible(true);
 }
 
+
+void TilesetEditor::on_SaveGlobal_clicked()
+{
+    QDir(m_conf->config_dir).mkpath("../../tilesets/");
+
+    bool ok;
+    QString fileName = QInputDialog::getText(this, tr("Please enter a filename!"),
+                                             tr("Filename:"), QLineEdit::Normal,
+                                             lastFileName.isEmpty() ? m_tileset->name() : lastFileName, &ok);
+    if(!ok || fileName.isEmpty())
+        return;
+
+    //Filter input from forbidden characters
+    fileName = util::filePath(fileName);
+    lastFileName = fileName;
+
+    if(!fileName.endsWith(".tileset.ini"))
+        fileName += ".tileset.ini";
+
+    QString savePath = m_conf->config_dir + "../../tilesets/";
+
+    QDir target(savePath);
+    if(!target.exists()) target.mkpath(savePath);
+
+    SimpleTileset t = m_tileset->toSimpleTileset();
+    tileset::SaveSimpleTileset(savePath + fileName, t);
+    m_conf->addGlobalTileset(&t);
+
+    lastFullPath = QFileInfo(savePath + fileName).absoluteFilePath();
+    ui->delete_me->setVisible(true);
+}
+
 void TilesetEditor::on_OpenTileset_clicked()
 {
 
@@ -571,11 +565,11 @@ void TilesetEditor::on_OpenTileset_clicked()
     if(fileName.isEmpty())
         return;
 
-    openTileset(fileName, ui->customOnly->isChecked());
+    openTileset(fileName, openPath);
 
 }
 
-void TilesetEditor::openTileset(QString filePath, bool isCustom)
+void TilesetEditor::openTileset(QString filePath, QString openPath)
 {
     if(filePath.isEmpty())
         return;
@@ -601,7 +595,9 @@ void TilesetEditor::openTileset(QString filePath, bool isCustom)
         m_tileset->loadSimpleTileset(simple);
     }
 
-    ui->specific->setChecked(isCustom);
+    QDir d = QDir(filePath);
+    d.cdUp();
+    ui->specific->setChecked(d.absolutePath() == openPath);
     ui->delete_me->setVisible(true);
 }
 
@@ -636,24 +632,24 @@ void TilesetEditor::loadSimpleTileset(const SimpleTileset &tileset, bool isCusto
 }
 
 
-void TilesetEditor::on_customOnly_clicked()
+void TilesetEditor::on_radioButtonDefault_clicked()
 {
     if(m_mode == GFX_Staff)
         return;
-    ui->defaultOnly->setChecked(false);
-    ui->search->clear();
     setUpItems(ui->comboBox->currentIndex());
 }
-
-void TilesetEditor::on_defaultOnly_clicked()
+void TilesetEditor::on_radioButtonAll_clicked()
 {
     if(m_mode == GFX_Staff)
         return;
-    ui->customOnly->setChecked(false);
-    ui->search->clear();
     setUpItems(ui->comboBox->currentIndex());
 }
-
+void TilesetEditor::on_radioButtonCustom_clicked()
+{
+    if(m_mode == GFX_Staff)
+        return;
+    setUpItems(ui->comboBox->currentIndex());
+}
 
 void TilesetEditor::showEvent(QShowEvent *event)
 {
@@ -720,5 +716,5 @@ void TilesetEditor::keyPressEvent(QKeyEvent *event)
 
 void TilesetEditor::on_search_textChanged(const QString &arg1)
 {
-    m_model->setFilter(arg1, m_searchBy);
+    m_model->setFilter(arg1);
 }

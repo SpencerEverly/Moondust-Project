@@ -325,6 +325,7 @@ public:
     //Tilesets
     //! Full set of config-pack standard tilesets
     QList<SimpleTileset >      main_tilesets;
+    QVector<SimpleTileset >      global_tilesets;
     //! Full set of config-pack standard tileset groups are holds tilesets
     QList<SimpleTilesetGroup > main_tilesets_grp;
     //! Full set of config-pack standard tileset categories, generated from tileset groups
@@ -373,6 +374,7 @@ public:
 
 
     void  loadTilesets();
+    void  addGlobalTileset(SimpleTileset *tileset);
 
     void setConfigPath(const QString &p, const QString &appDir = QString());
     bool loadBasics();

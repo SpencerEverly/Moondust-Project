@@ -379,8 +379,6 @@
     <addaction name="action_doSafeTest"/>
     <addaction name="action_doSafeTestWld"/>
     <addaction name="separator"/>
-    <addaction name="action_Start_Engine"/>
-    <addaction name="separator"/>
     <addaction name="sepEngineExtras"/>
     <addaction name="separator"/>
     <addaction name="action_testSettings"/>
