@@ -38,7 +38,7 @@ class TilesetEditor : public QDialog
     Q_OBJECT
 
 public:
-    explicit TilesetEditor(DataConfig *conf, QGraphicsScene *scene = nullptr, QWidget *parent = nullptr);
+    explicit TilesetEditor(DataConfig *conf, QGraphicsScene *scene = nullptr, QWidget *parent = nullptr, bool isGlobal = false);
     ~TilesetEditor();
     enum GFXMode
     {
@@ -48,7 +48,7 @@ public:
     };
 
     void openTileset(QString filePath, QString openPath);
-    void loadSimpleTileset(const SimpleTileset &tileset, bool isCustom);
+    void loadSimpleTileset(const SimpleTileset &tileset, bool isCustom, bool isGlobal);
 
 private slots:
     void on_clearTileset_clicked();

@@ -200,47 +200,59 @@ void TilesetItemBox::setTabPosition(QTabWidget::TabPosition pos)
 
 void TilesetItemBox::editSelectedTileset()
 {
-    TilesetEditor *tilesetConfDia;
-
-    if(mw()->activeChildWindow() == MainWindow::WND_Level)
-        tilesetConfDia = new TilesetEditor(&mw()->configs, mw()->activeLvlEditWin()->scene, mw());
-    else if(mw()->activeChildWindow() == MainWindow::WND_World)
-        tilesetConfDia = new TilesetEditor(&mw()->configs, mw()->activeWldEditWin()->scene, mw());
-    else
-        tilesetConfDia = new TilesetEditor(&mw()->configs, nullptr, mw());
-
-    util::DialogToCenter(tilesetConfDia);
-
     auto *b = qobject_cast<QPushButton *>(sender());
     if(!b)
     {
-        delete tilesetConfDia;
         return;
     }
 
     QWidget *parent = b->parentWidget();
     if(!parent)
     {
-        delete tilesetConfDia;
         return;
     }
 
     auto *box = qobject_cast<QGroupBox *>(parent);
     if(!box)
     {
-        delete tilesetConfDia;
         return;
     }
 
+    bool isGlobal = box->parent()->parent()->parent() == ui->globalTilesets; // Jank-central
+
+    TilesetEditor *tilesetConfDia;
+
+    if(mw()->activeChildWindow() == MainWindow::WND_Level)
+        tilesetConfDia = new TilesetEditor(&mw()->configs, mw()->activeLvlEditWin()->scene, mw(), isGlobal);
+    else if(mw()->activeChildWindow() == MainWindow::WND_World)
+        tilesetConfDia = new TilesetEditor(&mw()->configs, mw()->activeWldEditWin()->scene, mw(), isGlobal);
+    else
+        tilesetConfDia = new TilesetEditor(&mw()->configs, nullptr, mw());
+
+    util::DialogToCenter(tilesetConfDia);
+
     QString fileName = b->property("tileset-file-name").toString();//box->title();
     QVector<SimpleTileset> cTileSets = loadCustomTilesets();
-    for(auto &tileSet : cTileSets)
-    {
-        if(tileSet.fileName == fileName)
+    if (ui->TileSetsCategories->currentIndex() == 0) {
+        for(auto &tileSet : cTileSets)
         {
-            tilesetConfDia->loadSimpleTileset(tileSet, tileSet.customDir);
-            tilesetConfDia->exec();
-            break;
+            if(tileSet.fileName == fileName)
+            {
+                tilesetConfDia->loadSimpleTileset(tileSet, tileSet.customDir, false);
+                tilesetConfDia->exec();
+                break;
+            }
+        }
+    } else {
+        cTileSets = mw()->configs.global_tilesets;
+        for(auto &tileSet : cTileSets)
+        {
+            if(tileSet.fileName == fileName)
+            {
+                tilesetConfDia->loadSimpleTileset(tileSet, tileSet.customDir, true);
+                tilesetConfDia->exec();
+                break;
+            }
         }
     }
 
@@ -824,7 +836,7 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                     b->setMaximumSize(32, 32);
                     b->setFlat(true);
                     l->addWidget(b, 0, (int)mostRighter);
-                    connect(b, SIGNAL(clicked()), this, SLOT(editSelectedTileset()));
+                    connect(b, &QPushButton::clicked, this, &TilesetItemBox::editSelectedTileset);
                 }
             }
         }

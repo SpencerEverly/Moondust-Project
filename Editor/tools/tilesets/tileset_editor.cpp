@@ -32,7 +32,7 @@
 #include "qfile_dialogs_default_options.hpp"
 
 
-TilesetEditor::TilesetEditor(DataConfig *conf, QGraphicsScene *scene, QWidget *parent) :
+TilesetEditor::TilesetEditor(DataConfig *conf, QGraphicsScene *scene, QWidget *parent, bool isGlobal) :
     QDialog(parent),
     ui(new Ui::TilesetEditor)
 {
@@ -59,7 +59,11 @@ TilesetEditor::TilesetEditor(DataConfig *conf, QGraphicsScene *scene, QWidget *p
     ui->radioButtonCustom->setVisible(m_mode != GFX_Staff);
     ui->radioButtonDefault->setVisible(m_mode != GFX_Staff);
     ui->SaveGlobal->setVisible(m_mode != GFX_Staff);
-    ui->specific->setVisible(m_mode != GFX_Staff);
+    if (isGlobal) {
+        ui->SaveGlobal->setText("Save");
+    }
+    ui->SaveTileset->setVisible(!isGlobal);
+    ui->specific->setVisible(m_mode != GFX_Staff && !isGlobal);
     ui->specific->setChecked(m_mode != GFX_Staff);
     ui->delete_me->setVisible(false);
 
@@ -110,7 +114,6 @@ TilesetEditor::TilesetEditor(DataConfig *conf, QGraphicsScene *scene, QWidget *p
     connect(ui->spin_height, SIGNAL(valueChanged(int)), this, SLOT(update()));
 
     {
-        m_searchSetup.addSeparator();
         QMenu   *sortBy = m_searchSetup.addMenu(tr("Sort by", "Search settings pop-up menu, sort submenu"));
 
         QAction *sortByName = sortBy->addAction(tr("Name", "Sort by name"));
@@ -592,6 +595,8 @@ void TilesetEditor::openTileset(QString filePath, QString openPath)
         ui->spin_height->setValue(static_cast<int>(simple.rows));
         ui->comboBox->setCurrentIndex(static_cast<int>(simple.type));
         setUpItems(simple.type);
+        QString notCustomPath = dynamic_cast<LvlScene *>(scn)->m_data->meta.path + "/";
+        bool isGlobal = QDir(filePath) == m_conf->config_dir + "../../tilesets/";
         m_tileset->loadSimpleTileset(simple);
     }
 
@@ -601,7 +606,7 @@ void TilesetEditor::openTileset(QString filePath, QString openPath)
     ui->delete_me->setVisible(true);
 }
 
-void TilesetEditor::loadSimpleTileset(const SimpleTileset &tileset, bool isCustom)
+void TilesetEditor::loadSimpleTileset(const SimpleTileset &tileset, bool isCustom, bool isGlobal)
 {
     ui->TilesetName->setText(tileset.tileSetName);
     ui->spin_width->setValue(static_cast<int>(tileset.cols));
@@ -611,19 +616,23 @@ void TilesetEditor::loadSimpleTileset(const SimpleTileset &tileset, bool isCusto
     m_tileset->loadSimpleTileset(tileset);
     lastFileName = QString(tileset.fileName).remove(".tileset.ini");
 
-    switch(m_mode)
-    {
-    case GFX_Level:
-        lastFullPath = dynamic_cast<LvlScene *>(scn)->m_data->meta.path +
-                       (isCustom ? "/" + dynamic_cast<LvlScene *>(scn)->m_data->meta.filename : "") + "/";
-        break;
-    case GFX_World:
-        lastFullPath = dynamic_cast<WldScene *>(scn)->m_data->meta.path +
-                       (isCustom ? "/" + dynamic_cast<WldScene *>(scn)->m_data->meta.filename : "") + "/";
-        break;
-    case GFX_Staff:
-        lastFullPath = m_conf->config_dir + "tilesets/";
-        break;
+    if (isGlobal) {
+        lastFullPath = m_conf->config_dir + "../../tilesets/";
+    } else {
+        switch(m_mode)
+        {
+        case GFX_Level:
+            lastFullPath = dynamic_cast<LvlScene *>(scn)->m_data->meta.path +
+                           (isCustom ? "/" + dynamic_cast<LvlScene *>(scn)->m_data->meta.filename : "") + "/";
+            break;
+        case GFX_World:
+            lastFullPath = dynamic_cast<WldScene *>(scn)->m_data->meta.path +
+                           (isCustom ? "/" + dynamic_cast<WldScene *>(scn)->m_data->meta.filename : "") + "/";
+            break;
+        case GFX_Staff:
+            lastFullPath = m_conf->config_dir + "tilesets/";
+            break;
+        }
     }
     lastFullPath.append(tileset.fileName);
 
