@@ -71,9 +71,7 @@ void DataConfig::loadTilesets()
         }
     }
 
-    bool hasGlobalTilesets = false;
-
-    if(QDir(tilesetDirPath).exists())
+    if(QDir(globalTilesetDirPath).exists())
     {
         emit progressPartNumber(10);
         emit progressMax(100);
@@ -96,7 +94,6 @@ void DataConfig::loadTilesets()
             if(tileset::OpenSimpleTileset(globalTilesetDirPath + files[i], xxx))
             {
                 global_tilesets.push_back(xxx);
-                hasGlobalTilesets = true;
             }
         }
     }

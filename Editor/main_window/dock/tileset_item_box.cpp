@@ -670,8 +670,6 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
         if(!scrollWid)
             return;
 
-        int earlyTabCount = ui->global_cat->isVisible() ? 2 : 1;
-
         qDeleteAll(scrollWid->findChildren<QGroupBox *>());
 
         if(scrollWid->layout() == nullptr)
@@ -705,7 +703,7 @@ void TilesetItemBox::makeSelectedTileset(int tabIndex)
                     {
                         if(s == tileSet.fileName)
                         {
-                            QString searchBarText = m_searchBoxes[tabIndex - earlyTabCount]->text();
+                            QString searchBarText = m_searchBoxes[tabIndex - 2]->text();
                             bool includeTilesetInSearch = false;
                             for (int i = 0; i < tileSet.items.size(); ++i) {
                                 int type = tileSet.items[i].type;
@@ -910,7 +908,7 @@ void TilesetItemBox::makeAllTilesets()
     QFileInfo ourFile(edit->currentFile());
     savePath = ourFile.absoluteDir().path() + "/" + ourFile.completeBaseName() + "/";
 
-    ui->global_cat->setVisible(mw()->configs.global_tilesets.count() > 0);
+    ui->TileSetsCategories->setTabVisible(1, mw()->configs.global_tilesets.count() > 0);
     favTilesetContentsMap.clear();
     m_favorites = SimpleTileset();
     QDir target(savePath);
