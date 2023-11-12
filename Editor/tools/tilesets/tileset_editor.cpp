@@ -595,8 +595,6 @@ void TilesetEditor::openTileset(QString filePath, QString openPath)
         ui->spin_height->setValue(static_cast<int>(simple.rows));
         ui->comboBox->setCurrentIndex(static_cast<int>(simple.type));
         setUpItems(simple.type);
-        QString notCustomPath = dynamic_cast<LvlScene *>(scn)->m_data->meta.path + "/";
-        bool isGlobal = QDir(filePath) == m_conf->config_dir + "../../tilesets/";
         m_tileset->loadSimpleTileset(simple);
     }
 
