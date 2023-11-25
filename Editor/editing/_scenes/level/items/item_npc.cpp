@@ -613,7 +613,7 @@ void ItemNPC::changeDirection(int dir)
         m_randomDirection = new QGraphicsPixmapItem;
         m_randomDirection->setPixmap(QPixmap(":/npc/random_direction.png"));
         m_scene->addItem(m_randomDirection);
-        m_randomDirection->setOpacity(qreal(0.75));
+        m_randomDirection->setOpacity(GlobalSettings::LvlItemDefaults.NPCRandomDirectionIndicatorOpacity);
         m_randomDirection->setPos(
             this->scenePos().x() - 9,
             this->scenePos().y() - 9
@@ -745,7 +745,7 @@ void ItemNPC::setGenerator(bool enable, int direction, int type, bool init)
 
         m_gridSize = 16;
 
-        m_generatorArrow->setOpacity(qreal(0.6));
+        m_generatorArrow->setOpacity(GlobalSettings::LvlItemDefaults.NPCGeneratorIndicatorOpacity);
 
         QPointF offset = QPoint(0, 0);
 
@@ -901,7 +901,7 @@ void ItemNPC::updateTalking()
         m_talking = new QGraphicsPixmapItem;
         m_talking->setPixmap(QPixmap(":/npc/talking.png"));
         m_scene->addItem(m_talking);
-        m_talking->setOpacity(qreal(0.75));
+        m_talking->setOpacity(GlobalSettings::LvlItemDefaults.NPCTalkingIndicatorOpacity);
         m_talking->setPos(
             this->scenePos().x() + qreal(m_localProps.setup.width) - 9,
             this->scenePos().y() - 9
@@ -1138,6 +1138,22 @@ void ItemNPC::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
             painter->setPen(QPen(QBrush(Qt::magenta), 2, Qt::DotLine));
             painter->drawRect(1, 1,
                               int(m_localProps.setup.width - 2), int(m_localProps.setup.height - 2));
+        }
+    }
+
+    if (m_generatorArrow != nullptr) {
+        if (m_generatorArrow->opacity() != GlobalSettings::LvlItemDefaults.NPCGeneratorIndicatorOpacity) {
+            m_generatorArrow->setOpacity(GlobalSettings::LvlItemDefaults.NPCGeneratorIndicatorOpacity);
+        }
+    }
+    if (m_randomDirection != nullptr) {
+        if (m_randomDirection->opacity() != GlobalSettings::LvlItemDefaults.NPCRandomDirectionIndicatorOpacity) {
+            m_randomDirection->setOpacity(GlobalSettings::LvlItemDefaults.NPCRandomDirectionIndicatorOpacity);
+        }
+    }
+    if (m_talking != nullptr) {
+        if (m_talking->opacity() != GlobalSettings::LvlItemDefaults.NPCTalkingIndicatorOpacity) {
+            m_talking->setOpacity(GlobalSettings::LvlItemDefaults.NPCTalkingIndicatorOpacity);
         }
     }
 }

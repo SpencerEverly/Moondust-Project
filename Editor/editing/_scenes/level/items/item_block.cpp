@@ -762,7 +762,7 @@ void ItemBlock::updateSlippery()
             m_slipperyShade = polygonIt;
             polygonIt->setBrush(QBrush(QPixmap(":/block/slippery.png")));
             polygonIt->setPen(QPen(Qt::NoPen));
-            polygonIt->setOpacity(0.75);
+            polygonIt->setOpacity(GlobalSettings::LvlItemDefaults.BlockSlipperyIndicatorOpacity);
             p.clear();
             p.append(QPoint(m_data.w, 0));
             p.append(QPoint(m_data.w, semiHeight));
@@ -776,7 +776,7 @@ void ItemBlock::updateSlippery()
             m_slipperyShade = polygonIt;
             polygonIt->setBrush(QBrush(QPixmap(":/block/slippery.png")));
             polygonIt->setPen(QPen(Qt::NoPen));
-            polygonIt->setOpacity(0.75);
+            polygonIt->setOpacity(GlobalSettings::LvlItemDefaults.BlockSlipperyIndicatorOpacity);
             p.clear();
             p.append(QPoint(0, 0));
             p.append(QPoint(0, semiHeight));
@@ -790,7 +790,7 @@ void ItemBlock::updateSlippery()
             m_slipperyShade = rectIt;
             rectIt->setBrush(QBrush(QPixmap(":/block/slippery.png")));
             rectIt->setPen(QPen(Qt::NoPen));
-            rectIt->setOpacity(0.75);
+            rectIt->setOpacity(GlobalSettings::LvlItemDefaults.BlockSlipperyIndicatorOpacity);
             rectIt->setRect(
                 0, 0,
                 m_data.w,
@@ -940,6 +940,12 @@ void ItemBlock::paint(QPainter *painter, const QStyleOptionGraphicsItem */*optio
     }
     else
         painter->drawRect(QRect(0, 0, 32, 32));
+
+    if (m_slipperyShade != nullptr) {
+        if (m_slipperyShade->opacity() != GlobalSettings::LvlItemDefaults.BlockSlipperyIndicatorOpacity) {
+            m_slipperyShade->setOpacity(GlobalSettings::LvlItemDefaults.BlockSlipperyIndicatorOpacity);
+        }
+    }
 
     if(this->isSelected())
     {
