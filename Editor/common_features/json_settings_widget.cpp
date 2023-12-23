@@ -782,13 +782,69 @@ void JsonSettingsWidget::loadLayoutEntries(JsonSettingsWidget::SetupStack setupT
                 l->addWidget(it, row, 0, 1, 2);
             else
                 l->addWidget(it, row, 1);
+
+            QFrame *subGroup = nullptr;
+            QJsonArray conditionalChildren;
+            if (o.contains("children")) {
+                conditionalChildren = o["children"].toArray();
+                if(!conditionalChildren.isEmpty())
+                {
+                    row++;
+                    subGroup = new QFrame(target);
+
+                    bool collapsible = o["collapse"].toBool(false);
+
+                    if (collapsible) {
+                        QPushButton *collapseButton = new QPushButton(target);
+                        if (o["default-collapsed"].toBool(false)) {
+                            subGroup->setVisible(false);
+                            collapseButton->setText("Expand " + title);
+                        } else {
+                            collapseButton->setText("Collapse " + title);
+                        }
+                        l->addWidget(collapseButton, row, 0, 1, 2);
+                        row++;
+
+                        QObject::connect(collapseButton, static_cast<void(QPushButton::*)(bool)>(&QPushButton::clicked),
+                                         [subGroup, collapseButton](bool)
+                                         {
+                                             subGroup->setVisible(!subGroup->isVisible());
+                                             collapseButton->setText((subGroup->isVisible() ? "Collapse options" : "Expand options"));
+                                         });
+                    }
+
+                    l->addWidget(subGroup, row, 0, 1, 2);
+                    int idx = 0;
+                    if (it->isChecked()) {
+                        idx = 1;
+                    }
+
+                    if (conditionalChildren.count() > idx && idx >= 0 && conditionalChildren[idx].isArray()) {
+                        loadLayoutEntries(setupTree, conditionalChildren[idx].toArray(), subGroup, err, parent);
+                    }
+                }
+            }
             QObject::connect(it, static_cast<void(QCheckBox::*)(bool)>(&QCheckBox::clicked),
-            [id, this](bool val)
+            [id, this, subGroup, conditionalChildren, setupTree, err, parent](bool val)
             {
 #ifdef DEBUG_BUILD
                 qDebug() << "changed:" << id << val;
 #endif
                 m_setupStack.setValue(id, val);
+                if (subGroup != nullptr) {
+                    QObjectList children = subGroup->children();
+                    for (int i = children.count() - 1; i >= 0; i--) {
+                        delete children[i];
+                    }
+                    int idx = 0;
+                    if (val) {
+                        idx = 1;
+                    }
+                    subGroup->updateGeometry();
+                    if (conditionalChildren.count() > idx && idx >= 0 && conditionalChildren[idx].isArray()) {
+                        loadLayoutEntries(setupTree, conditionalChildren[idx].toArray(), subGroup, err, parent);
+                    }
+                }
                 emit settingsChanged();
             });
             row++;
