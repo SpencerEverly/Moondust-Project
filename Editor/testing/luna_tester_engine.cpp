@@ -1436,6 +1436,7 @@ bool LunaTesterEngine::sendLevelData(LevelData &lvl)
 
     QJsonObject JSONparams;
     QString levelPathOut;
+    QString smbxPath = getEnginePath();
     QString x = (hasLvlxSupport && !lvl.meta.smbx64strict ? "x" : "");
 
     if(isUntitled)
