@@ -133,6 +133,7 @@ void MainWindow::updateMenus(QMdiSubWindow* subWindow, bool force)
                  (lvlWin->scene->m_resizeBox != nullptr)&&
                  (lvlWin->scene->m_resizeBox->m_resizerType == ItemResizer::Resizer_Section)
             );
+            dock_LevelProps->loadData(lvlWin->LvlData);
         }
 
         zoom->setText(QString::number(lvlWin->getZoom()));

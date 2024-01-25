@@ -70,6 +70,7 @@ struct EditorSetup
         bool lvl_layers = true;
         bool lvl_events = true;
         bool lvl_search = false;
+        bool level_props = false;
 
         bool wld_itembox = true;
         bool wld_musicboxes = false;
@@ -136,6 +137,7 @@ struct EditorSetup
         State level_classic_events_box  = State(State::F_FLOATING);
         State level_layers_box          = State(State::F_FLOATING);
         State level_section_properties  = State(State::F_FLOATING);
+        State level_properties          = State(State::F_FLOATING);
 
         State world_item_browser        = State(State::F_DOCKED_LEFT);
         State world_music_boxes         = State(State::F_DOCKED_LEFT);
@@ -323,6 +325,7 @@ public:
     //Tilesets
     //! Full set of config-pack standard tilesets
     QList<SimpleTileset >      main_tilesets;
+    QVector<SimpleTileset >      global_tilesets;
     //! Full set of config-pack standard tileset groups are holds tilesets
     QList<SimpleTilesetGroup > main_tilesets_grp;
     //! Full set of config-pack standard tileset categories, generated from tileset groups
@@ -371,6 +374,7 @@ public:
 
 
     void  loadTilesets();
+    void  addGlobalTileset(SimpleTileset *tileset);
 
     void setConfigPath(const QString &p, const QString &appDir = QString());
     bool loadBasics();

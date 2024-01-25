@@ -91,6 +91,7 @@ private:
     QRect highlightedRect;
     int inPlace;
 
+    int m_heldPieceType;
     int m_rows;
     int m_cols;
     int m_baseSize;

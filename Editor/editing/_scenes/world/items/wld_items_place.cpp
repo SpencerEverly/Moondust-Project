@@ -154,6 +154,15 @@ void WldScene::placeLevel(WorldLevelTile &level, bool toGrid)
 
     ItemLevel *LevelItem = new ItemLevel(this);
 
+    LevelItem->itemIsOverPath = false;
+    QRectF collisionBox = QRectF(level.x, level.y, 32, 32); // NOTE: If levels can be resized, make this level.width
+    for (QGraphicsItem* item : WldScene::items(collisionBox)) {
+        if (dynamic_cast<ItemPath*>(item)) {
+            LevelItem->itemIsOverPath = true;
+            break;
+        }
+    }
+
     LevelItem->setLevelData(level, &mergedSet, &animator, &pathAnimator, &bPathAnimator);
 
     LevelItem->setFlag(QGraphicsItem::ItemIsSelectable, (!m_lockLevel));

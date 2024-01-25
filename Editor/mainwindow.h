@@ -892,7 +892,7 @@ public:
 
 // ////////////////////Level Properties///////////////////////
     public slots:
-        void on_actionLevelProp_triggered();
+        void on_actionLevelProp_triggered(bool checked);
 // ////////////////////////////////////////////////////////
 
 
@@ -974,6 +974,10 @@ public:
         LvlItemProperties *dock_LvlItemProps;
 // ///////////////////////////////////////////////////////////
 
+
+// ///////////////// Level Settings box /////////////////
+    public:
+        LevelProps *dock_LevelProps;
 
 // ///////////////// Section Settings box /////////////////
     public:

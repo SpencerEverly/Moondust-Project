@@ -36,6 +36,8 @@ private slots:
 
     void on_FileList_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_search_textChanged();
+
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
 
@@ -44,6 +46,7 @@ private:
 
     QFuture<void> fileWalker;
     QStringList m_filters;
+    QStringList m_files;
 
     QString m_currentFile;
     QString m_parentDirectory;

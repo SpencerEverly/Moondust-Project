@@ -17,6 +17,7 @@
  */
 
 #include <QClipboard>
+#include <QToolTip>
 
 #include <editing/_dialogs/itemselectdialog.h>
 #include <common_features/util.h>
@@ -46,6 +47,7 @@ ItemLevel::ItemLevel(WldScene *parentScene, QGraphicsItem *parent)
 void ItemLevel::construct()
 {
     setData(ITEM_TYPE, "LEVEL");
+    setAcceptHoverEvents(true);
 }
 
 ItemLevel::~ItemLevel()
@@ -295,7 +297,6 @@ bool ItemLevel::itemTypeIsLocked()
     return m_scene->m_lockLevel;
 }
 
-
 ///////////////////MainArray functions/////////////////////////////
 //void ItemLevel::setLayer(QString layer)
 //{
@@ -327,6 +328,24 @@ void ItemLevel::transformTo(long target_id)
 
     if(!m_scene->m_opts.animationEnabled)
         m_scene->update();
+}
+
+void ItemLevel::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
+    if (itemIsOverPath) {
+        QToolTip::showText(QPoint(event->screenPos().x(), event->screenPos().y()), "Path reveals will to not stop at this level because there is a path on the same cell.\nPlease ignore this note if that is what you want.");
+    }
+}
+
+void ItemLevel::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
+    if (itemIsOverPath) {
+        QToolTip::showText(QPoint(event->screenPos().x(), event->screenPos().y()), "Path reveals will to not stop at this level because there is a path on the same cell.\nPlease ignore this note if that is what you want.");
+    }
+}
+
+void ItemLevel::hoverExitEvent(QGraphicsSceneHoverEvent* event) {
+    if (itemIsOverPath) {
+        QToolTip::hideText();
+    }
 }
 
 void ItemLevel::arrayApply()
@@ -365,6 +384,16 @@ void ItemLevel::arrayApply()
 
     m_scene->unregisterElement(this);
     m_scene->registerElement(this);
+
+
+    itemIsOverPath = false;
+    QRectF collisionBox = QRectF(m_data.x, m_data.y, 32, 32); // NOTE: If levels can be resized, make this level.width
+    for (QGraphicsItem* item : scene()->items(collisionBox)) {
+        if (dynamic_cast<ItemPath*>(item)) {
+            itemIsOverPath = true;
+            break;
+        }
+    }
 }
 
 void ItemLevel::removeFromArray()
@@ -508,6 +537,10 @@ void ItemLevel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
                             m_scene->m_animatorsLevels[m_animatorID]->frameRect());
     else
         painter->drawRect(QRect(0, 0, 32, 32));
+
+    if (itemIsOverPath) {
+        painter->fillRect(QRect(m_imgOffsetX + m_imageSize.width() - 8, m_imgOffsetY, 8, 8), QBrush(Qt::red));
+    }
 
     if(this->isSelected())
     {

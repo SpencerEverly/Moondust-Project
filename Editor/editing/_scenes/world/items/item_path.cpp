@@ -237,8 +237,27 @@ void ItemPath::arrayApply()
 {
     bool found = false;
 
+    QRectF collisionBox = QRectF(m_data.x, m_data.y, 32, 32); // NOTE: If paths can be resized, make this m_data.width
+    for (QGraphicsItem* item : scene()->items(collisionBox)) {
+        ItemLevel* level = dynamic_cast<ItemLevel*>(item);
+        if (level) {
+            level->itemIsOverPath = false;
+            break;
+        }
+    }
+
     m_data.x = qRound(this->scenePos().x());
     m_data.y = qRound(this->scenePos().y());
+
+    collisionBox.setX(m_data.x);
+    collisionBox.setY(m_data.y);
+    for (QGraphicsItem* item : scene()->items(collisionBox)) {
+        ItemLevel* level = dynamic_cast<ItemLevel*>(item);
+        if (level) {
+            level->itemIsOverPath = true;
+            break;
+        }
+    }
 
     if(m_data.meta.index < (unsigned int)m_scene->m_data->paths.size())
     {

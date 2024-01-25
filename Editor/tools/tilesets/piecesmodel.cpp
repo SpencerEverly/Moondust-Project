@@ -184,12 +184,10 @@ void ElementsListModel::addElement(const int &index)
         m_elements.push_back(element);
 }
 
-void ElementsListModel::setFilter(const QString &criteria, int searchType)
+void ElementsListModel::setFilter(const QString &criteria)
 {
     if(m_filterCriteria != criteria)
         m_filterCriteria = criteria;
-    if(m_filterSearchType != searchType)
-        m_filterSearchType = searchType;
 
     if(criteria.isEmpty())
     {
@@ -207,19 +205,7 @@ void ElementsListModel::setFilter(const QString &criteria, int searchType)
     for(int i = 0; i < m_elements.size(); ++i)
     {
         Element &e = m_elements[i];
-        switch(searchType)
-        {
-        default:
-        case Search_ByName:
-            e.isVisible = e.name.contains(criteria, Qt::CaseInsensitive);
-            break;
-        case Search_ById:
-            e.isVisible = e.elementId == criteria.toULongLong();
-            break;
-        case Search_ByIdContained:
-            e.isVisible = QString("%1").arg(e.elementId).contains(criteria);
-            break;
-        }
+        e.isVisible = e.name.contains(criteria, Qt::CaseInsensitive) || QString("%1").arg(e.elementId).contains(criteria);
         if(e.isVisible)
             ++newVisiblesCount;
     }

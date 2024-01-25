@@ -105,7 +105,7 @@ void MainWindow::applyTheme(QString themeDir)
     ui->actionPlayMusic->setIcon(Themes::icon(Themes::playmusic));
     ui->actionGridEn->setIcon(Themes::icon(Themes::grid_snap));
     ui->actionShowGrid->setIcon(Themes::icon(Themes::show_grid));
-    ui->actionGridCustom->setIcon(Themes::icon(Themes::grid_custom));
+    ui->actionGridCustom->setIcon(Themes::icon(Themes::grid_snap));
     ui->actionShowCameraGrid->setIcon(Themes::icon(Themes::camera_grid));
     ui->actionAnimation->setIcon(Themes::icon(Themes::animation));
 

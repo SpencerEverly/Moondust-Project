@@ -44,6 +44,10 @@ void MainWindow::setDefaults()
     GlobalSettings::tools_sox_bin_path = ApplicationPath + GlobalSettings::tools_sox_bin_path;
 
     GlobalSettings::LvlItemDefaults.LockedItemOpacity               = 0.3;
+    GlobalSettings::LvlItemDefaults.NPCGeneratorIndicatorOpacity    = 0.4;
+    GlobalSettings::LvlItemDefaults.NPCRandomDirectionIndicatorOpacity   = 0.65;
+    GlobalSettings::LvlItemDefaults.NPCTalkingIndicatorOpacity      = 0.65;
+    GlobalSettings::LvlItemDefaults.BlockSlipperyIndicatorOpacity   = 0.65;
 
     GlobalSettings::LvlItemDefaults.npc_direction                   = -1;
     GlobalSettings::LvlItemDefaults.npc_generator_type              = 1;
@@ -105,6 +109,7 @@ void MainWindow::setUiDefults()
     dock_LvlEvents       = new LvlEventsBox(this);
     dock_LvlLayers       = new LvlLayersBox(this);
     dock_LvlSectionProps = new LvlSectionProps(this);
+    dock_LevelProps      = new LevelProps(this);
 
     dock_WldItemProps    = new WLD_ItemProps(this);
     dock_WldSearchBox    = new WldSearchBox(this);
@@ -745,6 +750,7 @@ void MainWindow::setUiDefultsConfigPack()
     s_mw_addWidget(this, dock_VariablesBox, configs.editor.default_widget_state.variables_box, l, b, r);
 #endif
     s_mw_addWidget(this, dock_LvlSectionProps, configs.editor.default_widget_state.level_section_properties, l, b, r);
+    s_mw_addWidget(this, dock_LevelProps, configs.editor.default_widget_state.level_properties, l, b, r);
     s_mw_addWidget(this, dock_LvlItemBox, configs.editor.default_widget_state.level_item_browser, l, b, r);
     s_mw_addWidget(this, dock_TilesetBox, configs.editor.default_widget_state.tilesets_item_box, l, b, r);
     s_mw_addWidget(this, dock_WldItemBox, configs.editor.default_widget_state.world_item_browser, l, b, r);

@@ -18,6 +18,7 @@
 
 #include <mainwindow.h>
 #include <main_window/dock/lvl_item_properties.h>
+#include <main_window/dock/lvl_props_box.h>
 #include <main_window/dock/lvl_sctc_props.h>
 #include <main_window/dock/debugger.h>
 #include <editing/edit_level/level_edit.h>
@@ -268,8 +269,10 @@ void LvlScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                     m_mw->dock_LvlSectionProps->show();
                     m_mw->dock_LvlSectionProps->raise();
                 }
-                else if(answer == lvlprops)
-                    m_mw->on_actionLevelProp_triggered();
+                else if(answer == lvlprops) {
+                    m_mw->dock_LevelProps->show();
+                    m_mw->dock_LevelProps->raise();
+                }
             }
         }
         return;

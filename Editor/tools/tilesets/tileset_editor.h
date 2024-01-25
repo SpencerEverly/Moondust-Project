@@ -38,7 +38,7 @@ class TilesetEditor : public QDialog
     Q_OBJECT
 
 public:
-    explicit TilesetEditor(DataConfig *conf, QGraphicsScene *scene = nullptr, QWidget *parent = nullptr);
+    explicit TilesetEditor(DataConfig *conf, QGraphicsScene *scene = nullptr, QWidget *parent = nullptr, bool isGlobal = false);
     ~TilesetEditor();
     enum GFXMode
     {
@@ -47,19 +47,21 @@ public:
         GFX_World
     };
 
-    void openTileset(QString filePath, bool isCustom);
-    void loadSimpleTileset(const SimpleTileset &tileset, bool isCustom);
+    void openTileset(QString filePath, QString openPath);
+    void loadSimpleTileset(const SimpleTileset &tileset, bool isCustom, bool isGlobal);
 
 private slots:
     void on_clearTileset_clicked();
     void setUpItems(int type);
     void setUpTileset(int type);
     void on_SaveTileset_clicked();
+    void on_SaveGlobal_clicked();
 
     void on_OpenTileset_clicked();
 
-    void on_customOnly_clicked();
-    void on_defaultOnly_clicked();
+    void on_radioButtonAll_clicked();
+    void on_radioButtonCustom_clicked();
+    void on_radioButtonDefault_clicked();
     void showEvent( QShowEvent * event );
     void showNotify();
     void on_delete_me_clicked();

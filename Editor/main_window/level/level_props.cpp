@@ -16,41 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <editing/edit_level/levelprops.h>
+#include <main_window/dock/lvl_props_box.h>
 #include <editing/_scenes/level/lvl_history_manager.h>
 
 #include <ui_mainwindow.h>
 #include "mainwindow.h"
 
-
-
 //Open Level Properties
-void MainWindow::on_actionLevelProp_triggered()
+void MainWindow::on_actionLevelProp_triggered(bool checked)
 {
-    if(activeChildWindow() != WND_Level)
-        return;
-
-    LevelEdit* e = activeLvlEditWin();
-
-    if(!e)
-        return;
-
-    LevelProps levelProps(e->LvlData, this);
-    levelProps.setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    levelProps.setGeometry(util::alignToScreenCenter(levelProps.size()));
-
-    if(levelProps.exec() == QDialog::Accepted)
-    {
-        QList<QVariant> lvlsetData;
-        lvlsetData.push_back(e->LvlData.LevelName);
-        lvlsetData.push_back(e->LvlData.custom_params);
-        lvlsetData.push_back(levelProps.m_levelTitle);
-        lvlsetData.push_back(levelProps.m_customParams);
-        e->scene->m_history->addChangeLevelSettings(HistorySettings::SETTING_LEVELNAME, QVariant(lvlsetData));
-        e->LvlData.LevelName = levelProps.m_levelTitle;
-        e->LvlData.custom_params = levelProps.m_customParams;
-        e->LvlData.meta.modified = true;
-        e->setWindowTitle(QString(levelProps.m_levelTitle.isEmpty() ? e->userFriendlyCurrentFile() : levelProps.m_levelTitle).replace("&", "&&&"));
-        updateWindowMenu();
+    if (checked) {
+        dock_LevelProps->show();
+        dock_LevelProps->raise();
+    } else {
+        dock_LevelProps->hide();
     }
 }
