@@ -62,8 +62,14 @@ public:
     WorldLevelTile m_data;
     obj_w_level m_localProps;
 
+    bool itemIsOverPath = false;
+
     bool itemTypeIsLocked();
     void contextMenu(QGraphicsSceneMouseEvent *mouseEvent);
+
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
+    virtual void hoverExitEvent(QGraphicsSceneHoverEvent* event);
 
 private:
     //! Offset X of renderable image of a "small path background"

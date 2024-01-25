@@ -9,6 +9,7 @@
 #include <QGroupBox>
 #include <QPushButton>
 #include <QJsonArray>
+#include <QMap>
 
 class ColorPreview : public QWidget
 {
@@ -114,7 +115,7 @@ private:
     QString m_directoryEpisode;
     QString m_directoryData;
 
-    QMap<QString, JsonListSettingsGroup> m_instantiatedQJsonLists;
+    QMap<QString, JsonSettingsWidget::JsonListSettingsGroup> m_instantiatedQJsonLists;
 
     DataConfig *m_configPack = nullptr;
 

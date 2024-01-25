@@ -78,9 +78,6 @@ void Themes::init()
     icons_map[grid_snap]    = QIcon(":/toolbar/edit/grid_snap.png");
     icons_map_dark[grid_snap] = QIcon(":/toolbar/edit/grid_snap_dark.png");
 
-    icons_map[grid_custom]    = QIcon(":/toolbar/edit/grid_snap_custom.png");
-    icons_map_dark[grid_custom] = QIcon(":/toolbar/edit/grid_snap_custom_dark.png");
-
     icons_map[show_grid]    = QIcon(":/toolbar/view/show_grid.png");
     icons_map_dark[show_grid] = QIcon(":/toolbar/view/show_grid_dark.png");
     icons_map[camera_grid]  = QIcon(":/toolbar/view/camera_grid.png");
@@ -802,6 +799,8 @@ void Themes::togglePallete(Themes::Palettes pallete)
         darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(85, 100, 125));
         darkPalette.setColor(QPalette::BrightText, Qt::red);
         darkPalette.setColor(QPalette::Link, QColor(0, 100, 150));
+        darkPalette.setColor(QPalette::Light, QColor(150, 175, 200));
+        darkPalette.setColor(QPalette::Mid, QColor(50, 70, 100));
         darkPalette.setColor(QPalette::Highlight, QColor(0, 100, 150));
         darkPalette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(40, 60, 80));
         darkPalette.setColor(QPalette::HighlightedText, QColor(150, 175, 200));

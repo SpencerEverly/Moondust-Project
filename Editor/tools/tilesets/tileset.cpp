@@ -43,6 +43,7 @@ tileset::tileset(DataConfig *conf, int type, QWidget *parent, int baseSize, int 
     m_cols = cols;
     m_conf = conf;
     m_type = type;
+    m_heldPieceType = -1;
     updateSize();
 }
 
@@ -154,13 +155,18 @@ void tileset::dropEvent(QDropEvent *event)
         int objID;
         stream >> objID;
 
+        int type = m_type;
+        if (m_heldPieceType != -1) {
+            type = m_heldPieceType;
+        }
+
         QPixmap scaledPix;
-        Items::getItemGFX(m_type, (unsigned long)objID, scaledPix, scn, false, QSize(m_baseSize, m_baseSize));
+        Items::getItemGFX(type, (unsigned long)objID, scaledPix, scn, false, QSize(m_baseSize, m_baseSize));
 
         piecePixmaps.append(scaledPix);
         pieceRects.append(square);
         pieceID.append(objID);
-        pieceType.append(m_type);
+        pieceType.append(type);
 
         highlightedRect = QRect();
         update();
@@ -207,6 +213,7 @@ void tileset::mousePressEvent(QMouseEvent *event)
 
     QPixmap pixmap = piecePixmaps[found];
     long objID = pieceID[found];
+    m_heldPieceType = pieceType[found];
     piecePixmaps.removeAt(found);
     pieceRects.removeAt(found);
     pieceID.removeAt(found);
@@ -231,9 +238,10 @@ void tileset::mousePressEvent(QMouseEvent *event)
         piecePixmaps.insert(found, pixmap);
         pieceRects.insert(found, square);
         pieceID.insert(found, objID);
-        pieceType.insert(found, m_type);
+        pieceType.insert(found, m_heldPieceType);
         update();
     }
+    m_heldPieceType = -1;
 }
 
 int tileset::findPiece(const QRect &pieceRect) const

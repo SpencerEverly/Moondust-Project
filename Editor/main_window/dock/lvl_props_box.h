@@ -20,9 +20,11 @@
 #ifndef LEVELPROPS_H
 #define LEVELPROPS_H
 
-#include <memory>
-#include <QDialog>
+#include <QDockWidget>
 #include <QSpacerItem>
+#include <QMutex>
+#include <memory>
+#include "mwdock_base.h"
 
 #include <PGE_File_Formats/lvl_filedata.h>
 
@@ -33,21 +35,27 @@ namespace Ui {
 class LevelProps;
 }
 
-class LevelProps : public QDialog
+class LevelProps : public QDockWidget, public MWDock_Base
 {
     Q_OBJECT
 
+    friend class MainWindow;
 public:
-    explicit LevelProps(LevelData &FileData,QWidget *parent = nullptr);
+    explicit LevelProps(QWidget *parent = nullptr);
     ~LevelProps();
+    void loadData(LevelData& data);
     QString m_levelTitle;
     QString m_customParams;
 
 private slots:
-    void on_LVLPropButtonBox_accepted();
-    void on_LVLPropButtonBox_rejected();
+
+    void setSMBX64Strict(bool en);
+    void re_translate();
+    void on_LevelTitle_editingFinished();
 
 private:
+
+    void focusInEvent(QFocusEvent *ev);
     void initAdvancedSettings();
     void onExtraSettingsChanged();
 
@@ -57,6 +65,8 @@ private:
     Ui::LevelProps *ui = nullptr;
     LevelData *m_currentData = nullptr;
     MainWindow *m_mw = nullptr;
+
+    QMutex m_mutex;
 };
 
 #endif // LEVELPROPS_H

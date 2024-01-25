@@ -379,8 +379,6 @@
     <addaction name="action_doSafeTest"/>
     <addaction name="action_doSafeTestWld"/>
     <addaction name="separator"/>
-    <addaction name="action_Start_Engine"/>
-    <addaction name="separator"/>
     <addaction name="sepEngineExtras"/>
     <addaction name="separator"/>
     <addaction name="action_testSettings"/>
@@ -591,6 +589,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionLevelProp"/>
    <addaction name="actionLVLToolBox"/>
    <addaction name="actionTilesetBox"/>
    <addaction name="actionSection_Settings"/>
@@ -1430,8 +1429,15 @@
    </property>
   </action>
   <action name="actionLevelProp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="_resources/toolbar/toolbar.qrc">
+     <normaloff>:/toolbar/dock/levelprops.png</normaloff>:/toolbar/dock/levelprops.png</iconset>
    </property>
    <property name="text">
     <string>Properties...</string>
@@ -3025,90 +3031,6 @@ Objects will not be able to be placed on top of each other, and attempting to do
     <string>Bulk convert and repair of level and world files...</string>
    </property>
   </action>
-  <action name="actionGridDefault">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="_resources/toolbar/toolbar.qrc">
-     <normaloff>:/toolbar/edit/grid_snap_adaptive.png</normaloff>:/toolbar/edit/grid_snap_adaptive.png</iconset>
-   </property>
-   <property name="text">
-    <string>Default Grid</string>
-   </property>
-   <property name="toolTip">
-    <string>Default Grid Snap (Depending on selected item)</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionGrid4">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="_resources/toolbar/toolbar.qrc">
-     <normaloff>:/toolbar/edit/grid_snap_4.png</normaloff>:/toolbar/edit/grid_snap_4.png</iconset>
-   </property>
-   <property name="text">
-    <string>4x4 Grid</string>
-   </property>
-   <property name="toolTip">
-    <string>4 Pixel Grid Snap</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionGrid8">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="_resources/toolbar/toolbar.qrc">
-     <normaloff>:/toolbar/edit/grid_snap_8.png</normaloff>:/toolbar/edit/grid_snap_8.png</iconset>
-   </property>
-   <property name="text">
-    <string>8x8 Grid</string>
-   </property>
-   <property name="toolTip">
-    <string>8 Pixel Grid Snap</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionGrid16">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="_resources/toolbar/toolbar.qrc">
-     <normaloff>:/toolbar/edit/grid_snap_16.png</normaloff>:/toolbar/edit/grid_snap_16.png</iconset>
-   </property>
-   <property name="text">
-    <string>16x16 Grid</string>
-   </property>
-   <property name="toolTip">
-    <string>16 Pixel Grid Snap</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
   <action name="actionGridCustom">
    <property name="checkable">
     <bool>false</bool>
@@ -3118,7 +3040,7 @@ Objects will not be able to be placed on top of each other, and attempting to do
    </property>
    <property name="icon">
     <iconset resource="_resources/toolbar/toolbar.qrc">
-     <normaloff>:/toolbar/edit/grid_snap_custom.png</normaloff>:/toolbar/edit/grid_snap_custom.png</iconset>
+     <normaloff>:/toolbar/edit/grid_snap.png</normaloff>:/toolbar/edit/grid_snap.png</iconset>
    </property>
    <property name="text">
     <string>Grid Snap</string>

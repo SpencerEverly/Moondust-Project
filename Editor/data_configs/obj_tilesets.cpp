@@ -22,13 +22,19 @@
 
 #include "data_configs.h"
 
+void DataConfig::addGlobalTileset(SimpleTileset* tileset) {
+    global_tilesets.push_back(*tileset);
+}
+
 void DataConfig::loadTilesets()
 {
+    global_tilesets.clear();
     main_tilesets.clear();
     main_tilesets_grp.clear();
     main_tileset_categogies.clear();
 
     QString tilesetDirPath = config_dir + "tilesets/";
+    QString globalTilesetDirPath = config_dir + "../../tilesets/";
     QString tilesetGrpDirPath = config_dir + "group_tilesets/";
     QStringList filters;
 
@@ -61,6 +67,33 @@ void DataConfig::loadTilesets()
             if(tileset::OpenSimpleTileset(tilesetDirPath + files[i], xxx))
             {
                 main_tilesets.push_back(xxx);
+            }
+        }
+    }
+
+    if(QDir(globalTilesetDirPath).exists())
+    {
+        emit progressPartNumber(10);
+        emit progressMax(100);
+        emit progressValue(0);
+        emit progressTitle(QObject::tr("Loading Global Tilesets..."));
+
+        filters.clear();
+        filters << "*.tileset.ini";
+        QDir tilesetDir(globalTilesetDirPath);
+        tilesetDir.setSorting(QDir::Name);
+        tilesetDir.setNameFilters(filters);
+        QStringList files = tilesetDir.entryList(filters);
+
+        emit progressMax(files.size());
+        global_tilesets.reserve(files.size());
+        for(int i = 0; i < files.size(); i++)
+        {
+            emit progressValue(i);
+            SimpleTileset xxx;
+            if(tileset::OpenSimpleTileset(globalTilesetDirPath + files[i], xxx))
+            {
+                global_tilesets.push_back(xxx);
             }
         }
     }

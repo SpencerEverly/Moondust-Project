@@ -10,8 +10,11 @@
     <height>543</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="windowIcon">
-   <iconset resource="../../_resources/editor.qrc">
+   <iconset resource="../../_resources/toolbar/toolbar.qrc">
     <normaloff>:/toolbar/dock/item_browser_level.png</normaloff>:/toolbar/dock/item_browser_level.png</iconset>
   </property>
   <property name="allowedAreas">
@@ -183,7 +186,7 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="../../_resources/editor.qrc">
+        <iconset resource="../../_resources/dock/dock.qrc">
          <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
        </property>
        <property name="popupMode">
@@ -346,7 +349,7 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="../../_resources/editor.qrc">
+        <iconset resource="../../_resources/dock/dock.qrc">
          <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
        </property>
        <property name="popupMode">
@@ -506,7 +509,7 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="../../_resources/editor.qrc">
+        <iconset resource="../../_resources/dock/dock.qrc">
          <normaloff>:/dock/wrench_16x16.png</normaloff>:/dock/wrench_16x16.png</iconset>
        </property>
        <property name="popupMode">
@@ -522,7 +525,8 @@
   </widget>
  </widget>
  <resources>
-  <include location="../../_resources/editor.qrc"/>
+  <include location="../../_resources/dock/dock.qrc"/>
+  <include location="../../_resources/toolbar/toolbar.qrc"/>
  </resources>
  <connections/>
 </ui>

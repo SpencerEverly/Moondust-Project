@@ -102,6 +102,10 @@ void MainWindow::loadSettings()
         GlobalSettings::LvlOpts.default_zoom = settings.value("default-zoom", 100).toUInt();
 
         GlobalSettings::LvlItemDefaults.LockedItemOpacity = settings.value("locked-item-opacity", 0.3).toDouble();
+        GlobalSettings::LvlItemDefaults.NPCGeneratorIndicatorOpacity = settings.value("npc-generator-indicator-opacity", 0.4).toDouble();
+        GlobalSettings::LvlItemDefaults.NPCRandomDirectionIndicatorOpacity = settings.value("npc-random-direction-indicator-opacity", 0.65).toDouble();
+        GlobalSettings::LvlItemDefaults.NPCTalkingIndicatorOpacity = settings.value("npc-talking-indicator-opacity", 0.65).toDouble();
+        GlobalSettings::LvlItemDefaults.BlockSlipperyIndicatorOpacity = settings.value("block-slippery-indicator-opacity", 0.65).toDouble();
         GlobalSettings::LvlItemDefaults.npc_direction = settings.value("defaults-npc-directuin", -1).toInt();
         GlobalSettings::LvlItemDefaults.npc_generator_type = settings.value("defaults-npc-gen-type", 1).toInt();
         GlobalSettings::LvlItemDefaults.npc_generator_delay = settings.value("defaults-npc-gen-delay", 20).toInt();
@@ -160,6 +164,7 @@ void MainWindow::loadSettings()
         loadToolboxProps(settings, QStringLiteral("level-layers"),      dock_LvlLayers,         configs.editor.default_visibility.lvl_layers,       configs.editor.default_visibility_enforce.lvl_layers,   configs.editor.default_widget_state.level_layers_box);
         loadToolboxProps(settings, QStringLiteral("level-events"),      dock_LvlEvents,         configs.editor.default_visibility.lvl_events,       configs.editor.default_visibility_enforce.lvl_events,   configs.editor.default_widget_state.level_classic_events_box);
         loadToolboxProps(settings, QStringLiteral("level-search"),      dock_LvlSearchBox,      configs.editor.default_visibility.lvl_search,       configs.editor.default_visibility_enforce.lvl_search,  configs.editor.default_widget_state.level_search_box);
+        loadToolboxProps(settings, QStringLiteral("level-properties"),  dock_LevelProps,        configs.editor.default_visibility.level_props,       configs.editor.default_visibility_enforce.level_props,  configs.editor.default_widget_state.level_properties);
 
         loadToolboxProps(settings, QStringLiteral("world-item-box"),    dock_WldItemBox,        configs.editor.default_visibility.wld_itembox,      configs.editor.default_visibility_enforce.wld_itembox,   configs.editor.default_widget_state.world_item_browser);
         loadToolboxProps(settings, QStringLiteral("world-muscboxes-box"), dock_WldMusicBoxes,   configs.editor.default_visibility.wld_musicboxes,   configs.editor.default_visibility_enforce.wld_musicboxes,configs.editor.default_widget_state.world_music_boxes);
@@ -280,6 +285,8 @@ void MainWindow::saveSettings()
         saveToolboxProps(settings, QStringLiteral("level-layers"),      dock_LvlLayers);
         saveToolboxProps(settings, QStringLiteral("level-events"),      dock_LvlEvents);
         saveToolboxProps(settings, QStringLiteral("level-search"),      dock_LvlSearchBox);
+        saveToolboxProps(settings, QStringLiteral("level-properties"),      dock_LevelProps);
+
 
         saveToolboxProps(settings, QStringLiteral("world-item-box"),    dock_WldItemBox);
         saveToolboxProps(settings, QStringLiteral("world-muscboxes-box"), dock_WldMusicBoxes);
