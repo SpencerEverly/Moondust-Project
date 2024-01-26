@@ -240,11 +240,6 @@ private:
      * @return true on a succes sending
      */
     bool sendItemPlacing(const QString &rawData, PendingCmd ipcPendCmd);
-    
-    /**
-     * @brief A hook for the properties close request
-     */
-    bool engineClosePropertiesLunaLua(PendingCmd ipcPendCmd);
 
 public:
     explicit LunaTesterEngine(QObject *parent = nullptr);

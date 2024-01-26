@@ -817,6 +817,7 @@ public:
     signals:
         void configPackReloadBegin();
         void configPackReloaded();
+        void engineCloseProperties();
 // ////////////////////////////////////////////////////////
 
 // //////////////////External tools////////////////////////

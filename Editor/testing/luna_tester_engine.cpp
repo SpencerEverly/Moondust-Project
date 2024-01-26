@@ -239,7 +239,7 @@ void LunaTesterEngine::init()
     QObject::connect(&g_intEngine, &IntEngineSignals::sendPlacingBGO,
                      this, &LunaTesterEngine::sendPlacingBGO);
                      
-    QObject::connect(&g_intEngine, &IntEngineSignals::engineCloseProperties,
+    QObject::connect(m_w, &MainWindow::engineCloseProperties,
                      this, &LunaTesterEngine::sendBlankItem);
 
     QObject::connect(this, &LunaTesterEngine::testStarted,
@@ -704,8 +704,11 @@ bool LunaTesterEngine::sendItemPlacing(const QString &rawData, PendingCmd ipcPen
     jsonObj["params"] = JSONparams;
     jsonObj["id"] = static_cast<int>(ipcPendCmd);
     jsonOut.setObject(jsonObj);
-    
-    LogDebug("ENGINE: Place item command: " + rawData);
+
+    if(rawData == "nil")
+        LogDebug("ENGINE: Item closed.");
+    else
+        LogDebug("ENGINE: Place item command: " + rawData);
     
     if(writeToIPC(jsonOut))
     {
@@ -726,39 +729,7 @@ void LunaTesterEngine::sendBlankItem()
 
     QString nilValue = "nil";
 
-    engineClosePropertiesLunaLua(PendC_SendPlacingItem);
-}
-
-bool LunaTesterEngine::engineClosePropertiesLunaLua(PendingCmd ipcPendCmd)
-{
-    //{"jsonrpc": "2.0", "method": "sendItemPlacing", "params":
-    //   {"sendItemPlacing": "nil" }}
-    
-    if(!isEngineActive())
-        return false;
-
-    if(!m_caps.ipcCommands.contains("sendItemPlacing"))
-        return false; // This command is not supported by this LunaLua build
-
-    QJsonDocument jsonOut;
-    QJsonObject jsonObj;
-    jsonObj["jsonrpc"]  = "2.0";
-    jsonObj["method"]   = "sendItemPlacing";
-    QJsonObject JSONparams;
-    JSONparams["sendItemPlacing"] = "nil";
-    jsonObj["params"] = JSONparams;
-    jsonObj["id"] = static_cast<int>(ipcPendCmd);
-    jsonOut.setObject(jsonObj);
-    
-    LogDebug("ENGINE: item closed.");
-    
-    if(writeToIPC(jsonOut))
-    {
-        m_pendingCommands += ipcPendCmd;
-        return true;
-    }
-
-    return false;
+    sendItemPlacing(nilValue, PendC_SendPlacingItem);
 }
 
 bool LunaTesterEngine::sendSimpleCommand(const QString &cmd, PendingCmd ipcPendCmd)

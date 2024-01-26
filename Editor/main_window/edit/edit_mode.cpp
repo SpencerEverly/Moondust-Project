@@ -74,6 +74,8 @@ void MainWindow::on_actionSelect_triggered()
     {
         activeWldEditWin()->scene->SwitchEditingMode(WldScene::MODE_Selecting);
     }
+
+    emit engineCloseProperties();
 }
 
 
