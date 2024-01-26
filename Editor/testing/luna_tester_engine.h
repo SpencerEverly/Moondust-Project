@@ -196,6 +196,11 @@ public slots:
      */
     void sendPlacingNPC(const LevelNPC &npc);
 
+    /**
+     * @brief A hook for the properties close request
+     */
+    void sendBlankItem();
+
 #ifndef _WIN32
 private:
     /**
@@ -235,6 +240,11 @@ private:
      * @return true on a succes sending
      */
     bool sendItemPlacing(const QString &rawData, PendingCmd ipcPendCmd);
+    
+    /**
+     * @brief A hook for the properties close request
+     */
+    bool engineClosePropertiesLunaLua(PendingCmd ipcPendCmd);
 
 public:
     explicit LunaTesterEngine(QObject *parent = nullptr);

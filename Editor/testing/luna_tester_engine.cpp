@@ -238,6 +238,9 @@ void LunaTesterEngine::init()
                      this, &LunaTesterEngine::sendPlacingNPC);
     QObject::connect(&g_intEngine, &IntEngineSignals::sendPlacingBGO,
                      this, &LunaTesterEngine::sendPlacingBGO);
+                     
+    QObject::connect(&g_intEngine, &IntEngineSignals::engineCloseProperties,
+                     this, &LunaTesterEngine::sendBlankItem);
 
     QObject::connect(this, &LunaTesterEngine::testStarted,
                      m_w, &MainWindow::stopMusicForTesting);
@@ -684,7 +687,7 @@ void LunaTesterEngine::sendPlacingBGO(const LevelBGO &bgo)
 bool LunaTesterEngine::sendItemPlacing(const QString &rawData, PendingCmd ipcPendCmd)
 {
     //{"jsonrpc": "2.0", "method": "sendItemPlacing", "params":
-    //   {"sendItemPlacing": <RAW ITEM DATA> }}
+    //   {"sendItemPlacing": <RAW ITEM DATA, or "nil"> }}
     
     if(!isEngineActive())
         return false;
@@ -703,6 +706,51 @@ bool LunaTesterEngine::sendItemPlacing(const QString &rawData, PendingCmd ipcPen
     jsonOut.setObject(jsonObj);
     
     LogDebug("ENGINE: Place item command: " + rawData);
+    
+    if(writeToIPC(jsonOut))
+    {
+        m_pendingCommands += ipcPendCmd;
+        return true;
+    }
+
+    return false;
+}
+
+void LunaTesterEngine::sendBlankItem()
+{
+    if(!isEngineActive())
+        return;
+
+    if(!m_caps.ipcCommands.contains("sendItemPlacing"))
+        return; // This command is not supported by this LunaLua build
+
+    QString nilValue = "nil";
+
+    engineClosePropertiesLunaLua(PendC_SendPlacingItem);
+}
+
+bool LunaTesterEngine::engineClosePropertiesLunaLua(PendingCmd ipcPendCmd)
+{
+    //{"jsonrpc": "2.0", "method": "sendItemPlacing", "params":
+    //   {"sendItemPlacing": "nil" }}
+    
+    if(!isEngineActive())
+        return false;
+
+    if(!m_caps.ipcCommands.contains("sendItemPlacing"))
+        return false; // This command is not supported by this LunaLua build
+
+    QJsonDocument jsonOut;
+    QJsonObject jsonObj;
+    jsonObj["jsonrpc"]  = "2.0";
+    jsonObj["method"]   = "sendItemPlacing";
+    QJsonObject JSONparams;
+    JSONparams["sendItemPlacing"] = "nil";
+    jsonObj["params"] = JSONparams;
+    jsonObj["id"] = static_cast<int>(ipcPendCmd);
+    jsonOut.setObject(jsonObj);
+    
+    LogDebug("ENGINE: item closed.");
     
     if(writeToIPC(jsonOut))
     {
